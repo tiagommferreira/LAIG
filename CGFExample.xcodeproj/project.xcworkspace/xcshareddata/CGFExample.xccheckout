@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6DE1F6E7-BB32-4AF4-8988-5EFC2B8E8293</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CGFExample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>3EF06B54F970B427B5B604496EA7BB71240E3A0C</key>
+		<string>https://github.com/pedrorfernandes/CGFlib.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CGFexample/CGFExample.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>3EF06B54F970B427B5B604496EA7BB71240E3A0C</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/pedrorfernandes/CGFlib.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3EF06B54F970B427B5B604496EA7BB71240E3A0C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3EF06B54F970B427B5B604496EA7BB71240E3A0C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CGFlib</string>
+		</dict>
+	</array>
+</dict>
+</plist>

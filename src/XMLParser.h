@@ -6,6 +6,13 @@
 #include <string.h>
 #include "CGFshader.h"
 
+#ifdef _WIN32
+#include <string.h>
+#define strncasecmp(s1,s2) (stricmp(s1,s2))
+#else
+#include <strings.h>
+#endif
+
 class XMLParser
 {
 public:
@@ -15,7 +22,7 @@ public:
     
     bool checkTrue(char *currentString) {
         const char *s2 = "true";
-        if(!(strcasecmp(currentString,s2) == 0)){
+        if(!(strncasecmp (currentString,s2) == 0)){
             return false;
         }
         return true;

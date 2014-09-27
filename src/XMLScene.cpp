@@ -25,35 +25,35 @@ void XMLScene::init() {
     
     // CULLING PROPERTIES
     
-    if((strcasecmp(parser->getOrder(),"cw")==0)){
+    if((strncasecmp (parser->getOrder(),"cw")==0)){
         glFrontFace(GL_CW);
     }else {
         glFrontFace(GL_CCW);
     }
     
     // also has the possibility to be none
-    if((strcasecmp(parser->getFace(),"front")==0)){
+    if((strncasecmp (parser->getFace(),"front")==0)){
         glCullFace(GL_FRONT);
-    }else if((strcasecmp(parser->getFace(),"back")==0)){
+    }else if((strncasecmp (parser->getFace(),"back")==0)){
         glCullFace(GL_BACK);
     }
     
     
     //LIGHTING PROPERTIES
-    if((strcasecmp(parser->getEnabled(),"true")==0)){
+    if((strncasecmp (parser->getEnabled(),"true")==0)){
         glEnable(GL_LIGHTING);
     }
-    if((strcasecmp(parser->getLocal(),"true")==0)){
+    if((strncasecmp (parser->getLocal(),"true")==0)){
         glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     }
-    if((strcasecmp(parser->getDoublesided(),"true")==0)){
+    if((strncasecmp (parser->getDoublesided(),"true")==0)){
         glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     }
     
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getAmbientLight());
     
     //DRAWING PROPERTIES
-    if((strcasecmp(parser->getShading(),"flat")==0)){
+    if((strncasecmp (parser->getShading(),"flat")==0)){
         cout << 1 << endl;
         glShadeModel(GL_FLAT);
     }else {
@@ -62,11 +62,11 @@ void XMLScene::init() {
     }
     
     //falta a função para o drawing mode
-    if((strcasecmp(parser->getDrawingMode(),"flat")==0)){
+    if((strncasecmp (parser->getDrawingMode(),"flat")==0)){
        
-    }else if(strcasecmp(parser->getDrawingMode(),"point")==0){
+    }else if(strncasecmp (parser->getDrawingMode(),"point")==0){
     
-    }else if(strcasecmp(parser->getDrawingMode(),"line")==0){
+    }else if(strncasecmp (parser->getDrawingMode(),"line")==0){
         
     }
     

@@ -3,11 +3,11 @@
 #include "CGFappearance.h"
 #include "CGFapplication.h"
 #include "CGFaxis.h"
-#include <strings.h>
+
 #include <iostream>
 
 XMLParser::XMLParser() {
-    const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.xml";
+    const char *p = "tiny.xml";
     // Read XML from file
     
     doc=new TiXmlDocument(p );

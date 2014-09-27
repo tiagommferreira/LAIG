@@ -24,7 +24,6 @@ void XMLScene::init() {
     /* GLOBALS */
     
     // CULLING PROPERTIES
-    
     if((strncasecmp (parser->getOrder(),"cw")==0)){
         glFrontFace(GL_CW);
     }else {
@@ -62,15 +61,18 @@ void XMLScene::init() {
     }
     
     //falta a função para o drawing mode
-    if((strncasecmp (parser->getDrawingMode(),"flat")==0)){
-       
+    if((strncasecmp (parser->getDrawingMode(),"fill")==0)){
+       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }else if(strncasecmp (parser->getDrawingMode(),"point")==0){
-    
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
     }else if(strncasecmp (parser->getDrawingMode(),"line")==0){
-        
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
-    
 
+	//background color
+	float* backColor = parser->getBackgroundColor();
+	glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
+ 
     
     setUpdatePeriod(30);
 }

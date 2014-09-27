@@ -1,0 +1,14 @@
+<anf>
+    <globals>
+        <!-- drawing -->
+        <drawing mode ="fill" shading = "flat" background = "0.7 0.8 0.3 1.0" />
+        
+        <!-- culling -->
+        <culling face = "back" order = "cw"/>
+        
+        <!-- lighting -->
+        <lighting doublesided = "false" local = "false" enabled = "false" ambient = "3.0 7.0 9.8 4.0"/>
+        
+    </globals>
+    
+</anf>

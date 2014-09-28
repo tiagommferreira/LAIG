@@ -7,7 +7,8 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-    const char *p = "tiny.xml";
+    const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.xml";
+    // const char *p = "tiny.xml";
     // Read XML from file
     
     doc=new TiXmlDocument(p );
@@ -73,7 +74,7 @@ XMLParser::XMLParser() {
         
         TiXmlElement* lightingElement=globalsElement->FirstChildElement("lighting");
         if (lightingElement) {
-            char * doublesideTemp; char* localTemp; char* enabledTemp; char* ambientTemp;
+            char* ambientTemp;
             
             doublesided = (char *) lightingElement->Attribute("doublesided");
             

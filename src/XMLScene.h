@@ -6,13 +6,8 @@
 #include "XMLParser.h"
 #include "CGFshader.h"
 #include "CGFappearance.h"
-
-#ifdef _WIN32
-#include <string.h>
-#define strncasecmp(s1,s2) (stricmp(s1,s2))
-#else
 #include <strings.h>
-#endif
+
 
 class XMLScene : public CGFscene
 {

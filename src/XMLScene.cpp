@@ -1,5 +1,6 @@
 #include "XMLScene.h"
 #include "XMLParser.h"
+#include <string.h>
 #include <iostream>
 
 //-------------------------------------------------------
@@ -24,35 +25,37 @@ void XMLScene::init() {
     /* GLOBALS */
     
     // CULLING PROPERTIES
-    if((strncasecmp (parser->getOrder(),"cw")==0)){
+    if((strcmp (parser->getOrder(),"cw")==0)){
+        cout << "culling order: clockwise\n";
         glFrontFace(GL_CW);
     }else {
+        cout << "culling order: counter-clockwise\n";
         glFrontFace(GL_CCW);
     }
     
     // also has the possibility to be none
-    if((strncasecmp (parser->getFace(),"front")==0)){
+    if((strcmp(parser->getFace(),"front")==0)){
         glCullFace(GL_FRONT);
-    }else if((strncasecmp (parser->getFace(),"back")==0)){
+    }else if((strcmp (parser->getFace(),"back")==0)){
         glCullFace(GL_BACK);
     }
     
     
     //LIGHTING PROPERTIES
-    if((strncasecmp (parser->getEnabled(),"true")==0)){
+    if((strcmp (parser->getEnabled(),"true")==0)){
         glEnable(GL_LIGHTING);
     }
-    if((strncasecmp (parser->getLocal(),"true")==0)){
+    if((strcmp (parser->getLocal(),"true")==0)){
         glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     }
-    if((strncasecmp (parser->getDoublesided(),"true")==0)){
+    if((strcmp (parser->getDoublesided(),"true")==0)){
         glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     }
     
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getAmbientLight());
     
     //DRAWING PROPERTIES
-    if((strncasecmp (parser->getShading(),"flat")==0)){
+    if((strcmp (parser->getShading(),"flat")==0)){
         cout << 1 << endl;
         glShadeModel(GL_FLAT);
     }else {
@@ -61,11 +64,11 @@ void XMLScene::init() {
     }
     
     //falta a função para o drawing mode
-    if((strncasecmp (parser->getDrawingMode(),"fill")==0)){
+    if((strcmp (parser->getDrawingMode(),"fill")==0)){
        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }else if(strncasecmp (parser->getDrawingMode(),"point")==0){
+    }else if(strcmp(parser->getDrawingMode(),"point")==0){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-    }else if(strncasecmp (parser->getDrawingMode(),"line")==0){
+    }else if(strcmp (parser->getDrawingMode(),"line")==0){
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 

@@ -5,13 +5,7 @@
 #include "tinyxml.h"
 #include <string.h>
 #include "CGFshader.h"
-
-#ifdef _WIN32
-#include <string.h>
-#define strncasecmp(s1,s2) (stricmp(s1,s2))
-#else
 #include <strings.h>
-#endif
 
 class XMLParser
 {
@@ -22,24 +16,32 @@ public:
     
     bool checkTrue(char *currentString) {
         const char *s2 = "true";
-        if(!(strncasecmp (currentString,s2) == 0)){
+        if(!(strcmp (currentString,s2) == 0)){
             return false;
         }
         return true;
     }
     
+    char* toLowerCase(char* string){
+        int i;
+        for(i=0;string[i];i++){
+            string[i]=tolower(string[i]);
+        }
+        return string;
+    }
+    
     // Getters
-    char* getDrawingMode(){return drawingMode;}
-    char* getShading(){return shading;}
+    char* getDrawingMode(){toLowerCase(drawingMode);return drawingMode;}
+    char* getShading(){toLowerCase(shading);return shading;}
     float* getBackgroundColor(){return backgroundColor;}
     
-    char* getFace(){return face;}
-    char* getOrder(){return order;}
+    char* getFace(){toLowerCase(face);return face;}
+    char* getOrder(){toLowerCase(order);return order;}
     
     //first is "doublesided", then "local" and finally "enabled"
-    char* getDoublesided(){return doublesided;}
-    char* getLocal(){return local;}
-    char* getEnabled(){return enabled;}
+    char* getDoublesided(){toLowerCase(doublesided);return doublesided;}
+    char* getLocal(){toLowerCase(local);return local;}
+    char* getEnabled(){toLowerCase(enabled);return enabled;}
     float* getAmbientLight(){return ambient;}
     
 protected:

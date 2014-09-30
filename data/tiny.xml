@@ -11,4 +11,35 @@
         
     </globals>
     
+    <!-- bloco de camaras: o atributo "initial" identifica a camara/ponto de vista inicial, que tem de existir -->
+    <cameras initial="ss" >
+        <!-- tem de existir, pelo menos uma camara dos tipos seguintes (perspective ou ortho) -->
+        <!-- no caso da camara ortho, o atributo "direction" define o eixo segundo o qual se efetua a projecao -->
+        
+        <perspective id="ss" near="ff" far="ff" angle="ff" pos="ff ff ff" target="ff ff ff" />
+        <ortho id="camera" direction="x" near="10.6" far="6.4" left="4.3" right="2.1" top="1.3" bottom="1.7" />
+        
+    </cameras>
+    
+    <!-- bloco de luzes -->
+    <lights>
+        <!-- Deve existir pelo menos uma luz declarada -->
+        <!-- Atributo "marker" indica se deve ou nao desenhar-se uma esfera representativa -->
+        <light id="ss" type="omni" enabled="tt" marker="tt" pos="ff ff ff" >
+            <component type="ambient" value="ff ff ff ff" />
+            <component type="diffuse" value="ff ff ff ff" />
+            <component type="specular" value="ff ff ff ff" />
+            
+        </light>
+        
+        <light id="ss" type="spot" enabled="tt" marker="tt" pos="ff ff ff" target="ff ff ff"
+            angle="ff" exponent="ff" >
+            
+            <component type="ambient" value="ff ff ff ff" />
+            <component type="diffuse" value="ff ff ff ff" />
+            <component type="specular" value="ff ff ff ff" />
+            
+        </light>
+    </lights>
+ 
 </anf>

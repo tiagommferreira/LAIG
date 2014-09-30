@@ -26,10 +26,8 @@ void XMLScene::init() {
     
     // CULLING PROPERTIES
     if((strcmp (parser->getOrder(),"cw")==0)){
-        cout << "culling order: clockwise\n";
         glFrontFace(GL_CW);
     }else {
-        cout << "culling order: counter-clockwise\n";
         glFrontFace(GL_CCW);
     }
     
@@ -56,14 +54,11 @@ void XMLScene::init() {
     
     //DRAWING PROPERTIES
     if((strcmp (parser->getShading(),"flat")==0)){
-        cout << 1 << endl;
         glShadeModel(GL_FLAT);
     }else {
-        cout << 2 << endl;
         glShadeModel(GL_SMOOTH);
     }
     
-    //falta a função para o drawing mode
     if((strcmp (parser->getDrawingMode(),"fill")==0)){
        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }else if(strcmp(parser->getDrawingMode(),"point")==0){

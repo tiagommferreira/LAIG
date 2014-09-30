@@ -47,7 +47,10 @@ public:
 protected:
     
     TiXmlDocument* doc;
+    TiXmlElement* anfElement;
     TiXmlElement* globalsElement;
+    TiXmlElement* camerasElement;
+    TiXmlElement* lightsElement;
     
     /** GLOBAL PROPERITES **/
     // drawing properties
@@ -65,14 +68,26 @@ protected:
     char* enabled;
     float ambient[4];
     
+    /* CAMERA PROPERTIES */
+    //ortho properties
+    char* orthoId;
+    char orthoDirection;
+    float orthoNear, orthoFar, orthoLeft, orthoRight, orthoBottom, orthoTop;
     
-    // random stuff to erase
+    //perspective properties
+    char* perspecId;
+    float perspecNear, perspecFar, perspecAngle;
+    float* perspecPos, * perspecTarget;
     
-    TiXmlElement* matsElement;
-    TiXmlElement* textsElement;
-    TiXmlElement* leavesElement;
-    TiXmlElement* nodesElement;
-    TiXmlElement* graphElement;
+    /* LIGHTS PROPERTIES */
+    // Specific lights properties
+    char * lightId, * lightType;
+    bool * lightEnabled, * lightMarker;
+    char * lightPos[3];
+    char * lightAmbient[4];
+    char * lightDiffuse[4];
+    char * lightSpecular[4];
+    
 };
 
 #endif /* defined(__CGFExample__XMLParser__) */

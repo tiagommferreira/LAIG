@@ -20,7 +20,7 @@ XMLParser::XMLParser() {
         exit( 1 );
     }
     
-    TiXmlElement* anfElement= doc->FirstChildElement( "anf" );
+    anfElement= doc->FirstChildElement( "anf" );
     
     if (anfElement == NULL)
     {
@@ -30,32 +30,28 @@ XMLParser::XMLParser() {
     
     globalsElement = anfElement->FirstChildElement( "globals" );
     
-    
+    cout << "_____ GLOBALS INFO _____" << endl;
     // Globals
-    // An example of well-known, required nodes
     
     if (globalsElement == NULL)
         printf("globals block not found!\n");
     else
     {
-        printf("Processing global elements:\n");
         /** DRAWING PROPERTIES **/
         TiXmlElement* drawingElement=globalsElement->FirstChildElement("drawing");
         if (drawingElement) {
-            /**
-             * TO DO: verificar se os inputs estão correctos
-             */
             
             // Procura os elementos dentro do drawing
-            drawingMode = (char *) drawingElement->Attribute("mode");
-            cout << endl << "drawing mode: " << drawingMode << endl;
-            shading = (char *) drawingElement->Attribute("shading");
-            cout << endl << "shading mode: " << shading << endl;
             
+            cout << "drawing information" << endl;
+            
+            drawingMode = (char *) drawingElement->Attribute("mode");
+            shading = (char *) drawingElement->Attribute("shading");
             char * background = (char *) drawingElement->Attribute("background");
             sscanf(background, "%f %f %f %f",&backgroundColor[0],&backgroundColor[1],
                    &backgroundColor[2],&backgroundColor[3]);
             
+            cout << "end of parsing drawing information" << endl;
             
         }
         else
@@ -64,8 +60,10 @@ XMLParser::XMLParser() {
         /** CULLING PROPERTIES **/
         TiXmlElement* cullingElement=globalsElement->FirstChildElement("culling");
         if (cullingElement) {
+            cout << "culling information" << endl;
             face = (char *) cullingElement->Attribute("face");
             order = (char *) cullingElement->Attribute("order");
+            cout << "end of parsing culling information" << endl;
         }
         else
             printf("culling not found\n");
@@ -74,6 +72,7 @@ XMLParser::XMLParser() {
         
         TiXmlElement* lightingElement=globalsElement->FirstChildElement("lighting");
         if (lightingElement) {
+            cout << "lighting information" << endl;
             char* ambientTemp;
             
             doublesided = (char *) lightingElement->Attribute("doublesided");
@@ -85,10 +84,97 @@ XMLParser::XMLParser() {
             ambientTemp = (char *) lightingElement->Attribute("ambient");
             sscanf(ambientTemp, "%f %f %f %f",&ambient[0],&ambient[1],
                    &ambient[2],&ambient[3]);
+            
+            cout << "end of parsing lighting information" << endl;
         }
         else
             printf("lighting not found\n");
     }
+    
+    // Camera
+    cout << endl << "_____ CAMERA INFO _____" << endl;
+    camerasElement = anfElement->FirstChildElement( "cameras" );
+    if(camerasElement){
+        TiXmlElement* ortho=camerasElement->FirstChildElement("ortho");
+        if(ortho){
+            cout << "ortho camera found" << endl;
+            
+            // ortho
+            orthoId = (char*) ortho->Attribute("id");
+            
+            char * orthoNearTemp = (char *) ortho->Attribute("near");
+            orthoNear = atof(orthoNearTemp);
+            
+            char * orthoFarTemp = (char *) ortho->Attribute("far");
+            orthoFar = atof(orthoFarTemp);
+            
+            char * orthoLeftTemp = (char *) ortho->Attribute("left");
+            orthoLeft = atof(orthoLeftTemp);
+            
+            char * orthoRightTemp = (char *) ortho->Attribute("right");
+            orthoRight = atof(orthoRightTemp);
+            
+            char * orthoTopTemp = (char *) ortho->Attribute("top");
+            orthoTop = atof(orthoTopTemp);
+            
+            char * orthoBottomTemp = (char *) ortho->Attribute("bottom");
+            orthoBottom = atof(orthoBottomTemp);
+            
+            char * directionTemp = (char *) ortho->Attribute("direction");
+            orthoDirection = directionTemp[0];
+            
+            cout << "end of parsing ortho informaton" << endl;
+            
+        }else {
+            cout << "Perspective camera found" << endl;
+            
+            TiXmlElement* perspective=camerasElement->FirstChildElement("perspective");
+            // perspective
+            perspecId = (char *) perspective->Attribute("id");
+            
+            char * perspNearTemp = (char *) perspective->Attribute("near");
+            perspecNear = atof(perspNearTemp);
+            
+            char * perspFarTemp = (char *) perspective->Attribute("far");
+            perspecFar = atof(perspFarTemp);
+            
+            char * perspAngleTemp = (char *) perspective->Attribute("angle");
+            perspecAngle = atof(perspAngleTemp);
+            
+            char *posTemp = (char *) perspective->Attribute("pos");
+            sscanf(posTemp, "%f %f %f",&perspecPos[0],&perspecPos[1],
+                   &perspecPos[2]);
+            
+            char *targetTemp = (char *) perspective->Attribute("target");
+            sscanf(targetTemp, "%f %f %f",&perspecTarget[0],&perspecTarget[1],
+                   &perspecTarget[2]);
+            
+            cout << "end of parsing perspective information" << endl;
+        }
+        
+    }else {
+        cout << "Cameras element wasnt found\n";
+    }
+    
+    
+    //lights
+    cout << endl << "_____ LIGHTS INFO _____" << endl;
+    lightsElement = anfElement->FirstChildElement( "lights" );
+    
+    if(lightsElement){
+        cout << "processing lights information" << endl;
+        
+        TiXmlElement* light=lightsElement->FirstChildElement("light");
+        if(light){
+            
+            
+        }
+        
+        cout << "end of parsing lights information" << endl;
+    }else {
+        cout << "no lights were defined" << endl;
+    }
+    
     
     // Other blocks could be validated/processed here
     

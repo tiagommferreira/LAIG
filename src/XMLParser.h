@@ -6,12 +6,16 @@
 #include <string.h>
 #include "CGFshader.h"
 #include <strings.h>
+#include "Globals.h"
+#include "Camera.h"
+#include "Light.h"
 
 class XMLParser
 {
 public:
     XMLParser();
     ~XMLParser();
+    
     static TiXmlElement *findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val);
     
     bool checkTrue(char *currentString) {
@@ -21,28 +25,9 @@ public:
         }
         return true;
     }
-    
-    char* toLowerCase(char* string){
-        int i;
-        for(i=0;string[i];i++){
-            string[i]=tolower(string[i]);
-        }
-        return string;
-    }
-    
-    // Getters
-    char* getDrawingMode(){toLowerCase(drawingMode);return drawingMode;}
-    char* getShading(){toLowerCase(shading);return shading;}
-    float* getBackgroundColor(){return backgroundColor;}
-    
-    char* getFace(){toLowerCase(face);return face;}
-    char* getOrder(){toLowerCase(order);return order;}
-    
-    //first is "doublesided", then "local" and finally "enabled"
-    char* getDoublesided(){toLowerCase(doublesided);return doublesided;}
-    char* getLocal(){toLowerCase(local);return local;}
-    char* getEnabled(){toLowerCase(enabled);return enabled;}
-    float* getAmbientLight(){return ambient;}
+    Globals * getGlobals(){return this->global;}
+    vector<Camera*> getCameras(){return this->cameras;}
+    vector<Light*> getLights(){return this->lights;}
     
 protected:
     
@@ -51,42 +36,10 @@ protected:
     TiXmlElement* globalsElement;
     TiXmlElement* camerasElement;
     TiXmlElement* lightsElement;
-    
-    /** GLOBAL PROPERITES **/
-    // drawing properties
-    char* drawingMode;
-    char* shading;
-    float backgroundColor[4];
-    
-    // culling properties
-    char* face;
-    char* order;
-    
-    // lighting properties
-    char* doublesided;
-    char* local;
-    char* enabled;
-    float ambient[4];
-    
-    /* CAMERA PROPERTIES */
-    //ortho properties
-    char* orthoId;
-    char orthoDirection;
-    float orthoNear, orthoFar, orthoLeft, orthoRight, orthoBottom, orthoTop;
-    
-    //perspective properties
-    char* perspecId;
-    float perspecNear, perspecFar, perspecAngle;
-    float* perspecPos, * perspecTarget;
-    
-    /* LIGHTS PROPERTIES */
-    // Specific lights properties
-    char * lightId, * lightType;
-    bool * lightEnabled, * lightMarker;
-    char * lightPos[3];
-    char * lightAmbient[4];
-    char * lightDiffuse[4];
-    char * lightSpecular[4];
+
+    Globals * global;
+    vector<Camera*> cameras;
+    vector<Light*> lights;
     
 };
 

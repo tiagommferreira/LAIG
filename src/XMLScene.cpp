@@ -25,52 +25,51 @@ void XMLScene::init() {
     /* GLOBALS */
     
     // CULLING PROPERTIES
-    if((strcmp (parser->getOrder(),"cw")==0)){
+    if((strcmp (parser->getGlobals()->getOrder(),"cw")==0)){
         glFrontFace(GL_CW);
     }else {
         glFrontFace(GL_CCW);
     }
     
     // also has the possibility to be none
-    if((strcmp(parser->getFace(),"front")==0)){
+    if((strcmp(parser->getGlobals()->getFace(),"front")==0)){
         glCullFace(GL_FRONT);
-    }else if((strcmp (parser->getFace(),"back")==0)){
+    }else if((strcmp (parser->getGlobals()->getFace(),"back")==0)){
         glCullFace(GL_BACK);
     }
     
     
     //LIGHTING PROPERTIES
-    if((strcmp (parser->getEnabled(),"true")==0)){
+    if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
         glEnable(GL_LIGHTING);
     }
-    if((strcmp (parser->getLocal(),"true")==0)){
+    if((strcmp (parser->getGlobals()->getLocal(),"true")==0)){
         glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     }
-    if((strcmp (parser->getDoublesided(),"true")==0)){
+    if((strcmp (parser->getGlobals()->getDoublesided(),"true")==0)){
         glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     }
     
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getAmbientLight());
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
     
     //DRAWING PROPERTIES
-    if((strcmp (parser->getShading(),"flat")==0)){
+    if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
         glShadeModel(GL_FLAT);
     }else {
         glShadeModel(GL_SMOOTH);
     }
     
-    if((strcmp (parser->getDrawingMode(),"fill")==0)){
+    if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }else if(strcmp(parser->getDrawingMode(),"point")==0){
+    }else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-    }else if(strcmp (parser->getDrawingMode(),"line")==0){
+    }else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
 	//background color
-	float* backColor = parser->getBackgroundColor();
+	float* backColor = parser->getGlobals()->getBackgroundColor();
 	glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
- 
     
     setUpdatePeriod(30);
 }
@@ -90,8 +89,28 @@ void XMLScene::display() {
     glLoadIdentity();
     
     // Apply transformations corresponding to the camera position relative to the origin
-    CGFscene::activeCamera->applyView();
+    //CGFscene::activeCamera->applyView();
     
+    vector<Camera*> cameras = parser->getCameras();
+    Camera *initialCamera = cameras[0];
+    
+    glMatrixMode(GL_PROJECTION);
+    
+    glLoadIdentity();
+    
+    if(initialCamera->getOrthoDirection() == 'x') {
+        glRotated(90,0,1,0);
+        glScaled(1, 1, -1);
+    }
+    else if(initialCamera->getOrthoDirection() == 'y') {
+        glRotated(90,1,0,0);
+        glScaled(1, -1, 1);
+    }
+    
+    glOrtho(initialCamera->getOrthoLeft(), initialCamera->getOrthoRight(), initialCamera->getOrthoBottom(), initialCamera->getOrthoTop(), initialCamera->getOrthoNear(), initialCamera->getOrthoFar());
+    
+    
+    glMatrixMode(GL_MODELVIEW);
     // Draw axis
     axis.draw();
    

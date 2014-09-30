@@ -37,6 +37,8 @@ XMLParser::XMLParser() {
         printf("globals block not found!\n");
     else
     {
+        global = new Globals();
+        
         /** DRAWING PROPERTIES **/
         TiXmlElement* drawingElement=globalsElement->FirstChildElement("drawing");
         if (drawingElement) {
@@ -45,11 +47,13 @@ XMLParser::XMLParser() {
             
             cout << "drawing information" << endl;
             
-            drawingMode = (char *) drawingElement->Attribute("mode");
-            shading = (char *) drawingElement->Attribute("shading");
+            char *drawingMode = (char *) drawingElement->Attribute("mode");
+            char *shading = (char *) drawingElement->Attribute("shading");
             char * background = (char *) drawingElement->Attribute("background");
-            sscanf(background, "%f %f %f %f",&backgroundColor[0],&backgroundColor[1],
-                   &backgroundColor[2],&backgroundColor[3]);
+        
+            global->setDrawingMode(drawingMode);
+            global->setShading(shading);
+            global->setBackgroundColor(background);
             
             cout << "end of parsing drawing information" << endl;
             
@@ -61,8 +65,11 @@ XMLParser::XMLParser() {
         TiXmlElement* cullingElement=globalsElement->FirstChildElement("culling");
         if (cullingElement) {
             cout << "culling information" << endl;
-            face = (char *) cullingElement->Attribute("face");
-            order = (char *) cullingElement->Attribute("order");
+            char *face = (char *) cullingElement->Attribute("face");
+            char *order = (char *) cullingElement->Attribute("order");
+            
+            global->setFace(face);
+            global->setOrder(order);
             cout << "end of parsing culling information" << endl;
         }
         else
@@ -73,17 +80,16 @@ XMLParser::XMLParser() {
         TiXmlElement* lightingElement=globalsElement->FirstChildElement("lighting");
         if (lightingElement) {
             cout << "lighting information" << endl;
-            char* ambientTemp;
             
-            doublesided = (char *) lightingElement->Attribute("doublesided");
+            char *doublesided = (char *) lightingElement->Attribute("doublesided");
+            char *local = (char *) lightingElement->Attribute("local");
+            char* enabled = (char *) lightingElement->Attribute("enabled");
+            char *ambientTemp = (char *) lightingElement->Attribute("ambient");
             
-            local = (char *) lightingElement->Attribute("local");
-            
-            enabled = (char *) lightingElement->Attribute("enabled");
-            
-            ambientTemp = (char *) lightingElement->Attribute("ambient");
-            sscanf(ambientTemp, "%f %f %f %f",&ambient[0],&ambient[1],
-                   &ambient[2],&ambient[3]);
+            global->setDoublesided(doublesided);
+            global->setLocal(local);
+            global->setEnable(enabled);
+            global->setAmbient(ambientTemp);
             
             cout << "end of parsing lighting information" << endl;
         }
@@ -95,61 +101,70 @@ XMLParser::XMLParser() {
     cout << endl << "_____ CAMERA INFO _____" << endl;
     camerasElement = anfElement->FirstChildElement( "cameras" );
     if(camerasElement){
-        TiXmlElement* ortho=camerasElement->FirstChildElement("ortho");
-        if(ortho){
-            cout << "ortho camera found" << endl;
-            
-            // ortho
-            orthoId = (char*) ortho->Attribute("id");
-            
-            char * orthoNearTemp = (char *) ortho->Attribute("near");
-            orthoNear = atof(orthoNearTemp);
-            
-            char * orthoFarTemp = (char *) ortho->Attribute("far");
-            orthoFar = atof(orthoFarTemp);
-            
-            char * orthoLeftTemp = (char *) ortho->Attribute("left");
-            orthoLeft = atof(orthoLeftTemp);
-            
-            char * orthoRightTemp = (char *) ortho->Attribute("right");
-            orthoRight = atof(orthoRightTemp);
-            
-            char * orthoTopTemp = (char *) ortho->Attribute("top");
-            orthoTop = atof(orthoTopTemp);
-            
-            char * orthoBottomTemp = (char *) ortho->Attribute("bottom");
-            orthoBottom = atof(orthoBottomTemp);
-            
-            char * directionTemp = (char *) ortho->Attribute("direction");
-            orthoDirection = directionTemp[0];
-            
-            cout << "end of parsing ortho informaton" << endl;
-            
-        }else {
-            cout << "Perspective camera found" << endl;
-            
-            TiXmlElement* perspective=camerasElement->FirstChildElement("perspective");
-            // perspective
-            perspecId = (char *) perspective->Attribute("id");
-            
-            char * perspNearTemp = (char *) perspective->Attribute("near");
-            perspecNear = atof(perspNearTemp);
-            
-            char * perspFarTemp = (char *) perspective->Attribute("far");
-            perspecFar = atof(perspFarTemp);
-            
-            char * perspAngleTemp = (char *) perspective->Attribute("angle");
-            perspecAngle = atof(perspAngleTemp);
-            
-            char *posTemp = (char *) perspective->Attribute("pos");
-            sscanf(posTemp, "%f %f %f",&perspecPos[0],&perspecPos[1],
-                   &perspecPos[2]);
-            
-            char *targetTemp = (char *) perspective->Attribute("target");
-            sscanf(targetTemp, "%f %f %f",&perspecTarget[0],&perspecTarget[1],
-                   &perspecTarget[2]);
-            
-            cout << "end of parsing perspective information" << endl;
+        TiXmlElement* camera=camerasElement->FirstChildElement();
+
+        while(camera) {
+            if (strcmp(camera->Value(),"ortho")==0) {
+                Camera * orthoCam=new Camera(1);
+                
+                // ortho
+                char * orthoId = (char*) camera->Attribute("id");
+                orthoCam->setId(orthoId);
+                
+                char * orthoNearTemp = (char *) camera->Attribute("near");
+                orthoCam->setOrthoNear(atof(orthoNearTemp));
+                
+                char * orthoFarTemp = (char *) camera->Attribute("far");
+                orthoCam->setOrthoFar(atof(orthoFarTemp));
+                
+                char * orthoLeftTemp = (char *) camera->Attribute("left");
+                orthoCam->setOrthoLeft(atof(orthoLeftTemp));
+                
+                char * orthoRightTemp = (char *) camera->Attribute("right");
+                orthoCam->setOrthoRight(atof(orthoRightTemp));
+                
+                char * orthoTopTemp = (char *) camera->Attribute("top");
+                orthoCam->setOrthoTop(atof(orthoTopTemp));
+                
+                char * orthoBottomTemp = (char *) camera->Attribute("bottom");
+                orthoCam->setOrthoBottom(atof(orthoBottomTemp));
+                
+                char * directionTemp = (char *) camera->Attribute("direction");
+                orthoCam->setOrthoDirection(directionTemp[0]);
+                
+                cameras.push_back(orthoCam);
+                
+                cout << "end of parsing ortho informaton" << endl;
+            } else{
+                Camera * perspCam=new Camera(0);
+                
+                cout << "Perspective camera found" << endl;
+                // perspective
+                char * perspecId = (char *) camera->Attribute("id");
+                perspCam->setId(perspecId);
+                
+                char * perspNearTemp = (char *) camera->Attribute("near");
+                perspCam->setNearPerspec(atof(perspNearTemp));
+                
+                char * perspFarTemp = (char *) camera->Attribute("far");
+                perspCam->setFarPerspec(atof(perspFarTemp));
+                
+                char * perspAngleTemp = (char *) camera->Attribute("angle");
+                perspCam->setAnglePerspec(atof(perspAngleTemp));
+                
+                char *posTemp = (char *) camera->Attribute("pos");
+                
+                perspCam->setPerspPos(posTemp);
+                
+                char *targetTemp = (char *) camera->Attribute("target");
+                
+                perspCam->setPerspTarget(targetTemp);
+                
+                cout << "end of parsing perspective information" << endl;
+                
+                cameras.push_back(perspCam);
+            }
+            camera = camera->NextSiblingElement();
         }
         
     }else {

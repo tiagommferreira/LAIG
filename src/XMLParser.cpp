@@ -7,8 +7,8 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-    const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.xml";
-    // const char *p = "tiny.xml";
+    //const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.xml";
+     const char *p = "tiny.xml";
     // Read XML from file
     
     doc=new TiXmlDocument(p );
@@ -148,23 +148,33 @@ XMLParser::XMLParser() {
                 // perspective
                 char * perspecId = (char *) camera->Attribute("id");
                 perspCam->setId(perspecId);
+
+				cout << "id done" << endl;
                 
                 char * perspNearTemp = (char *) camera->Attribute("near");
                 perspCam->setNearPerspec(atof(perspNearTemp));
                 
+				cout << "near done" << endl;
+
                 char * perspFarTemp = (char *) camera->Attribute("far");
                 perspCam->setFarPerspec(atof(perspFarTemp));
                 
+				cout << "far done" << endl;
+
                 char * perspAngleTemp = (char *) camera->Attribute("angle");
                 perspCam->setAnglePerspec(atof(perspAngleTemp));
                 
+				cout << "angle done" << endl;
+
                 char *posTemp = (char *) camera->Attribute("pos");
-                
                 perspCam->setPerspPos(posTemp);
                 
+				cout << "pos done" << endl;
+
                 char *targetTemp = (char *) camera->Attribute("target");
-                
-                perspCam->setPerspTarget(targetTemp);
+                perspCam->setPerspTarget(targetTemp);	
+
+				cout << "target done" << endl;
                 
                 cout << "end of parsing perspective information" << endl;
                 
@@ -183,18 +193,65 @@ XMLParser::XMLParser() {
     lightsElement = anfElement->FirstChildElement( "lights" );
     
     if(lightsElement){
-        cout << "processing lights information" << endl;
-        
-        TiXmlElement* light=lightsElement->FirstChildElement("light");
-        if(light){
+        TiXmlElement* light=lightsElement->FirstChildElement();
+       
+        while(light) {
+			Light *lightTemp=new Light();
+                
+			cout << "Light found" << endl;
+			
+            char * idLight = (char *) light->Attribute("id");
+            lightTemp->setID(idLight);
             
-            
-        }
-        
-        cout << "end of parsing lights information" << endl;
-    }else {
-        cout << "no lights were defined" << endl;
-    }
+            char * type = (char *) light->Attribute("type");
+            lightTemp->setType(type);
+
+            char * enabled = (char *) light->Attribute("enabled");
+            lightTemp->setEnabled(enabled);
+
+            char * marker = (char *) light->Attribute("marker");
+            lightTemp->setMarker(marker);
+
+            char *posTemp = (char *) light->Attribute("pos");
+            lightTemp->setPosition(posTemp);
+			
+			//ATTRIBUTES
+			TiXmlElement* attr = light->FirstChildElement();
+
+			while(attr) {
+
+				char *attribute;
+
+				if(strcmp(attr->Attribute("type"), "ambient") == 0) {
+					attribute = (char *) attr->Attribute("value");
+					lightTemp->setAmbientComponent(attribute);
+				}
+				else if(strcmp(attr->Attribute("type"), "diffuse") == 0) {
+					attribute = (char *) attr->Attribute("value");
+					lightTemp->setDiffuseComponent(attribute);
+				}
+				else if(strcmp(attr->Attribute("type"), "ambient") == 0) {
+					attribute = (char *) attr->Attribute("value");
+					lightTemp->setSpecularComponent(attribute);
+				}
+
+				attr = attr->NextSiblingElement();
+			}
+                
+            cout << "end of parsing perspective information" << endl;
+                
+            //lights.push_back(lightTemp);
+			
+			//cout << "Ambient: " << endl;
+			//cout << lightTemp->getAmbientComponent()[0] << ", " << lightTemp->getAmbientComponent()[1] << ", " << lightTemp->getAmbientComponent()[2] << ", " << lightTemp->getAmbientComponent()[3] << endl << endl;
+
+			//cout << "Diffuse: " << endl;
+			//cout << lightTemp->getDiffuseComponent()[0] << ", " << lightTemp->getDiffuseComponent()[0] << ", " << lightTemp->getDiffuseComponent()[2] << ", " << lightTemp->getDiffuseComponent()[3] << endl << endl;
+
+			light = light->NextSiblingElement();
+		}
+	}
+}
     
     
     // Other blocks could be validated/processed here
@@ -257,7 +314,7 @@ XMLParser::XMLParser() {
         }
     }*/
     
-}
+
 
 XMLParser::~XMLParser() {
     delete(doc);

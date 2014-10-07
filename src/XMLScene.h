@@ -6,7 +6,6 @@
 #include "XMLParser.h"
 #include "CGFshader.h"
 #include "CGFappearance.h"
-#include <strings.h>
 
 
 class XMLScene : public CGFscene

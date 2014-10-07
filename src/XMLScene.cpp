@@ -19,9 +19,8 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * a
 
 void XMLScene::init() {
     /** Parses the information from xml to c++ **/
-    parser = new XMLParser();
     shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
-
+	parser = new XMLParser();
     /* GLOBALS */
     
     // CULLING PROPERTIES
@@ -93,6 +92,8 @@ void XMLScene::display() {
     
     vector<Camera*> cameras = parser->getCameras();
     Camera *initialCamera = new Camera();
+
+	//cout << cameras.size() << endl;
     
     for(int i=0;i<cameras.size();i++){
         if(strcmp(cameras[i]->getId(),cameras[i]->getInitial())==0){
@@ -125,7 +126,12 @@ void XMLScene::display() {
     }
     
     glMatrixMode(GL_MODELVIEW);
-    // Draw axis
+
+
+    
+	
+	
+	// Draw axis
     axis.draw();
    
     

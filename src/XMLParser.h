@@ -5,7 +5,6 @@
 #include "tinyxml.h"
 #include <string.h>
 #include "CGFshader.h"
-#include <strings.h>
 #include "Globals.h"
 #include "Camera.h"
 #include "Light.h"

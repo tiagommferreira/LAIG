@@ -108,7 +108,8 @@ private:
     
     //perspective properties
     float perspecNear, perspecFar, perspecAngle;
-    float* perspecPos, * perspecTarget;
+    float perspecPos[3];
+	float perspecTarget[3];
 };
 
 

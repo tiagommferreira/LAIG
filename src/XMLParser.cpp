@@ -102,10 +102,14 @@ XMLParser::XMLParser() {
     camerasElement = anfElement->FirstChildElement( "cameras" );
     if(camerasElement){
         TiXmlElement* camera=camerasElement->FirstChildElement();
-
+        char *initial = (char *)camerasElement->Attribute("initial");
+        
         while(camera) {
             if (strcmp(camera->Value(),"ortho")==0) {
-                Camera * orthoCam=new Camera(1);
+                cout << "ortho cam found" << endl;
+                Camera * orthoCam=new Camera();
+                orthoCam->setInitial(initial);
+                orthoCam->setType(1);
                 
                 // ortho
                 char * orthoId = (char*) camera->Attribute("id");
@@ -136,7 +140,9 @@ XMLParser::XMLParser() {
                 
                 cout << "end of parsing ortho informaton" << endl;
             } else{
-                Camera * perspCam=new Camera(0);
+                Camera * perspCam=new Camera();
+                perspCam->setInitial(initial);
+                perspCam->setType(0);
                 
                 cout << "Perspective camera found" << endl;
                 // perspective

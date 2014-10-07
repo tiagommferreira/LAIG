@@ -12,13 +12,12 @@
     </globals>
     
     <!-- bloco de camaras: o atributo "initial" identifica a camara/ponto de vista inicial, que tem de existir -->
-    <cameras initial="ss" >
+    <cameras initial="camera" >
         <!-- tem de existir, pelo menos uma camara dos tipos seguintes (perspective ou ortho) -->
         <!-- no caso da camara ortho, o atributo "direction" define o eixo segundo o qual se efetua a projecao -->
         
         <!-- <perspective id="ss" near="ff" far="ff" angle="ff" pos="ff ff ff" target="ff ff ff" /> -->
         <ortho id="camera" direction="y" near="-1.0" far="1.0" left="-1.0" right="1.0" top="1.0" bottom="-1.0" />
-        
     </cameras>
     
     <!-- bloco de luzes -->

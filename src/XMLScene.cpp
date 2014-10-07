@@ -92,23 +92,37 @@ void XMLScene::display() {
     //CGFscene::activeCamera->applyView();
     
     vector<Camera*> cameras = parser->getCameras();
-    Camera *initialCamera = cameras[0];
+    Camera *initialCamera = new Camera();
+    
+    for(int i=0;i<cameras.size();i++){
+        if(strcmp(cameras[i]->getId(),cameras[i]->getInitial())==0){
+            initialCamera = cameras[i];
+            break;
+        }
+    }
     
     glMatrixMode(GL_PROJECTION);
     
     glLoadIdentity();
     
-    if(initialCamera->getOrthoDirection() == 'x') {
-        glRotated(90,0,1,0);
-        glScaled(1, 1, -1);
+    if(initialCamera->getType() == 1){
+        if(initialCamera->getOrthoDirection() == 'x') {
+            glRotated(90,0,1,0);
+            glScaled(1, 1, -1);
+        }
+        else if(initialCamera->getOrthoDirection() == 'y') {
+            glRotated(90,1,0,0);
+            glScaled(1, -1, 1);
+        }
+        
+        glOrtho(initialCamera->getOrthoLeft(), initialCamera->getOrthoRight(), initialCamera->getOrthoBottom(), initialCamera->getOrthoTop(), initialCamera->getOrthoNear(), initialCamera->getOrthoFar());
+        
+    } else {
+        gluPerspective(initialCamera->getPerspecAngle(), 1, initialCamera->getPerspecNear(), initialCamera->getPerspecFar());
+        gluLookAt(initialCamera->getPerspecPos()[0], initialCamera->getPerspecPos()[1], initialCamera->getPerspecPos()[2],
+                  initialCamera->getPerspecTarget()[0], initialCamera->getPerspecTarget()[1], initialCamera->getPerspecTarget()[2],
+                  0,1,0);
     }
-    else if(initialCamera->getOrthoDirection() == 'y') {
-        glRotated(90,1,0,0);
-        glScaled(1, -1, 1);
-    }
-    
-    glOrtho(initialCamera->getOrthoLeft(), initialCamera->getOrthoRight(), initialCamera->getOrthoBottom(), initialCamera->getOrthoTop(), initialCamera->getOrthoNear(), initialCamera->getOrthoFar());
-    
     
     glMatrixMode(GL_MODELVIEW);
     // Draw axis

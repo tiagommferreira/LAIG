@@ -6,8 +6,8 @@
 
 class Camera{
 public:
-    Camera(int i){this->type = i;}
-    void setId(char *i){this->id=i;}
+    Camera(){}
+    void setId(char *i){this->idCamera=i;}
     void setOrthoFar(float i){this->orthoFar=i;}
     void setOrthoNear(float i){this->orthoNear=i;}
     void setOrthoLeft(float i){this->orthoLeft=i;}
@@ -56,10 +56,51 @@ public:
     char getOrthoDirection() {
         return orthoDirection;
     }
+    
+    char * getInitial(){
+        return initialId;
+    }
+    
+    void setInitial(char* initial){
+        this->initialId = initial;
+    }
 
+    char * getId(){
+        return this->idCamera;
+    }
+    
+    int getType(){
+        return type;
+        
+    }
+    
+    float getPerspecNear(){
+        return this->perspecNear;
+    }
+    
+    float getPerspecFar(){
+        return this->perspecFar;
+    }
+    
+    float getPerspecAngle(){
+        return this->perspecAngle;
+    }
+    float * getPerspecPos() {
+        return this->perspecPos;
+    }
+    
+    float * getPerspecTarget() {
+        return this->perspecTarget;
+    }
+    
+    void setType(int i) {
+        this->type = i;
+    }
+    
 private:
     int type; // 0->perspectiva 1->ortogonal
-    char *id;
+    char * initialId;
+    char *idCamera;
     
     //ortho properties
     char orthoDirection;

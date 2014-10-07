@@ -8,6 +8,8 @@
 #include "Globals.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Node.h"
+#include "Transform.h"
 
 class XMLParser
 {
@@ -35,10 +37,12 @@ protected:
     TiXmlElement* globalsElement;
     TiXmlElement* camerasElement;
     TiXmlElement* lightsElement;
-
+    TiXmlElement* graphElement;
+    
     Globals * global;
     vector<Camera*> cameras;
     vector<Light*> lights;
+    vector<Node *> graph;
     
 };
 

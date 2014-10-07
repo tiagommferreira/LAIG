@@ -57,6 +57,16 @@ float* Light::getSpecularComponent() {
 	return specularComponent;
 }
 
+void Light::setTarget(char * target){
+    sscanf(target, "%f %f %f",&this->target[0],&this->target[1],
+           &this->target[2]);
+}
+void Light::setAngle(float angle) {
+    this->angle = angle;
+}
+void Light::setExponent(float exponent){
+    this->exponent = exponent;
+}
 
 
 

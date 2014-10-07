@@ -7,8 +7,8 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-    //const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.xml";
-     const char *p = "tiny.xml";
+    const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.xml";
+    // const char *p = "tiny.xml";
     // Read XML from file
     
     doc=new TiXmlDocument(p );
@@ -205,6 +205,17 @@ XMLParser::XMLParser() {
             
             char * type = (char *) light->Attribute("type");
             lightTemp->setType(type);
+            
+            if(strcmp(type,"spot") == 0){
+                char * target = (char *) light->Attribute("target");
+                lightTemp->setTarget(target);
+                
+                char * angle = (char *) light->Attribute("angle");
+                lightTemp->setAngle(atof(angle));
+                
+                char * exponent = (char *) light->Attribute("exponent");
+                lightTemp->setExponent(atof(exponent));
+            }
 
             char * enabled = (char *) light->Attribute("enabled");
             lightTemp->setEnabled(enabled);
@@ -240,25 +251,103 @@ XMLParser::XMLParser() {
                 
             cout << "end of parsing perspective information" << endl;
                 
-            //lights.push_back(lightTemp);
-			
-			//cout << "Ambient: " << endl;
-			//cout << lightTemp->getAmbientComponent()[0] << ", " << lightTemp->getAmbientComponent()[1] << ", " << lightTemp->getAmbientComponent()[2] << ", " << lightTemp->getAmbientComponent()[3] << endl << endl;
-
-			//cout << "Diffuse: " << endl;
-			//cout << lightTemp->getDiffuseComponent()[0] << ", " << lightTemp->getDiffuseComponent()[0] << ", " << lightTemp->getDiffuseComponent()[2] << ", " << lightTemp->getDiffuseComponent()[3] << endl << endl;
-
+            lights.push_back(lightTemp);
 			light = light->NextSiblingElement();
 		}
 	}
-}
     
-    
-    // Other blocks could be validated/processed here
-    
-    /*
     // graph section
-    if (graphElement == NULL)
+    graphElement = anfElement->FirstChildElement( "graph" );
+    if(graphElement==NULL){
+        cout << "Graph block not found!" << endl;
+    } else {
+        TiXmlElement *node=graphElement->FirstChildElement();
+        while(node){
+            Node * currentNode = new Node();
+            
+            TiXmlElement *transforms=graphElement->FirstChildElement("transforms");
+            TiXmlElement *transform=transforms->FirstChildElement();
+            while(transform){
+                Transform *transforTemp = new Transform();
+                
+                char * type = (char *) transform->Attribute("type");
+                transforTemp->setType(type);
+                
+                if(strcmp(type,"translate")==0){
+                    char * to = (char *) transform->Attribute("to");
+                    transforTemp->setTo(to);
+                } else if(strcmp(type,"rotate")==0){
+                    char * axis = (char *) transform->Attribute("axis");
+                    transforTemp->setAxis(axis[0]);
+                    char * angle = (char *) transform->Attribute("angle");
+                    transforTemp->setAxis(atof(angle));
+                } else if(strcmp(type,"scale")==0){
+                    char * factor = (char *) transform->Attribute("factor");
+                    transforTemp->setFactor(factor);
+                }
+                // TO DO criar funcao em Node.h para adicionar estra transform ao node
+                transform = transform->NextSiblingElement();
+            }
+            
+            TiXmlElement *appearence = graphElement->FirstChildElement("appearanceref");
+            if(appearence==NULL){
+                
+            } else {
+                char * id = (char *) appearence->Attribute("id");
+                // TO DO fazer um set no node para adicionar
+            }
+            
+            TiXmlElement *primitives = graphElement->FirstChildElement("primitives");
+            TiXmlElement *primitive = graphElement->FirstChildElement();
+            
+            while(primitive) {
+                Primitive *primitiveTemp = new Primitive();
+                
+                if(strcmp(primitive->Value(),"rectangle")==0) {
+                    char* xy1 = (char*) primitive->Attribute("xy1");
+                    char* xy2 = (char*) primitive->Attribute("xy2");
+                    
+                    primitiveTemp->setXY1(xy1);
+                    primitiveTemp->setXY2(xy2);
+                    
+                }
+                else if(strcmp(primitive->Value(),"triangle")==0) {
+                    char* xyz1 = (char*) primitive->Attribute("xyz1");
+                    char* xyz2 = (char*) primitive->Attribute("xyz2");
+                    char* xyz3 = (char*) primitive->Attribute("xyz3");
+                    
+                    primitiveTemp->setXYZ1(xyz1);
+                    primitiveTemp->setXYZ2(xyz2);
+                    primitiveTemp->setXYZ3(xyz3);
+                    
+                }
+                else if(strcmp(primitive->Value(),"cylinder")==0) {
+                    char* base = (char*) primitive->Attribute("base");
+                    char* top = (char*) primitive->Attribute("top");
+                    char* height = (char*) primitive->Attribute("height");
+                    char* slices = (char*) primitive->Attribute("slices");
+                    char* stacks = (char*) primitive->Attribute("stacks");
+                    
+                    primitiveTemp->setBase(atof(base));
+                    primitiveTemp->setTop(atof(top));
+                    primitiveTemp->setHeight(atof(height));
+                    primitiveTemp->setSlices(atof(slices));
+                    primitiveTemp->setStacks(atof(stacks));
+                    
+                }
+                //SHERE AND TORUS
+                
+                primitive = primitive->NextSiblingElement();
+            }
+            
+            
+            
+            graph.push_back(currentNode);
+        }
+    }
+    
+    
+    /* if (graphElement == NULL)
         printf("Graph block not found!\n");
     else
     {
@@ -313,7 +402,7 @@ XMLParser::XMLParser() {
             node=node->NextSiblingElement();
         }
     }*/
-    
+}
 
 
 XMLParser::~XMLParser() {

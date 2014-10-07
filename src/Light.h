@@ -9,8 +9,12 @@ private:
 	char* type;
 	char* enabled;
 	char* marker;
+    
+    float target[3];
+    float angle;
+    float exponent;
+    
 	float pos[3];
-
 	float ambientComponent[4];
 	float diffuseComponent[4];
 	float specularComponent[4];
@@ -25,6 +29,9 @@ public:
 	void setAmbientComponent(char* ambient);
 	void setDiffuseComponent(char* diffuse);
 	void setSpecularComponent(char* specular);
+    void setTarget(char * target);
+    void setAngle(float angle);
+    void setExponent(float exponent);
 
 	char* getID();
 	char* getType();
@@ -34,6 +41,9 @@ public:
 	float* getAmbientComponent();
 	float* getDiffuseComponent();
 	float* getSpecularComponent();
+    float* getTarget();
+    float getAngle();
+    float getExponent();
 
 };
 

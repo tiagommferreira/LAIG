@@ -125,6 +125,8 @@ void XMLScene::display() {
 
 	glMatrixMode(GL_MODELVIEW);
 
+	// Draw axis
+	axis.draw();
 
 	/** GRAPH **/
 	map<char*,Node*>::iterator atual=parser->getGraph().begin();
@@ -135,18 +137,13 @@ void XMLScene::display() {
 
 		for(int j = 0; j < primitives.size(); j++) {
 			if(strcmp(primitives[j]->getValue(), "rectangle") == 0) {
-				glPushMatrix();
-				glTranslated(10,1,1);
+				glLoadMatrixf(atual->second->getTransformMatrix());
 				drawRectangle(parser->getGlobals()->getOrder(),primitives[j]->getXY1(),primitives[j]->getXY2());
-				glPopMatrix();
-			//	glLoadMatrixf(atual->second->getTransformMatrix());
 			}
 		}
 	}
 
 
-	// Draw axis
-	axis.draw();
 
 
 	glutSwapBuffers();

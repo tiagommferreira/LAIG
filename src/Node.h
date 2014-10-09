@@ -62,5 +62,34 @@ public:
 	void setId(char* id) {
 		this->id = id;
 	}
+
+	void setMatrix(){
+
+		glLoadIdentity();
+
+		for(int i = 0; i < transforms.size(); i++) {
+
+			cout << transforms[i]->getType() << endl;
+
+			if(strcmp(transforms[i]->getType(), "translate") == 0) {
+
+				cout << "TRANSLATE" << endl;
+				cout << "X " << transforms[i]->getTo()[0] << endl;
+				cout << "y " << transforms[i]->getTo()[1] << endl;
+				cout << "z " << transforms[i]->getTo()[2] << endl;
+
+				glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
+			}
+		}
+
+		glGetFloatv(GL_MODELVIEW_MATRIX, &transformMatrix[0][0]);
+
+	}
+
+	const float* getTransformMatrix() const {
+		return &transformMatrix[0][0];
+	}
+
+
 };
 #endif /* defined(__CGFExample__Node__) */

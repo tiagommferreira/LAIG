@@ -1,10 +1,10 @@
 <anf>
     <globals>
         <!-- drawing -->
-        <drawing mode ="fill" shading = "flat" background = "1 1 1 1.0" />
+        <drawing mode ="fill" shading = "flat" background = "0 0 0 0" />
         
         <!-- culling -->
-        <culling face = "back" order = "Cw"/>
+        <culling face = "back" order = "ccw"/>
         
         <!-- lighting -->
         <lighting doublesided = "false" local = "false" enabled = "false" ambient = "3.0 7.0 9.8 4.0"/>
@@ -12,11 +12,11 @@
     </globals>
     
     <!-- bloco de camaras: o atributo "initial" identifica a camara/ponto de vista inicial, que tem de existir -->
-    <cameras initial="camera" >
+    <cameras initial="ss" >
         <!-- tem de existir, pelo menos uma camara dos tipos seguintes (perspective ou ortho) -->
         <!-- no caso da camara ortho, o atributo "direction" define o eixo segundo o qual se efetua a projecao -->
         
-        <!-- <perspective id="ss" near="ff" far="ff" angle="ff" pos="ff ff ff" target="ff ff ff" /> -->
+        <perspective id="ss" near="0" far="100" angle="45" pos="20 20 20" target="0 0 0" />
         <ortho id="camera" direction="y" near="-1.0" far="1.0" left="-1.0" right="1.0" top="1.0" bottom="-1.0" />
     </cameras>
     
@@ -46,13 +46,13 @@
         <node id="ss">
         
             <transforms>
-            
+            	<transform type="translate" to="1 1 1"/>
             </transforms>
 
             <appearanceref id="ss" />
 
             <primitives>
-
+				<rectangle xy1="5 5" xy2="7 7" />
              </primitives>
  
             <descendants>

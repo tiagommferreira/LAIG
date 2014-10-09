@@ -30,6 +30,7 @@ public:
     Globals * getGlobals(){return this->global;}
     vector<Camera*> getCameras(){return this->cameras;}
     vector<Light*> getLights(){return this->lights;}
+    map<char*,Node*> getGraph(){return this->graph;}
 
 protected:
     
@@ -40,6 +41,7 @@ protected:
     TiXmlElement* lightsElement;
     TiXmlElement* graphElement;
     
+
     Globals * global;
     vector<Camera*> cameras;
     vector<Light*> lights;

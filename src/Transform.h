@@ -19,6 +19,26 @@ public:
     void setAxis(char axis) {this->axis=axis;}
     void setAngle(float angle){this->angle=angle;}
     void setFactor(char * factor){sscanf(factor, "%f %f %f",&this->factor[0],&this->factor[1],&this->factor[2]);}
+
+	float getAngle() const {
+		return angle;
+	}
+
+	char getAxis() const {
+		return axis;
+	}
+
+	const float* getFactor() const {
+		return factor;
+	}
+
+	const float* getTo() const {
+		return to;
+	}
+
+	char* getType() const {
+		return type;
+	}
 };
 
 #endif /* defined(__CGFExample__Transform__) */

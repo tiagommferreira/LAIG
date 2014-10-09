@@ -262,7 +262,7 @@ XMLParser::XMLParser() {
 		cout << endl << "_____ GRAPH INFO _____" << endl;;
 		TiXmlElement *node=graphElement->FirstChildElement();
 		while(node){
-			cout << "specific node found" << endl;
+			cout << endl <<"specific node found" << endl;
 			Node * currentNode = new Node();
 			char * id = (char *)node->Attribute("id");
 			currentNode->setId(id);
@@ -297,7 +297,11 @@ XMLParser::XMLParser() {
 						currentNode->addTransform(transforTemp);
 						transform = transform->NextSiblingElement();
 					}
+
+					// transforms all read
+					currentNode->setMatrix();
 				}
+
 			}
 
 			TiXmlElement *appearence = node->FirstChildElement("appearanceref");
@@ -318,10 +322,10 @@ XMLParser::XMLParser() {
 					cout << "specific primitive not found" << endl;
 				} else {
 					while(primitive) {
-						cout << "specific primitive found" << endl;
+
 						Primitive *primitiveTemp = new Primitive();
 						primitiveTemp->setValue((char*)primitive->Value());
-
+						cout << "specific primitive found:" << primitive->Value() << endl;
 						if(strcmp(primitive->Value(),"rectangle")==0) {
 							char* xy1 = (char*) primitive->Attribute("xy1");
 							char* xy2 = (char*) primitive->Attribute("xy2");
@@ -406,7 +410,7 @@ XMLParser::XMLParser() {
 			 */
 			cout << "end of specific node" << endl;
 			graph[currentNode->getId()] = currentNode;
-			node = graphElement->NextSiblingElement();
+			node = node->NextSiblingElement();
 		}
 		cout << "Graph block element end" << endl;
 	}

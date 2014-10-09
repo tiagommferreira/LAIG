@@ -21,6 +21,7 @@ public:
 protected:
     XMLParser* parser;
     CGFshader* shader;
+    void drawRectangle(string,float[2],float[2]);
 };
 
 #endif

@@ -265,9 +265,18 @@ XMLParser::XMLParser() {
 		rootid = root;
 		while(node){
 			cout << endl <<"specific node found" << endl;
-			Node * currentNode = new Node();
+
 			char * id = (char *)node->Attribute("id");
-			currentNode->setId(id);
+
+			Node* currentNode;
+			if(graph.find(id) != graph.end()) {
+				currentNode = graph.find(id)->second;
+			}
+			else {
+				currentNode = new Node();
+				currentNode->setId(id);
+			}
+
 
 			TiXmlElement *transforms=node->FirstChildElement("transforms");
 			if(transforms==NULL){
@@ -402,6 +411,7 @@ XMLParser::XMLParser() {
 					Node * descNode = new Node();
 					descNode->setId(id);
 					currentNode->setDescendents(descNode);
+					graph[descNode->getId()] = descNode;
 					noderef = noderef->NextSiblingElement();
 				}
 				cout << "end of descendents" << endl;

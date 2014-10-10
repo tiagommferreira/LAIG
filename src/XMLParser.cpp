@@ -289,7 +289,7 @@ XMLParser::XMLParser() {
 							char * axis = (char *) transform->Attribute("axis");
 							transforTemp->setAxis(axis[0]);
 							char * angle = (char *) transform->Attribute("angle");
-							transforTemp->setAxis(atof(angle));
+							transforTemp->setAngle(atof(angle));
 						} else if(strcmp(type,"scale")==0){
 							char * factor = (char *) transform->Attribute("factor");
 							transforTemp->setFactor(factor);

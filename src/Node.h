@@ -69,16 +69,25 @@ public:
 
 		for(int i = 0; i < transforms.size(); i++) {
 
-			cout << transforms[i]->getType() << endl;
+			cout << "transform type: " << transforms[i]->getType() << endl;
 
 			if(strcmp(transforms[i]->getType(), "translate") == 0) {
-
-				cout << "TRANSLATE" << endl;
-				cout << "X " << transforms[i]->getTo()[0] << endl;
-				cout << "y " << transforms[i]->getTo()[1] << endl;
-				cout << "z " << transforms[i]->getTo()[2] << endl;
-
 				glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
+			}
+			else if(strcmp(transforms[i]->getType(), "rotate") == 0) {
+				cout << "ROTATE " << transforms[i]->getAxis() << " " << transforms[i]->getAngle() << endl;
+				if(transforms[i]->getAxis() == 'x') {
+					glRotated(transforms[i]->getAngle(),1,0,0);
+				}
+				else if(transforms[i]->getAxis() == 'y') {
+					glRotated(transforms[i]->getAngle(),0,1,0);
+				}
+				else if(transforms[i]->getAxis() == 'z') {
+					glRotated(transforms[i]->getAngle(),0,0,1);
+				}
+			}
+			else if(strcmp(transforms[i]->getType(), "scale") == 0) {
+				glScaled(transforms[i]->getFactor()[0],transforms[i]->getFactor()[1],transforms[i]->getFactor()[2]);
 			}
 		}
 

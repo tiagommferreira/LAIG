@@ -58,7 +58,7 @@ public:
     
     int getStacks() {return stacks;}
     int getLoops() {return loops;}
-    int getStlices() {return slices;}
+    int getSlices() {return slices;}
 
 	char* getValue() const {
 		return value;

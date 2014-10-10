@@ -22,6 +22,10 @@ protected:
     XMLParser* parser;
     CGFshader* shader;
     void drawRectangle(string,float[2],float[2]);
+    void drawTriangle(string,float[3],float[3],float[3]);
+    void drawCylinder(string,float,float,float,int,int);
+    void drawSphere(string,float,int,int);
+    void drawTorus(string,float,float,int,int);
 };
 
 #endif

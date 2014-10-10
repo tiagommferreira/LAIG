@@ -31,6 +31,7 @@ public:
     vector<Camera*> getCameras(){return this->cameras;}
     vector<Light*> getLights(){return this->lights;}
     map<char*,Node*> getGraph(){return this->graph;}
+    char* getRootid(){return rootid;}
 
 protected:
     
@@ -46,6 +47,7 @@ protected:
     vector<Camera*> cameras;
     vector<Light*> lights;
     map<char*,Node*> graph;
+    char* rootid;
     
 };
 

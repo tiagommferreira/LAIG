@@ -21,6 +21,8 @@ public:
 protected:
     XMLParser* parser;
     CGFshader* shader;
+    void drawGraph();
+    void drawNode(Node*, Node*, float*);
     void drawRectangle(string,float[2],float[2]);
     void drawTriangle(string,float[3],float[3],float[3]);
     void drawCylinder(string,float,float,float,int,int);

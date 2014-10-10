@@ -261,6 +261,8 @@ XMLParser::XMLParser() {
 	} else {
 		cout << endl << "_____ GRAPH INFO _____" << endl;;
 		TiXmlElement *node=graphElement->FirstChildElement();
+		char * root = (char *)graphElement->Attribute("rootid");
+		rootid = root;
 		while(node){
 			cout << endl <<"specific node found" << endl;
 			Node * currentNode = new Node();

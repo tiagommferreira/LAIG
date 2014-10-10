@@ -95,7 +95,7 @@ public:
 
 	}
 
-	const float* getTransformMatrix() const {
+	float* getTransformMatrix() {
 		return &transformMatrix[0][0];
 	}
 

@@ -129,6 +129,9 @@ void XMLScene::display() {
 	axis.draw();
 
 	/** GRAPH **/
+	drawGraph();
+
+	/*
 	map<char*,Node*>::iterator atual=parser->getGraph().begin();
 
 	for(int i = 0;i < parser->getGraph().size();i++,atual++) {
@@ -173,6 +176,8 @@ void XMLScene::display() {
 		}
 	}
 
+	 */
+
 	glutSwapBuffers();
 }
 
@@ -180,8 +185,98 @@ XMLScene::~XMLScene() {
 	delete(shader);
 }
 
+void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
+	glPushMatrix();
+
+	float* currentMatrix = prevMatrix;
+
+	cout << "TRANSFORMS SIZE: " << node->getTransforms().size() << endl;
+	if(node->getTransforms().size() != 0) {
+		if(parent == NULL) {
+			currentMatrix = node->getTransformMatrix();
+			glLoadMatrixf(currentMatrix);
+		}
+		else {
+			glLoadIdentity();
+			glMultMatrixf(prevMatrix);
+			glMultMatrixf(node->getTransformMatrix());
+			glGetFloatv(GL_MODELVIEW_MATRIX, currentMatrix);
+			glLoadMatrixf(currentMatrix);
+		}
+	}
+	else {
+		if(parent == NULL) {
+		}
+		else {
+			currentMatrix = prevMatrix;
+			glLoadMatrixf(currentMatrix);
+		}
+	}
+
+
+	vector<Primitive*> primitives = node->getPrimitives();
+	cout << "PRIMITIVES SIZE: " << primitives.size() << endl;
+	for(int i = 0; i < primitives.size(); i++) {
+
+		if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
+			drawRectangle(parser->getGlobals()->getOrder(),
+					primitives[i]->getXY1(),
+					primitives[i]->getXY2());
+		}
+		else if(strcmp(primitives[i]->getValue(), "triangle") == 0) {
+			drawTriangle(parser->getGlobals()->getOrder(),
+					primitives[i]->getXYZ1(),
+					primitives[i]->getXYZ2(),
+					primitives[i]->getXYZ3());
+		}
+		else if(strcmp(primitives[i]->getValue(), "cylinder") == 0) {
+			drawCylinder(parser->getGlobals()->getOrder(),
+					primitives[i]->getBase(),
+					primitives[i]->getTop(),
+					primitives[i]->getHeight(),
+					primitives[i]->getSlices(),
+					primitives[i]->getStacks());
+		}
+		else if(strcmp(primitives[i]->getValue(), "sphere") == 0) {
+			drawSphere(parser->getGlobals()->getOrder(),
+					primitives[i]->getRadius(),
+					primitives[i]->getSlices(),
+					primitives[i]->getStacks());
+		}
+		else if(strcmp(primitives[i]->getValue(), "torus") == 0) {
+			drawTorus(parser->getGlobals()->getOrder(),
+					primitives[i]->getInner(),
+					primitives[i]->getOutter(),
+					primitives[i]->getSlices(),
+					primitives[i]->getLoops());
+		}
+	}
+
+
+	for(int j = 0; j < node->getDescendents().size(); j++) {
+		drawNode(node->getDescendents()[j], node, currentMatrix);
+	}
+
+	glPopMatrix();
+}
+
+void XMLScene::drawGraph() {
+
+	Node* root;
+	map<char*,Node*>::iterator atual=parser->getGraph().begin();
+
+	for(int i = 0;i < parser->getGraph().size();i++,atual++) {
+		if(strcmp(atual->second->getId(), parser->getRootid()) == 0) {
+			root = atual->second;
+		}
+	}
+
+	drawNode(root, NULL, NULL);
+
+
+}
+
 void XMLScene::drawRectangle(string type,float xy1[2],float xy2[2]){
-	cout << "DRAWING RECTANGLE" << endl;
 	if(type=="cw"){
 		glBegin(GL_POLYGON);
 		glVertex2f(xy1[0],xy1[1]);
@@ -200,7 +295,6 @@ void XMLScene::drawRectangle(string type,float xy1[2],float xy2[2]){
 }
 
 void XMLScene::drawTriangle(string type,float xyz1[3],float xyz2[3], float xyz3[3]){
-	cout << "DRAWING TRIANGLE" << endl;
 	if(type=="cw"){
 		glBegin(GL_POLYGON);
 		glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
@@ -217,20 +311,17 @@ void XMLScene::drawTriangle(string type,float xyz1[3],float xyz2[3], float xyz3[
 }
 
 void XMLScene::drawCylinder(string type,float base,float top, float height, int slices, int stacks){
-	cout << "DRAWING CYLINDER" << endl;
 	//gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
 
 }
 
 void XMLScene::drawSphere(string type,float radious, int slices, int stacks){
-	cout << "DRAWING SPHERE" << endl;
 	glutSolidSphere(radious, slices, stacks);
 
 }
 
 
 void XMLScene::drawTorus(string type,float inner,float outter, int slices, int loops){
-	cout << "DRAWING TORUS" << endl;
 	//glutSolidTorus(inner, outter, slices, loops);
 }
 

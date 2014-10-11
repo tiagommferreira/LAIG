@@ -43,7 +43,7 @@ public:
 		return appearenceRef;
 	}
 
-	const vector<Node*>& getDescendents() const {
+	vector<Node*>& getDescendents() {
 		return descendents;
 	}
 

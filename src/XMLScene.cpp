@@ -17,6 +17,52 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * a
 	return child;
 }
 
+void XMLScene::drawRectangle(string type,float xy1[2],float xy2[2]){
+	if(type=="cw"){
+		glBegin(GL_POLYGON);
+		glVertex2f(xy1[0],xy1[1]);
+		glVertex2f(xy1[0],xy2[1]);
+		glVertex2f(xy2[0],xy2[1]);
+		glVertex2f(xy2[0],xy1[1]);
+		glEnd();
+	} else{
+		glBegin(GL_POLYGON);
+		glVertex2f(xy1[0],xy1[1]);
+		glVertex2f(xy2[0],xy1[1]);
+		glVertex2f(xy2[0],xy2[1]);
+		glVertex2f(xy1[0],xy2[1]);
+		glEnd();
+	}
+}
+
+void XMLScene::drawTriangle(string type,float xyz1[3],float xyz2[3], float xyz3[3]){
+	if(type=="cw"){
+		glBegin(GL_POLYGON);
+		glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
+		glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
+		glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
+		glEnd();
+	} else{
+		glBegin(GL_POLYGON);
+		glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
+		glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
+		glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
+		glEnd();
+	}
+}
+
+void XMLScene::drawCylinder(string type,float base,float top, float height, int slices, int stacks){
+	//gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
+}
+
+void XMLScene::drawSphere(string type,float radious, int slices, int stacks){
+	glutSolidSphere(radious, slices, stacks);
+}
+
+void XMLScene::drawTorus(string type,float inner,float outter, int slices, int loops){
+	//glutSolidTorus(inner, outter, slices, loops);
+}
+
 void XMLScene::init() {
 	/** Parses the information from xml to c++ **/
 	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
@@ -175,8 +221,7 @@ void XMLScene::display() {
 			}
 		}
 	}
-
-	 */
+	*/
 
 	glutSwapBuffers();
 }
@@ -250,8 +295,6 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 					primitives[i]->getLoops());
 		}
 	}
-
-
 	for(int j = 0; j < node->getDescendents().size(); j++) {
 		drawNode(node->getDescendents()[j], node, currentMatrix);
 	}
@@ -271,55 +314,5 @@ void XMLScene::drawGraph() {
 	}
 
 	drawNode(root, NULL, NULL);
-
-
 }
 
-void XMLScene::drawRectangle(string type,float xy1[2],float xy2[2]){
-	if(type=="cw"){
-		glBegin(GL_POLYGON);
-		glVertex2f(xy1[0],xy1[1]);
-		glVertex2f(xy1[0],xy2[1]);
-		glVertex2f(xy2[0],xy2[1]);
-		glVertex2f(xy2[0],xy1[1]);
-		glEnd();
-	} else{
-		glBegin(GL_POLYGON);
-		glVertex2f(xy1[0],xy1[1]);
-		glVertex2f(xy2[0],xy1[1]);
-		glVertex2f(xy2[0],xy2[1]);
-		glVertex2f(xy1[0],xy2[1]);
-		glEnd();
-	}
-}
-
-void XMLScene::drawTriangle(string type,float xyz1[3],float xyz2[3], float xyz3[3]){
-	if(type=="cw"){
-		glBegin(GL_POLYGON);
-		glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
-		glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
-		glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
-		glEnd();
-	} else{
-		glBegin(GL_POLYGON);
-		glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
-		glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
-		glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
-		glEnd();
-	}
-}
-
-void XMLScene::drawCylinder(string type,float base,float top, float height, int slices, int stacks){
-	//gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
-
-}
-
-void XMLScene::drawSphere(string type,float radious, int slices, int stacks){
-	glutSolidSphere(radious, slices, stacks);
-
-}
-
-
-void XMLScene::drawTorus(string type,float inner,float outter, int slices, int loops){
-	//glutSolidTorus(inner, outter, slices, loops);
-}

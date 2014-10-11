@@ -422,16 +422,24 @@ XMLParser::XMLParser() {
 				}
 				cout << "end of descendents" << endl;
 			}
-			/*
-			 * TODO adicionar ao fim os respectivos nodes ao respectivo id.
-			 * ciclo for a comparar ids com os respectivos assim so corre uma vez no inicio e dp ja tem o id para a referencia
-			 */
 			cout << "end of specific node" << endl;
 			graph[currentNode->getId()] = currentNode;
 			node = node->NextSiblingElement();
 		}
-
 		cout << "Graph block element end" << endl;
+
+		//assigning to the graph the correct elements of descendents
+		map<char*,Node*>::iterator atual = graph.begin();
+		map<char*,Node*>::iterator secAtual = graph.begin();
+		for(unsigned int i=0;i<graph.size();i++,atual++) {
+			for(unsigned int j=0;j<atual->second->getDescendents().size();j++) {
+				for(unsigned int x=0;x<graph.size();x++,secAtual++){
+					if(strcmp(secAtual->second->getId(),atual->second->getDescendents()[j]->getId())==0){
+						atual->second->getDescendents()[j] = secAtual->second;
+					}
+				}
+			}
+		}
 	}
 }
 

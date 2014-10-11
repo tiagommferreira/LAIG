@@ -195,11 +195,14 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 			glLoadMatrixf(currentMatrix);
 		}
 		else {
-			glLoadIdentity();
-			glMultMatrixf(prevMatrix);
-			glMultMatrixf(node->getTransformMatrix());
-			glGetFloatv(GL_MODELVIEW_MATRIX, currentMatrix);
-			glLoadMatrixf(currentMatrix);
+			if(!node->isProcessed()){
+				glLoadIdentity();
+				glMultMatrixf(prevMatrix);
+				glMultMatrixf(node->getTransformMatrix());
+				glGetFloatv(GL_MODELVIEW_MATRIX, currentMatrix);
+				glLoadMatrixf(currentMatrix);
+				node->setProcessed(true);
+			}
 		}
 	}
 	//se nao tiver transformacoes ve se tem pai, se nao tiver, nao faz nada, identidade, se tiver pai, mete so a do pai

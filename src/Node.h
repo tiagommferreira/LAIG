@@ -17,8 +17,11 @@ private:
     vector<Node *> descendents;
     float transformMatrix[4][4];
     char * id;
+    bool processed;
     
 public:
+    Node(){processed = false;}
+
     void addPrimitive(Primitive *currentPrimitive){
     	this->primitives.push_back(currentPrimitive);
     }
@@ -99,6 +102,12 @@ public:
 		return &transformMatrix[0][0];
 	}
 
+	bool isProcessed() const {
+		return processed;
+	}
 
+	void setProcessed(bool processed) {
+		this->processed = processed;
+	}
 };
 #endif /* defined(__CGFExample__Node__) */

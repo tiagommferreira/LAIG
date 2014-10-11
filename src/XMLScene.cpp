@@ -190,7 +190,6 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 
 	float* currentMatrix = prevMatrix;
 
-	cout << "TRANSFORMS SIZE: " << node->getTransforms().size() << endl;
 	if(node->getTransforms().size() != 0) {
 		if(parent == NULL) {
 			currentMatrix = node->getTransformMatrix();
@@ -215,7 +214,6 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 
 
 	vector<Primitive*> primitives = node->getPrimitives();
-	cout << "PRIMITIVES SIZE: " << primitives.size() << endl;
 	for(int i = 0; i < primitives.size(); i++) {
 
 		if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
@@ -324,7 +322,3 @@ void XMLScene::drawSphere(string type,float radious, int slices, int stacks){
 void XMLScene::drawTorus(string type,float inner,float outter, int slices, int loops){
 	//glutSolidTorus(inner, outter, slices, loops);
 }
-
-
-
-

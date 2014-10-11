@@ -269,14 +269,20 @@ XMLParser::XMLParser() {
 			char * id = (char *)node->Attribute("id");
 
 			Node* currentNode;
-			if(graph.find(id) != graph.end()) {
-				currentNode = graph.find(id)->second;
+			bool found = false;
+			map<char*,Node*>::iterator atual= getGraph().begin();
+
+			for(int i = 0;i < getGraph().size();i++,atual++) {
+				if(strcmp(atual->second->getId(), id) == 0) {
+					currentNode = atual->second;
+					found = true;
+					break;
+				}
 			}
-			else {
+			if(!found) {
 				currentNode = new Node();
 				currentNode->setId(id);
 			}
-
 
 			TiXmlElement *transforms=node->FirstChildElement("transforms");
 			if(transforms==NULL){
@@ -424,6 +430,7 @@ XMLParser::XMLParser() {
 			graph[currentNode->getId()] = currentNode;
 			node = node->NextSiblingElement();
 		}
+
 		cout << "Graph block element end" << endl;
 	}
 }
@@ -450,7 +457,3 @@ TiXmlElement *XMLParser::findChildByAttribute(TiXmlElement *parent,const char * 
 
 	return child;
 }
-
-
-
-

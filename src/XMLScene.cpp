@@ -67,8 +67,12 @@ void XMLScene::init() {
 	/** Parses the information from xml to c++ **/
 	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
 	parser = new XMLParser();
-	/* GLOBALS */
 
+	cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
+
+	cout << "__globals__" << endl << endl;
+	/* GLOBALS */
+	cout << "culling properties" << endl;
 	// CULLING PROPERTIES
 	if((strcmp (parser->getGlobals()->getOrder(),"cw")==0)){
 		glFrontFace(GL_CW);
@@ -83,7 +87,7 @@ void XMLScene::init() {
 		glCullFace(GL_BACK);
 	}
 
-
+	cout << "lighting properties" << endl;
 	//LIGHTING PROPERTIES
 	if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
 		glEnable(GL_LIGHTING);
@@ -97,6 +101,7 @@ void XMLScene::init() {
 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
 
+	cout << "drawing properties" << endl;
 	//DRAWING PROPERTIES
 	if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
 		glShadeModel(GL_FLAT);
@@ -135,7 +140,6 @@ void XMLScene::display() {
 
 	// Apply transformations corresponding to the camera position relative to the origin
 	//CGFscene::activeCamera->applyView();
-
 	vector<Camera*> cameras = parser->getCameras();
 	Camera *initialCamera = new Camera();
 
@@ -145,11 +149,9 @@ void XMLScene::display() {
 			break;
 		}
 	}
-
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-
 	if(initialCamera->getType() == 1){
 		if(initialCamera->getOrthoDirection() == 'x') {
 			glRotated(90,0,1,0);
@@ -168,9 +170,7 @@ void XMLScene::display() {
 				initialCamera->getPerspecTarget()[0], initialCamera->getPerspecTarget()[1], initialCamera->getPerspecTarget()[2],
 				0,1,0);
 	}
-
 	glMatrixMode(GL_MODELVIEW);
-
 	// Draw axis
 	axis.draw();
 
@@ -219,12 +219,10 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 	vector<Primitive*> primitives = node->getPrimitives();
 
 	for(int i = 0; i < primitives.size(); i++) {
-		cout << primitives[i]->getValue() << endl;
 		if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
 			drawRectangle(parser->getGlobals()->getOrder(),
 					primitives[i]->getXY1(),
 					primitives[i]->getXY2());
-			cout << "1" << endl;
 		}
 		else if(strcmp(primitives[i]->getValue(), "triangle") == 0) {
 			drawTriangle(parser->getGlobals()->getOrder(),
@@ -255,9 +253,7 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 		}
 	}
 
-	for(int j = 0; j < node->getDescendents().size(); j++) {
-		drawNode(node->getDescendents()[j], node, currentMatrix);
-	}
+
 
 	glPopMatrix();
 }
@@ -268,11 +264,11 @@ void XMLScene::drawGraph() {
 	map<char*,Node*>::iterator atual=parser->getGraph().begin();
 
 	for(int i = 0;i < parser->getGraph().size();i++,atual++) {
-		if(strcmp(atual->second->getId(), parser->getRootid()) == 0) {
+		if(strcmp(atual->second->getId(), "rootid") == 0) {
 			root = atual->second;
 		}
 	}
-
 	drawNode(root, NULL, NULL);
+
 }
 

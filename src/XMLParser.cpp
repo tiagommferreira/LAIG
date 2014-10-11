@@ -269,25 +269,16 @@ XMLParser::XMLParser() {
 			char * id = (char *)node->Attribute("id");
 
 			Node* currentNode;
-			bool found = false;
 			map<char*,Node*>::iterator atual= getGraph().begin();
 
-			for(int i = 0;i < getGraph().size();i++,atual++) {
-				if(strcmp(atual->second->getId(), id) == 0) {
-					currentNode = atual->second;
-					found = true;
-					break;
-				}
-			}
-			if(!found) {
-				currentNode = new Node();
-				currentNode->setId(id);
-			}
+			currentNode = new Node();
+			currentNode->setId(id);
 
 			TiXmlElement *transforms=node->FirstChildElement("transforms");
 			if(transforms==NULL){
 				cout << "transformations not found " << endl;
 			}else {
+				cout << "Transform block found" << endl;
 				TiXmlElement *transform=transforms->FirstChildElement();
 				if(transform==NULL){
 					cout << "specific transform not found " << endl;
@@ -440,6 +431,7 @@ XMLParser::XMLParser() {
 				}
 			}
 		}
+		cout << "descendency correct" << endl;
 	}
 }
 

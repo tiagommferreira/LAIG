@@ -189,7 +189,7 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 	glPushMatrix();
 
 	float* currentMatrix = prevMatrix;
-
+	//se tiver transformacoes, ve se tem pai, se tiver pai multiplica a do pai pela dela, se nao, mete so a dele
 	if(node->getTransforms().size() != 0) {
 		if(parent == NULL) {
 			currentMatrix = node->getTransformMatrix();
@@ -203,6 +203,7 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 			glLoadMatrixf(currentMatrix);
 		}
 	}
+	//se nao tiver transformacoes ve se tem pai, se nao tiver, nao faz nada, identidade, se tiver pai, mete so a do pai
 	else {
 		if(parent == NULL) {
 		}

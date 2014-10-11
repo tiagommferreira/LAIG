@@ -219,6 +219,7 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 	vector<Primitive*> primitives = node->getPrimitives();
 
 	for(int i = 0; i < primitives.size(); i++) {
+		cout << primitives[i]->getValue() << endl;
 		if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
 			drawRectangle(parser->getGlobals()->getOrder(),
 					primitives[i]->getXY1(),
@@ -253,7 +254,9 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 		}
 	}
 
-
+	for(int i=0;i<node->getDescendents().size();i++){
+		drawNode(node->getDescendents()[i],node,currentMatrix);
+	}
 
 	glPopMatrix();
 }
@@ -264,7 +267,7 @@ void XMLScene::drawGraph() {
 	map<char*,Node*>::iterator atual=parser->getGraph().begin();
 
 	for(int i = 0;i < parser->getGraph().size();i++,atual++) {
-		if(strcmp(atual->second->getId(), "rootid") == 0) {
+		if(strcmp(atual->second->getId(), parser->getRootid()) == 0) {
 			root = atual->second;
 		}
 	}

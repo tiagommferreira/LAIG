@@ -46,24 +46,24 @@
         <node id="raiz">
         
             <transforms>
-            	<!-- <transform type="translate" to="0 0 0"/> -->
-            	<transform type="rotate" axis="y" angle="90" />
-            	<!-- <transform type="scale" factor="2 1 1" /> -->
+             <!-- <transform type="translate" to="0 0 0"/> -->
+             <transform type="rotate" axis="y" angle="90" />
+             <!-- <transform type="scale" factor="2 1 1" /> -->
             </transforms>
 
             <appearanceref id="ss" />
 
             <primitives>
-				<rectangle xy1="5 5" xy2="7 7" />
-				<!-- <torus inner="1" outer="3" slices="100" loops="100" /> -->
-				<!-- <triangle xyz1="0 0 0" xyz2="1 2 0" xyz3="2 0 0" /> -->
-				<!-- <cylinder base="5" top="5" height="3" slices="20" stacks="20" /> -->
+    <rectangle xy1="5 5" xy2="7 7" />
+    <!-- <torus inner="1" outer="3" slices="100" loops="100" /> -->
+    <!-- <triangle xyz1="0 0 0" xyz2="1 2 0" xyz3="2 0 0" /> -->
+    <!-- <cylinder base="5" top="5" height="3" slices="20" stacks="20" /> -->
              </primitives>
  
             <descendants>
  
                 <noderef id="segundo" />
-
+				<noderef id="terceiro"/>
             </descendants>
             
         </node>
@@ -71,28 +71,46 @@
         <node id="segundo">
         
             <transforms>
-            	<transform type="translate" to="0 2 0"/>
-            	<!-- <transform type="rotate" axis="y" angle="90" /> -->
-            	<!-- <transform type="scale" factor="2 1 1" /> -->
+             <transform type="translate" to="0 0 3"/>
+             <!-- <transform type="rotate" axis="y" angle="90" /> -->
+             <!-- <transform type="scale" factor="2 1 1" /> -->
             </transforms>
 
             <appearanceref id="ss" />
 
             <primitives>
-				<rectangle xy1="5 5" xy2="7 7" />
-				<!-- <torus inner="1" outer="3" slices="100" loops="100" /> -->
-				<!-- <triangle xyz1="0 0 0" xyz2="1 2 0" xyz3="2 0 0" /> -->
-				<!-- <cylinder base="5" top="5" height="3" slices="20" stacks="20" /> -->
-				<!-- <sphere radius="3" slices="20" stacks="20" /> -->
+     <rectangle xy1="5 5" xy2="7 7" />
+    <!-- <torus inner="1" outer="3" slices="100" loops="100" /> -->
+    <triangle xyz1="2 4 0" xyz2="4 4 0" xyz3="3 6 0" />
+    <!-- <cylinder base="5" top="5" height="3" slices="20" stacks="20" /> -->
+     <sphere radius="3" slices="20" stacks="20" /> 
+     <cylinder base="0.4" top="0.4" height="1" slices="20" stacks="20" />
              </primitives>
  
             <descendants>
- 
-                <noderef id="ss" />
-
             </descendants>
             
         </node>
+        
+        <node id="terceiro">
+        
+            <transforms>
+             <transform type="translate" to="0 0 0"/>
+            </transforms>
+
+            <appearanceref id="ss" />
+
+            <primitives>
+     <rectangle xy1="0 0" xy2="1 1" /> 
+     <cylinder base="0.4" top="0.4" height="20" slices="20" stacks="20" />
+             </primitives>
+ 
+            <descendants>
+            
+            </descendants>
+            
+        </node>
+
     </graph>
  
 </anf>

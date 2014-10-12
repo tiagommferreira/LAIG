@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	LAIG Turma 3 
+	
+	Bruno Moreira, ei12012@fe.up.pt
+	Tiago Miranda, ei11166@fe.up.pt
+	
+	Se encontrarem algum erro, enviar email para os 2.
+-->
+
+<anf>
+	<globals>
+		<drawing mode="fill" shading="gourand" background="0.4 0.4 1.0 1.0"/>
+		<culling face="both" order="ccw"/>
+		<lighting doublesided="true" local="true" enabled="true" ambient="0.0 0.0 0.0 1.0"/>
+	</globals>
+  
+	<lights>
+		<light id="luz0" type="omni" enabled="true" marker="true" pos="52.0 10.0 32.0 1.0">
+			<component type="ambient" value="1.0 1.0 1.0 1.0"/>
+			<component type="diffuse" value="1.0 1.0 1.0 1.0"/>
+			<component type="specular" value="1.0 1.0 1.0 1.0"/>
+		</light>
+    
+		<light id="luz1" type="omni" enabled="true" marker="true" pos="-52.0 10.0 32.0 1.0">
+			<component type="ambient" value="1.0 1.0 1.0 1.0"/>
+			<component type="diffuse" value="1.0 1.0 1.0 1.0"/>
+			<component type="specular" value="1.0 1.0 1.0 1.0"/>
+		</light>
+	
+		<light id="luz2" type="omni" enabled="true" marker="true" pos="-52.0 10.0 -32.0 1.0">
+			<component type="ambient" value="1.0 1.0 1.0 1.0"/>
+			<component type="diffuse" value="1.0 1.0 1.0 1.0"/>
+			<component type="specular" value="1.0 1.0 1.0 1.0"/>
+		</light>
+	
+		<light id="luz3" type="omni" enabled="true" marker="true" pos="52.0 10.0 -32.0 1.0">
+			<component type="ambient" value="1.0 1.0 1.0 1.0"/>
+			<component type="diffuse" value="1.0 1.0 1.0 1.0"/>
+			<component type="specular" value="1.0 1.0 1.0 1.0"/>
+		</light>
+	</lights>
+  
+	<cameras initial="camara1">
+		<perspective id="camara1" near="2.3" far="4.5" angle="3.4" pos="1.0 1.0 1.0 1.0" target="1.0 1.0 1.0 1.0"/>
+		<ortho id="camara2" direction="x" near="1.0" far="1.0" left="1.0" right="1.0" bottom="2.0" top="2.0"/>
+	</cameras>
+  
+	<textures>
+		<texture id="campo" file="campo.png" texlength_s="1.0" texlength_t="1.0"/>
+		<texture id="branco" file="branco.png" texlength_s="1.0" texlength_t="1.0"/>
+		<texture id="bola" file="bola.jpg" texlength_s="1.0" texlength_t="1.0"/>
+	</textures>
+  
+	<appearances>
+		<appearance id="branco" shininess="1.0" textureref="branco">
+			<component type="ambient" value="1.0 1.0 1.0 1.0"/>
+			<component type="diffuse" value="1.0 1.0 1.0 1.0"/>
+			<component type="specular" value="1.0 1.0 1.0 1.0"/>
+		</appearance>
+
+		<appearance id="bolaTextura" shininess="1.0" textureref="bola">
+			<component type="ambient" value="0.5 0.5 0.5 1.0"/>
+			<component type="diffuse" value="0.5 0.5 0.5 1.0"/>
+			<component type="specular" value="0.5 0.5 0.5 1.0"/>
+		</appearance>
+	
+		<appearance id="campo" shininess="1.0" textureref="campo">
+			<component type="ambient" value="0.5 0.5 0.5 1.0"/>
+			<component type="diffuse" value="0.5 0.5 0.5 1.0"/>
+			<component type="specular" value="0.5 0.5 0.5 1.0"/>
+		</appearance>
+    </appearances>
+  
+	<graph rootid="rootid">
+    
+		<node id="rootid">
+			<transforms>				
+			</transforms>
+
+			<appearanceref id="" />
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="campo"/>
+				<noderef id="bola"/>
+				<noderef id="balizas"/>
+			</descendants>
+		</node>
+		
+		<node id="campo">
+			<transforms>
+                <transform type="rotate" axis="x" angle="-90" />
+			</transforms>
+
+			<appearanceref id=""/>
+
+			<primitives>
+				<rectangle xy1="0 0" xy2="104 68" />
+			</primitives>
+
+			<descendants>				
+			</descendants>
+		</node>
+		
+		<node id="bola">
+			<transforms>
+				<transform type="translate" to="0 1 0" />
+			</transforms>
+
+			<appearanceref id="bola"/>
+
+			<primitives>
+				<sphere radius="2.5" slices="20" stacks="20" />
+			</primitives>
+
+			<descendants>				
+			</descendants>
+		</node>
+		
+		<node id="balizas">
+			<transforms>				
+			</transforms>
+
+			<appearanceref id="branco"/>
+
+			<primitives>				
+			</primitives>
+
+			<descendants>
+				<noderef id="balizaN"/>
+				<noderef id="balizaS"/>
+			</descendants>
+		</node>
+		
+		<node id="balizaS">
+			<transforms>
+				<transform type="translate" to="-44.6333 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="baliza"/>
+			</descendants>
+		</node>
+		
+		<node id="balizaN">
+			<transforms>
+				<transform type="translate" to="44.6333 0 0" />
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="baliza"/>
+			</descendants>
+		</node>
+		
+		<node id="baliza">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="trave"/>
+				<noderef id="postes"/>
+			</descendants>
+		</node>
+		
+		<node id="trave">
+			<transforms>
+				<transform type="translate" to="0 7 -8.805" />
+                <transform type="rotate" axis="x" angle="90" />
+                <transform type="scale" factor="1 17.805 1" />
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="cilindro"/>
+			</descendants>
+		</node>
+		
+		<node id="posteE">
+			<transforms>
+				<transform type="translate" to="0 0 8.6" />
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="poste"/>
+			</descendants>
+			
+		</node>
+		
+		<node id="posteD">
+			<transforms>
+				<transform type="translate" to="0 0 -8.4" />
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="poste"/>
+			</descendants>
+			
+		</node>
+		
+		<node id="poste">
+			<transforms>
+				<transform type="scale" factor="1 7 1" />
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+			</primitives>
+
+			<descendants>
+				<noderef id="cilindro"/>
+			</descendants>
+			
+		</node>
+		
+		<node id="cilindro">
+			<transforms>
+			</transforms>
+
+			<appearanceref id="inherit"/>
+
+			<primitives>
+				<cylinder base="0.4" top="0.4" height="1" slices="20" stacks="20" />
+			</primitives>
+				
+			<descendants>
+			</descendants>
+			
+		</node>
+	</graph>
+</anf>

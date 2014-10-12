@@ -408,7 +408,6 @@ XMLParser::XMLParser() {
 					Node * descNode = new Node();
 					descNode->setId(id);
 					currentNode->setDescendents(descNode);
-					graph[descNode->getId()] = descNode;
 					noderef = noderef->NextSiblingElement();
 				}
 				cout << "end of descendents" << endl;
@@ -431,7 +430,11 @@ XMLParser::XMLParser() {
 				}
 			}
 		}
-		cout << "descendency correct" << endl;
+		atual = graph.begin();
+		for(;atual!=graph.end();atual++){
+			cout << "->" << atual->second->getId();
+		}
+		cout << "#" << graph.size();
 	}
 }
 

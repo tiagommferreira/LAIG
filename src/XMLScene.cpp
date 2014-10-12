@@ -52,7 +52,7 @@ void XMLScene::drawTriangle(string type,float xyz1[3],float xyz2[3], float xyz3[
 }
 
 void XMLScene::drawCylinder(string type,float base,float top, float height, int slices, int stacks){
-	//gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
+	gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
 }
 
 void XMLScene::drawSphere(string type,float radious, int slices, int stacks){
@@ -139,7 +139,7 @@ void XMLScene::display() {
 	glLoadIdentity();
 
 	// Apply transformations corresponding to the camera position relative to the origin
-	//CGFscene::activeCamera->applyView();
+	CGFscene::activeCamera->applyView();
 	vector<Camera*> cameras = parser->getCameras();
 	Camera *initialCamera = new Camera();
 
@@ -214,12 +214,8 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 			glLoadMatrixf(currentMatrix);
 		}
 	}
-
-
 	vector<Primitive*> primitives = node->getPrimitives();
-
 	for(int i = 0; i < primitives.size(); i++) {
-		cout << primitives[i]->getValue() << endl;
 		if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
 			drawRectangle(parser->getGlobals()->getOrder(),
 					primitives[i]->getXY1(),
@@ -253,25 +249,26 @@ void XMLScene::drawNode(Node* node, Node* parent, float* prevMatrix) {
 					primitives[i]->getLoops());
 		}
 	}
-
-	for(int i=0;i<node->getDescendents().size();i++){
-		drawNode(node->getDescendents()[i],node,currentMatrix);
-	}
-
 	glPopMatrix();
 }
 
 void XMLScene::drawGraph() {
 
-	Node* root = new Node();
-	map<char*,Node*>::iterator atual=parser->getGraph().begin();
+	map<char*,Node*> graph = parser->getGraph();
+	map<char*,Node*>::iterator atual=graph.begin();
+	map<char*,Node*>::iterator final=graph.end();
 
-	for(int i = 0;i < parser->getGraph().size();i++,atual++) {
-		if(strcmp(atual->second->getId(), parser->getRootid()) == 0) {
-			root = atual->second;
+	for(;atual!=final;atual++){
+		cout << "->" << atual->second->getId();
+		drawNode(atual->second,NULL,NULL);
+		vector<Node*> desc = atual->second->getDescendents();
+		for(int i=0; i<desc.size();i++){
+			if(desc[i]->isProcessed()){
+				desc[i]->setProcessed(false);
+			}
+			drawNode(desc[i],atual->second,atual->second->getTransformMatrix());
 		}
 	}
-	drawNode(root, NULL, NULL);
-
+	cout << endl;
 }
 

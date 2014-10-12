@@ -430,12 +430,6 @@ XMLParser::XMLParser() {
 				}
 			}
 		}
-		atual = graph.begin();
-		for(;atual!=graph.end();atual++){
-			if(strcmp(atual->second->getId(),"terceiro")==0){
-				cout << atual->second->getDescendents()[0]->getDescendents().size() << endl;
-			}
-		}
 	}
 }
 

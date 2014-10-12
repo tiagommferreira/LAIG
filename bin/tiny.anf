@@ -94,24 +94,6 @@
              </primitives>
  
             <descendants>
-            <noderef id="quinto"/>
-            </descendants>
-            
-        </node>
-        
-         <node id="quinto">
-        
-            <transforms>
-            <transform type="translate" to="-2 1 9"/>
-            </transforms>
-
-            <appearanceref id="ss" />
-
-            <primitives>
-    			<sphere radius="2" slices="20" stacks="20" />
-             </primitives>
- 
-            <descendants>
             </descendants>
             
         </node>

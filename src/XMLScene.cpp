@@ -103,6 +103,7 @@ void XMLScene::display() {
 			break;
 		}
 	}
+
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
@@ -124,6 +125,7 @@ void XMLScene::display() {
 				initialCamera->getPerspecTarget()[0], initialCamera->getPerspecTarget()[1], initialCamera->getPerspecTarget()[2],
 				0,1,0);
 	}
+
 	glMatrixMode(GL_MODELVIEW);
 	// Draw axis
 	axis.draw();
@@ -137,7 +139,8 @@ void XMLScene::display() {
 	map<char*,Node*>::iterator it=temp.begin();
 	for(unsigned int i=0;i<temp.size();i++,it++){
 		if(strcmp(parser->getRootid(),it->second->getId())==0){
-			it->second->draw(&m[0][0]);
+			it->second->draw(m);
+			break;
 		}
 	}
 

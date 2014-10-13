@@ -204,10 +204,13 @@ public:
 		}
 	}
 
-	void draw(float *pastMatrix){
+	void draw(float pastMatrix[][4]){
+		float finalNodeMatrix[4][4];
 		cout << "drawing current node: " << id << endl;
+
+		glPushMatrix();
 		glLoadIdentity();
-		glMultMatrixf(pastMatrix);
+		glMultMatrixf(&pastMatrix[0][0]);
 
 		if(transforms.size()!=0){
 			glMultMatrixf(&transformMatrix[0][0]);
@@ -215,8 +218,7 @@ public:
 		else {
 			cout << id << ": transforms not found" << endl;
 		}
-
-		glGetFloatv(GL_MODELVIEW_MATRIX, &transformMatrix[0][0]);
+		glGetFloatv(GL_MODELVIEW_MATRIX, &finalNodeMatrix[0][0]);
 
 		if(primitives.size()!=0) {
 			drawPrimitives();
@@ -224,9 +226,10 @@ public:
 			cout << id << ": primitives not found" << endl;
 		}
 
-		for(unsigned int i=0;i<descendents.size();i++){
-			descendents[i]->draw(&transformMatrix[0][0]);
+		for(unsigned int i=0;i<descendents.size();i++) {
+			descendents[i]->draw(finalNodeMatrix);
 		}
+		glPopMatrix();
 
 	}
 };

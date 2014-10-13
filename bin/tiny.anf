@@ -51,7 +51,6 @@
             <appearanceref id="ss" />
 
             <primitives>
-    			<rectangle xy1="0 0" xy2="5 5"/>
              </primitives>
  
             <descendants>
@@ -65,18 +64,17 @@
  <node id="segundo">
         
             <transforms>
-            <transform type="translate" to="2 1 -10"/>
-            <transform type="scale" factor="7 1 1"/>
+            <transform type="translate" to="-5 0 0"/>
             </transforms>
 
             <appearanceref id="ss" />
 
             <primitives>
-    			<sphere radius="2" slices="20" stacks="20" />
+    			<rectangle xy1="5 6" xy2="7 8"/>
              </primitives>
  
             <descendants>
-				
+				<noderef id="quinto"/>
             </descendants>
             
         </node>
@@ -84,13 +82,12 @@
  <node id="terceiro">
         
             <transforms>
-            <transform type="translate" to="4 1 9"/>
             </transforms>
 
             <appearanceref id="ss" />
 
             <primitives>
-    			<sphere radius="2" slices="20" stacks="20" />
+    			<rectangle xy1="0 0" xy2="5 5"/>
              </primitives>
  
             <descendants>
@@ -107,7 +104,22 @@
             <appearanceref id="ss" />
 
             <primitives>
-    			<sphere radius="10" slices="20" stacks="20" />
+             </primitives>
+ 
+            <descendants>
+            </descendants>
+            
+        </node>
+        
+        <node id="quinto">
+        
+            <transforms>
+            </transforms>
+
+            <appearanceref id="ss" />
+
+            <primitives>
+            <sphere radius="1" slices="50" stacks="50" />
              </primitives>
  
             <descendants>

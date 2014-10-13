@@ -32,6 +32,7 @@ public:
     vector<Light*> getLights(){return this->lights;}
     map<char*,Node*> getGraph(){return this->graph;}
     char* getRootid(){return rootid;}
+    void setEmptyNodes();
 
 protected:
     

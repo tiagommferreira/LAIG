@@ -11,6 +11,7 @@ using namespace std;
 
 class Node {
 private:
+	vector<Node*> graph;
 	vector<Primitive *> primitives;
 	vector<Transform *> transforms;
 	char * appearenceRef;
@@ -22,6 +23,13 @@ private:
 public:
 	Node(){processed = false;}
 
+	void setAllPrimitives(vector<Primitive *> prim) {
+		this->primitives = prim;
+	}
+
+	void setAllTransforms(vector<Transform * >trans){
+		this->transforms = trans;
+	}
 	void addPrimitive(Primitive *currentPrimitive){
 		this->primitives.push_back(currentPrimitive);
 	}
@@ -156,18 +164,10 @@ public:
 	void setProcessed(bool processed) {
 		this->processed = processed;
 	}
-
-	void draw(float *pastMatrix){
-		cout << "name:" << id << " #"<< primitives.size() << ", #" << transforms.size() <<"filhos#" << descendents.size()<<endl;
-
-		glLoadIdentity();
-
-		glMultMatrixf(pastMatrix);
-		if(transforms.size()!=0)
-			glMultMatrixf(&transformMatrix[0][0]);
-
-		glGetFloatv(GL_MODELVIEW_MATRIX, &transformMatrix[0][0]);
-
+	void setAllDescendents(vector<Node*> nodes) {
+		this->descendents = nodes;
+	}
+	void drawPrimitives() {
 		for(unsigned int i = 0; i < primitives.size(); i++) {
 			if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
 				drawRectangle("ccw",
@@ -202,12 +202,32 @@ public:
 						primitives[i]->getLoops());
 			}
 		}
-		for(unsigned int i=0;i<descendents.size();i++){
-			glPushMatrix();
-			descendents[i]->draw(&transformMatrix[0][0]);
-			glPopMatrix();
-		}
 	}
 
+	void draw(float *pastMatrix){
+		cout << "drawing current node: " << id << endl;
+		glLoadIdentity();
+		glMultMatrixf(pastMatrix);
+
+		if(transforms.size()!=0){
+			glMultMatrixf(&transformMatrix[0][0]);
+		}
+		else {
+			cout << id << ": transforms not found" << endl;
+		}
+
+		glGetFloatv(GL_MODELVIEW_MATRIX, &transformMatrix[0][0]);
+
+		if(primitives.size()!=0) {
+			drawPrimitives();
+		}else{
+			cout << id << ": primitives not found" << endl;
+		}
+
+		for(unsigned int i=0;i<descendents.size();i++){
+			descendents[i]->draw(&transformMatrix[0][0]);
+		}
+
+	}
 };
 #endif /* defined(__CGFExample__Node__) */

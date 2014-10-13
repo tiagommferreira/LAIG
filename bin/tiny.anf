@@ -76,7 +76,7 @@
              </primitives>
  
             <descendants>
- 
+				
             </descendants>
             
         </node>
@@ -84,13 +84,30 @@
  <node id="terceiro">
         
             <transforms>
-            <transform type="translate" to="-2 1 9"/>
+            <transform type="translate" to="4 1 9"/>
             </transforms>
 
             <appearanceref id="ss" />
 
             <primitives>
     			<sphere radius="2" slices="20" stacks="20" />
+             </primitives>
+ 
+            <descendants>
+            <noderef id="quatro"/>
+            </descendants>
+            
+        </node>
+        
+         <node id="quatro">
+        
+            <transforms>
+            </transforms>
+
+            <appearanceref id="ss" />
+
+            <primitives>
+    			<sphere radius="10" slices="20" stacks="20" />
              </primitives>
  
             <descendants>

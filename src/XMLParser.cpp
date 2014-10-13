@@ -268,10 +268,7 @@ XMLParser::XMLParser() {
 
 			char * id = (char *)node->Attribute("id");
 
-			Node* currentNode;
-			map<char*,Node*>::iterator atual= getGraph().begin();
-
-			currentNode = new Node();
+			Node* currentNode = new Node();
 			currentNode->setId(id);
 
 			TiXmlElement *transforms=node->FirstChildElement("transforms");
@@ -418,21 +415,38 @@ XMLParser::XMLParser() {
 		}
 		cout << "Graph block element end" << endl;
 
+
 		//assigning to the graph the correct elements of descendents
-		map<char*,Node*>::iterator atual = graph.begin();
-		map<char*,Node*>::iterator secAtual = graph.begin();
-		for(unsigned int i=0;i<graph.size();i++,atual++) {
-			for(unsigned int j=0;j<atual->second->getDescendents().size();j++) {
-				for(unsigned int x=0;x<graph.size();x++,secAtual++){
-					if(strcmp(secAtual->second->getId(),atual->second->getDescendents()[j]->getId())==0){
-						atual->second->getDescendents()[j] = secAtual->second;
-					}
-				}
-			}
-		}
+		cout << "Fill empty Nodes" << endl;
+		setEmptyNodes();
+		cout << "Empty nodes filled" << endl;
+
 	}
 }
 
+void XMLParser::setEmptyNodes(){
+	map<char*,Node*>::iterator it = graph.begin();
+	map<char*,Node*>::iterator it2 = graph.begin();
+	map<char*,Node*>::iterator ite = graph.end();
+	vector<Node*> currentChields;
+
+	for(;it!=ite;it++) {
+		if(it->second->getDescendents().size()!=0) {
+			currentChields = it->second->getDescendents();
+			for(int i=0;i<currentChields.size();i++) {
+				cout << "numero de filhos do node " << it->first << ", #" << currentChields.size() << endl;
+				for(;it2!=ite;it2++){
+					if(strcmp(it2->first,currentChields[i]->getId())==0){
+						currentChields[i] = it2->second;
+						cout << " chield: " << currentChields[i]->getId() << endl;
+					}
+				}
+				it2=graph.begin();
+			}
+			it->second->setAllDescendents(currentChields);
+		}
+	}
+}
 
 XMLParser::~XMLParser() {
 	delete(doc);

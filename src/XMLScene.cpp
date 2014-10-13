@@ -135,7 +135,7 @@ void XMLScene::display() {
 
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
-	for(int i=0;i<temp.size();i++,it++){
+	for(unsigned int i=0;i<temp.size();i++,it++){
 		if(strcmp(parser->getRootid(),it->second->getId())==0){
 			it->second->draw(&m[0][0]);
 		}

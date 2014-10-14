@@ -33,7 +33,15 @@ public:
     map<char*,Node*> getGraph(){return this->graph;}
     char* getRootid(){return rootid;}
     void setEmptyNodes();
-
+    
+    void toggleLight(int lightId){
+        if(strcmp(lights[lightId]->getEnabled(),"true")==0){
+            lights[lightId]->setEnabled((char*)"false");
+        } else {
+            lights[lightId]->setEnabled((char*)"true");
+        }
+    }
+    
 protected:
     
     TiXmlDocument* doc;
@@ -43,7 +51,6 @@ protected:
     TiXmlElement* lightsElement;
     TiXmlElement* graphElement;
     
-
     Globals * global;
     vector<Camera*> cameras;
     vector<Light*> lights;

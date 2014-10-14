@@ -8,6 +8,7 @@
 #include "UserInterface.h"
 #include "CGFappearance.h"
 #include "CGFapplication.h"
+#include <vector>
 
 class XMLScene : public CGFscene
 {
@@ -24,7 +25,11 @@ public:
         return this->parser;
     }
     
+    void addLights();
+    void drawLights();
+    
 protected:
+    vector<CGFlight*>lights;
     XMLParser* parser;
     CGFshader* shader;
 };

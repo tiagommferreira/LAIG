@@ -15,7 +15,11 @@ void UserInterface::initGUI() {
     lightPanel = addPanelToPanel(generalPanel,(char*)"Lights",1);
     for(int i=0;i<((XMLScene *) scene)->getParser()->getLights().size();i++){
         // fazer um check para se a luz tiver activa ficar logo com o check
-        addCheckboxToPanel(lightPanel,(char*)"toggle light",0,i);
+        if(strcmp(((XMLScene *) scene)->getParser()->getLights()[i]->getEnabled(),"true")==0){
+            addCheckboxToPanel(lightPanel,(char*)((XMLScene *) scene)->getParser()->getLights()[i]->getID(),0,i)->set_int_val(1);
+        }else{
+            addCheckboxToPanel(lightPanel,(char*)((XMLScene *) scene)->getParser()->getLights()[i]->getID(),0,i);
+        }
     }
     
     addColumnToPanel(generalPanel);
@@ -36,6 +40,7 @@ void UserInterface::initGUI() {
 void UserInterface::processGUI(GLUI_Control *ctrl) {
     if(ctrl->user_id>=0 && ctrl->user_id <= ((XMLScene *) scene)->getParser()->getLights().size()){
         cout << "light with the id of " << ctrl->user_id << " was toggled\n";
+        ((XMLScene *) scene)->getParser()->toggleLight(ctrl->user_id);
         //fazer uma função para activar ou desativar uma certa luz na XMLscene
     }else if(ctrl->user_id==8){
         cout << "Change of the drawing mode, current ->" << radio->get_int_val() << endl;

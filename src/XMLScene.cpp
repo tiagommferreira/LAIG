@@ -21,7 +21,10 @@ void XMLScene::init() {
 	/** Parses the information from xml to c++ **/
 	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
 	parser = new XMLParser();
-
+    
+    glEnable(GL_LIGHTING);
+    addLights();
+    
 	cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
 
 	cout << "__globals__" << endl << endl;
@@ -97,6 +100,7 @@ void XMLScene::display() {
     CGFscene::activeCamera->applyView();
 	// Draw axis
 	axis.draw();
+    drawLights();
 
 	/** GRAPH **/
 	float m[4][4];
@@ -116,3 +120,25 @@ void XMLScene::display() {
 XMLScene::~XMLScene() {
 	delete(shader);
 }
+
+void XMLScene::addLights(){
+    vector<Light*> lights = parser->getLights();
+    for(int i=0;i<lights.size();i++) {
+        CGFlight *currentLight = new CGFlight(i+16384,lights[i]->getPosition());
+        currentLight->setAmbient(lights[i]->getAmbientComponent());
+        this->lights.push_back(currentLight);
+    }
+}
+
+void XMLScene::drawLights(){
+    vector<Light*> tempLights=parser->getLights();
+    for(int i=0;i<tempLights.size();i++){
+        if(strcmp(tempLights[i]->getEnabled(),"true")==0){
+            this->lights[i]->enable();
+            this->lights[i]->draw();
+        } else{
+            this->lights[i]->disable();
+        }
+    }
+}
+

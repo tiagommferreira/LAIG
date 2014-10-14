@@ -31,20 +31,20 @@ void UserInterface::initGUI() {
     
     addColumnToPanel(generalPanel);
     cameraPanel = addPanelToPanel(generalPanel,(char*) "Cameras",1);
-    list = addListboxToPanel(cameraPanel,(char*)"",0,10);
+    list = addListboxToPanel(cameraPanel,(char*)"",0,9);
     for(int i=0;i<((XMLScene *) scene)->getParser()->getCameras().size();i++){
-        list->add_item(i+11,(char*)((XMLScene *) scene)->getParser()->getCameras()[i]->getId());
+        list->add_item(i,(char*)((XMLScene *) scene)->getParser()->getCameras()[i]->getId());
     }
 }
 
 void UserInterface::processGUI(GLUI_Control *ctrl) {
     if(ctrl->user_id>=0 && ctrl->user_id <= ((XMLScene *) scene)->getParser()->getLights().size()){
         cout << "light with the id of " << ctrl->user_id << " was toggled\n";
-        ((XMLScene *) scene)->getParser()->toggleLight(ctrl->user_id);
+        ((XMLScene *) scene)->toggleLight(ctrl->user_id);
         //fazer uma função para activar ou desativar uma certa luz na XMLscene
     }else if(ctrl->user_id==8){
         cout << "Change of the drawing mode, current ->" << radio->get_int_val() << endl;
-    }else if(ctrl->user_id>=9 && ctrl->user_id<((XMLScene *) scene)->getParser()->getCameras().size()+9) {
+    }else if(ctrl->user_id==9) {
         cout << "Camera change, current camera->" << (list->get_int_val()) << endl;
     }else{
         cout << "dafuq\n" << endl;

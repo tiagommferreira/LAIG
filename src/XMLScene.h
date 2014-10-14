@@ -25,11 +25,24 @@ public:
         return this->parser;
     }
     
+    void toggleLight(int lightId){
+        if(strcmp(parser->getLights()[lightId]->getEnabled(),"true")==0){
+            parser->getLights()[lightId]->setEnabled((char*)"false");
+            lights[lightId]->disable();
+        } else {
+           parser->getLights()[lightId]->setEnabled((char*)"true");
+            lights[lightId]->enable();
+        }
+    }
+    
+    
     void addLights();
     void drawLights();
+    void setNodesAppearances();
     
 protected:
     vector<CGFlight*>lights;
+    vector<CGFappearance*>appearances;
     XMLParser* parser;
     CGFshader* shader;
 };

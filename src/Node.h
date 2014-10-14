@@ -19,9 +19,18 @@ private:
 	float transformMatrix[4][4];
 	char * id;
 	bool processed;
+    CGFappearance * appearance;
 
 public:
 	Node(){processed = false;}
+    
+    void setAppearance(CGFappearance * app){
+        this->appearance = app;
+    }
+    
+    CGFappearance * getAppearance() {
+        return this->appearance;
+    }
 
 	void setAllPrimitives(vector<Primitive *> prim) {
 		this->primitives = prim;
@@ -77,9 +86,13 @@ public:
 
 	void drawRectangle(float xy1[2],float xy2[2]){
         glBegin(GL_QUADS);
+        glTexCoord2d(0,0);
         glVertex3d(xy1[0],xy1[1],0);
+        glTexCoord2d(1,0);
         glVertex3d(xy2[0],xy1[1],0);
+        glTexCoord2d(1,1);
         glVertex3d(xy2[0],xy2[1],0);
+        glTexCoord2d(0,1);
         glVertex3d(xy1[0],xy2[1],0);
         glEnd();
 	}
@@ -189,7 +202,11 @@ public:
 
 	void draw(float pastMatrix[][4]){
 		float finalNodeMatrix[4][4];
-
+        
+        if(strcmp(appearenceRef,"inherit")==0){
+        } else {
+            appearance->apply();
+        }
 		glPushMatrix();
 		glLoadIdentity();
 		glMultMatrixf(&pastMatrix[0][0]);

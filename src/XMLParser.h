@@ -10,6 +10,8 @@
 #include "Light.h"
 #include "Node.h"
 #include "Transform.h"
+#include "Texture.h"
+#include "Appearance.h"
 #include <map>
 
 class XMLParser
@@ -30,17 +32,13 @@ public:
     Globals * getGlobals(){return this->global;}
     vector<Camera*> getCameras(){return this->cameras;}
     vector<Light*> getLights(){return this->lights;}
+    vector<Appearance*> getAppearances(){return this->appearances;}
+    vector<Texture*> getTextures(){return this->textures;}
     map<char*,Node*> getGraph(){return this->graph;}
     char* getRootid(){return rootid;}
-    void setEmptyNodes();
     
-    void toggleLight(int lightId){
-        if(strcmp(lights[lightId]->getEnabled(),"true")==0){
-            lights[lightId]->setEnabled((char*)"false");
-        } else {
-            lights[lightId]->setEnabled((char*)"true");
-        }
-    }
+    void setEmptyNodes();
+   
     
 protected:
     
@@ -50,10 +48,14 @@ protected:
     TiXmlElement* camerasElement;
     TiXmlElement* lightsElement;
     TiXmlElement* graphElement;
+    TiXmlElement* appearancesElement;
+    TiXmlElement* texturesElement;
     
     Globals * global;
     vector<Camera*> cameras;
     vector<Light*> lights;
+    vector<Appearance*> appearances;
+    vector<Texture*> textures;
     map<char*,Node*> graph;
     char* rootid;
     

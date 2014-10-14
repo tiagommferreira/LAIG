@@ -7,7 +7,8 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "tiny.anf";
+	//const char *p = "tiny.anf";
+    const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -302,7 +303,6 @@ XMLParser::XMLParser() {
 						currentNode->addTransform(transforTemp);
 						transform = transform->NextSiblingElement();
 					}
-
 					// transforms all read
 					currentNode->setMatrix();
 				}

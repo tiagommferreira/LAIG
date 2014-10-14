@@ -44,6 +44,8 @@ public:
     float* getTarget();
     float getAngle();
     float getExponent();
+    
+    void addLight();
 
 };
 

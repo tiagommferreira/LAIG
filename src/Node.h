@@ -75,49 +75,32 @@ public:
 	}
 
 
-	void drawRectangle(string type,float xy1[2],float xy2[2]){
-		if(type=="cw"){
-			glBegin(GL_POLYGON);
-			glVertex2f(xy1[0],xy1[1]);
-			glVertex2f(xy1[0],xy2[1]);
-			glVertex2f(xy2[0],xy2[1]);
-			glVertex2f(xy2[0],xy1[1]);
-			glEnd();
-		} else{
-			glBegin(GL_POLYGON);
-			glVertex2f(xy1[0],xy1[1]);
-			glVertex2f(xy2[0],xy1[1]);
-			glVertex2f(xy2[0],xy2[1]);
-			glVertex2f(xy1[0],xy2[1]);
-			glEnd();
-		}
+	void drawRectangle(float xy1[2],float xy2[2]){
+        glBegin(GL_QUADS);
+        glVertex3d(xy1[0],xy1[1],0);
+        glVertex3d(xy2[0],xy1[1],0);
+        glVertex3d(xy2[0],xy2[1],0);
+        glVertex3d(xy1[0],xy2[1],0);
+        glEnd();
 	}
 
-	void drawTriangle(string type,float xyz1[3],float xyz2[3], float xyz3[3]){
-		if(type=="cw"){
+	void drawTriangle(float xyz1[3],float xyz2[3], float xyz3[3]){
 			glBegin(GL_POLYGON);
 			glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
 			glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
 			glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
 			glEnd();
-		} else{
-			glBegin(GL_POLYGON);
-			glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
-			glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
-			glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
-			glEnd();
-		}
 	}
 
-	void drawCylinder(string type,float base,float top, float height, int slices, int stacks){
+	void drawCylinder(float base,float top, float height, int slices, int stacks){
 		gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
 	}
 
-	void drawSphere(string type,float radious, int slices, int stacks){
+	void drawSphere(float radious, int slices, int stacks){
 		glutSolidSphere(radious, slices, stacks);
 	}
 
-	void drawTorus(string type,float inner,float outter, int slices, int loops){
+	void drawTorus(float inner,float outter, int slices, int loops){
 		glutSolidTorus(inner, outter, slices, loops);
 	}
 
@@ -170,18 +153,18 @@ public:
 	void drawPrimitives() {
 		for(unsigned int i = 0; i < primitives.size(); i++) {
 			if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
-				drawRectangle("ccw",
+				drawRectangle(
 						primitives[i]->getXY1(),
 						primitives[i]->getXY2());
 			}
 			else if(strcmp(primitives[i]->getValue(), "triangle") == 0) {
-				drawTriangle("ccw",
+				drawTriangle(
 						primitives[i]->getXYZ1(),
 						primitives[i]->getXYZ2(),
 						primitives[i]->getXYZ3());
 			}
 			else if(strcmp(primitives[i]->getValue(), "cylinder") == 0) {
-				drawCylinder("ccw",
+				drawCylinder(
 						primitives[i]->getBase(),
 						primitives[i]->getTop(),
 						primitives[i]->getHeight(),
@@ -189,13 +172,13 @@ public:
 						primitives[i]->getStacks());
 			}
 			else if(strcmp(primitives[i]->getValue(), "sphere") == 0) {
-				drawSphere("ccw",
+				drawSphere(
 						primitives[i]->getRadius(),
 						primitives[i]->getSlices(),
 						primitives[i]->getStacks());
 			}
 			else if(strcmp(primitives[i]->getValue(), "torus") == 0) {
-				drawTorus("ccw",
+				drawTorus(
 						primitives[i]->getInner(),
 						primitives[i]->getOutter(),
 						primitives[i]->getSlices(),
@@ -206,7 +189,6 @@ public:
 
 	void draw(float pastMatrix[][4]){
 		float finalNodeMatrix[4][4];
-		cout << "drawing current node: " << id << endl;
 
 		glPushMatrix();
 		glLoadIdentity();
@@ -216,21 +198,18 @@ public:
 			glMultMatrixf(&transformMatrix[0][0]);
 		}
 		else {
-			cout << id << ": transforms not found" << endl;
 		}
 		glGetFloatv(GL_MODELVIEW_MATRIX, &finalNodeMatrix[0][0]);
 
 		if(primitives.size()!=0) {
 			drawPrimitives();
 		}else{
-			cout << id << ": primitives not found" << endl;
 		}
 
 		for(unsigned int i=0;i<descendents.size();i++) {
 			descendents[i]->draw(finalNodeMatrix);
 		}
 		glPopMatrix();
-
 	}
 };
 #endif /* defined(__CGFExample__Node__) */

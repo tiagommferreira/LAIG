@@ -17,12 +17,11 @@ using std::exception;
 int main(int argc, char* argv[]) {
 
 	CGFapplication app = CGFapplication();
-
+    CGFscene * scene;
     try {
 		app.init(&argc, argv);
-		app.setScene(new XMLScene());
-		app.setInterface(new CGFinterface());
-		
+		app.setScene(scene = new XMLScene());
+        app.setInterface(new UserInterface());
 		app.run();
 	}
 	catch(GLexception& ex) {

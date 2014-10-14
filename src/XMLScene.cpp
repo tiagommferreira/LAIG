@@ -85,54 +85,21 @@ void XMLScene::update(unsigned long t) {
 }
 
 void XMLScene::display() {
-	// Clear image and depth buffer everytime we update the scene
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-	// Initialize Model-View matrix as identity (no transformation
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	// Apply transformations corresponding to the camera position relative to the origin
-	//CGFscene::activeCamera->applyView();
-	vector<Camera*> cameras = parser->getCameras();
-	Camera *initialCamera = new Camera();
-
-	for(int i=0;i<cameras.size();i++){
-		if(strcmp(cameras[i]->getId(),cameras[i]->getInitial())==0){
-			initialCamera = cameras[i];
-			break;
-		}
-	}
-
-	glMatrixMode(GL_PROJECTION);
-
-	glLoadIdentity();
-	if(initialCamera->getType() == 1){
-		if(initialCamera->getOrthoDirection() == 'x') {
-			glRotated(90,0,1,0);
-			glScaled(1, 1, -1);
-		}
-		else if(initialCamera->getOrthoDirection() == 'y') {
-			glRotated(90,1,0,0);
-			glScaled(1, -1, 1);
-		}
-
-		glOrtho(initialCamera->getOrthoLeft(), initialCamera->getOrthoRight(), initialCamera->getOrthoBottom(), initialCamera->getOrthoTop(), initialCamera->getOrthoNear(), initialCamera->getOrthoFar());
-
-	} else {
-		gluPerspective(initialCamera->getPerspecAngle(), 1, initialCamera->getPerspecNear(), initialCamera->getPerspecFar());
-		gluLookAt(initialCamera->getPerspecPos()[0], initialCamera->getPerspecPos()[1], initialCamera->getPerspecPos()[2],
-				initialCamera->getPerspecTarget()[0], initialCamera->getPerspecTarget()[1], initialCamera->getPerspecTarget()[2],
-				0,1,0);
-	}
-
-	glMatrixMode(GL_MODELVIEW);
+    sceneVar=0;
+    // Clear image and depth buffer everytime we update the scene
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    
+    // Initialize Model-View matrix as identity (no transformation
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    // Apply transformations corresponding to the camera position relative to the origin
+    CGFscene::activeCamera->applyView();
 	// Draw axis
 	axis.draw();
 
 	/** GRAPH **/
 	float m[4][4];
-	glLoadIdentity();
 	glGetFloatv(GL_MODELVIEW_MATRIX,&m[0][0]);
 
 	map<char*,Node*> temp = parser->getGraph();
@@ -143,7 +110,6 @@ void XMLScene::display() {
 			break;
 		}
 	}
-
 	glutSwapBuffers();
 }
 

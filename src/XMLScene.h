@@ -25,19 +25,7 @@ public:
         return this->parser;
     }
     
-    void toggleLight(int lightId){
-        if(strcmp(parser->getLights()[lightId]->getEnabled(),"true")==0){
-            parser->getLights()[lightId]->setEnabled((char*)"false");
-            cout << "now is false" << endl;
-            lights[lightId]->disable();
-            lights[lightId]->update();
-        } else if(strcmp(parser->getLights()[lightId]->getEnabled(),"false")==0){
-           parser->getLights()[lightId]->setEnabled((char*)"true");
-            cout << "now is true" << endl;
-            lights[lightId]->enable();
-            lights[lightId]->update();
-        }
-    }
+    void toggleLight(int lightId);
     
     
     void addLights();

@@ -19,9 +19,9 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * a
 
 void XMLScene::init() {
     /** Parses the information from xml to c++ **/
-    shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
+    //shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
     parser = new XMLParser();
-    glLoadIdentity();
+    
     glEnable(GL_NORMALIZE);
     
     cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
@@ -86,9 +86,9 @@ void XMLScene::init() {
 }
 
 void XMLScene::update(unsigned long t) {
-    shader->bind();
+  /*  shader->bind();
     shader->update(t/400.0);
-    shader->unbind();
+    shader->unbind();*/
 }
 
 void XMLScene::display() {
@@ -184,6 +184,20 @@ void XMLScene::setNodesAppearances() {
                 it->second->setAppearance(appearances[i]);
             }
         }
+    }
+}
+
+void XMLScene::toggleLight(int lightId){
+    if(strcmp(parser->getLights()[lightId]->getEnabled(),"true")==0){
+        parser->getLights()[lightId]->setEnabled((char*)"false");
+        cout << "now is false" << endl;
+        lights[lightId]->disable();
+        lights[lightId]->update();
+    } else if(strcmp(parser->getLights()[lightId]->getEnabled(),"false")==0){
+        parser->getLights()[lightId]->setEnabled((char*)"true");
+        cout << "now is true" << endl;
+        lights[lightId]->enable();
+        lights[lightId]->update();
     }
 }
 

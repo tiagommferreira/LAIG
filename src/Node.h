@@ -226,7 +226,7 @@ public:
 		for(unsigned int i=0;i<descendents.size();i++) {
 			descendents[i]->draw(finalNodeMatrix);
 		}
-		glPopMatrix();
+        glPopMatrix();
 	}
 };
 #endif /* defined(__CGFExample__Node__) */

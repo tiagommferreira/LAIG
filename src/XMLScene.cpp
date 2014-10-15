@@ -21,7 +21,7 @@ void XMLScene::init() {
     /** Parses the information from xml to c++ **/
     shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
     parser = new XMLParser();
-    
+    glLoadIdentity();
     glEnable(GL_NORMALIZE);
     
     cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;

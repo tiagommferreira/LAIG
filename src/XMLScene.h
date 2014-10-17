@@ -34,7 +34,8 @@ public:
     void setNodesAppearances();
     void setCamera(char* camera){this->camera=camera;}
     void setDrawingType(char*);
-    
+
+
 protected:
     char * camera;
     vector<CGFlight*>lights;

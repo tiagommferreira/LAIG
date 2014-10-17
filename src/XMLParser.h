@@ -2,7 +2,6 @@
 #define __CGFExample__XMLParser__
 
 #include <stdio.h>
-#include "tinyxml.h"
 #include <string.h>
 #include "CGFshader.h"
 #include "Globals.h"
@@ -12,6 +11,7 @@
 #include "Transform.h"
 #include "Texture.h"
 #include "Appearance.h"
+#include "tinyxml.h"
 #include <map>
 
 class XMLParser

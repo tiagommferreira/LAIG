@@ -6,253 +6,265 @@
 //-------------------------------------------------------
 
 TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val) {
-    TiXmlElement *child=parent->FirstChildElement();
-    int found=0;
-    
-    while (child && !found)
-        if (child->Attribute(attr) && strcmp(child->Attribute(attr),val)==0)
-            found=1;
-        else
-            child=child->NextSiblingElement();
-    return child;
+	TiXmlElement *child=parent->FirstChildElement();
+	int found=0;
+
+	while (child && !found)
+		if (child->Attribute(attr) && strcmp(child->Attribute(attr),val)==0)
+			found=1;
+		else
+			child=child->NextSiblingElement();
+	return child;
 }
 
 void XMLScene::init() {
-    /** Parses the information from xml to c++ **/
-    shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
-    parser = new XMLParser();
-    camera = parser->getCameras()[0]->getInitial();
-    glEnable(GL_NORMALIZE);
-    
-    cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
-    
-    cout << "__globals__" << endl << endl;
-    /* GLOBALS */
-    cout << "culling properties" << endl;
-    // CULLING PROPERTIES
-    if((strcmp (parser->getGlobals()->getOrder(),"cw")==0)){
-        glFrontFace(GL_CW);
-    }else {
-        glFrontFace(GL_CCW);
-    }
-    
-    // also has the possibility to be none
-    if((strcmp(parser->getGlobals()->getFace(),"front")==0)){
-        glCullFace(GL_FRONT);
-    }else if((strcmp (parser->getGlobals()->getFace(),"back")==0)){
-        glCullFace(GL_BACK);
-    }
-    
-    cout << "lighting properties" << endl;
-    //LIGHTING PROPERTIES
-    
-    if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
-        glEnable(GL_LIGHTING);
-    }
-    if((strcmp (parser->getGlobals()->getLocal(),"true")==0)){
-        glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    }
-    if((strcmp (parser->getGlobals()->getDoublesided(),"true")==0)){
-        glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-    }
-    
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
-    
-    cout << "drawing properties" << endl;
-    //DRAWING PROPERTIES
-    if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
-        glShadeModel(GL_FLAT);
-    }else {
-        glShadeModel(GL_SMOOTH);
-    }
-    
-    if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-    }else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
-    cout << "set background "<< endl;
-    //background color
-    float* backColor = parser->getGlobals()->getBackgroundColor();
-    glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
-    
-    // initialize appearences;
-    addLights();
-    setNodesAppearances();
-    
-    setUpdatePeriod(30);
+	/** Parses the information from xml to c++ **/
+	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
+	parser = new XMLParser();
+	camera = parser->getCameras()[0]->getInitial();
+
+	cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
+
+	cout << "lighting properties" << endl;
+	//LIGHTING PROPERTIES
+	glEnable(GL_LIGHTING);
+	if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
+		glEnable(GL_LIGHTING);
+	}
+	if((strcmp (parser->getGlobals()->getLocal(),"true")==0)){
+		glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	}
+	if((strcmp (parser->getGlobals()->getDoublesided(),"true")==0)){
+		glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	}
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
+
+	addLights();
+	glEnable(GL_NORMALIZE);
+
+
+	cout << "__globals__" << endl << endl;
+	/* GLOBALS */
+	cout << "culling properties" << endl;
+	// CULLING PROPERTIES
+	if((strcmp (parser->getGlobals()->getOrder(),(char*)"cw")==0)){
+		glFrontFace(GL_CW);
+	}else {
+		glFrontFace(GL_CCW);
+	}
+
+	// also has the possibility to be none
+	if((strcmp(parser->getGlobals()->getFace(),"front")==0)){
+		glCullFace(GL_FRONT);
+	}else if((strcmp (parser->getGlobals()->getFace(),"back")==0)){
+		glCullFace(GL_BACK);
+	}
+
+	cout << "drawing properties" << endl;
+	//DRAWING PROPERTIES
+	/**
+	 * TODO verificar se isto é aqui ou no update
+	 */
+	if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
+		glShadeModel(GL_FLAT);
+	}else {
+		glShadeModel(GL_SMOOTH);
+	}
+
+	if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	}else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	cout << "set background "<< endl;
+	//background color
+	float* backColor = parser->getGlobals()->getBackgroundColor();
+	glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
+
+	// initialize appearences;
+	setNodesAppearances();
+
+	setUpdatePeriod(30);
+	cout << "start updating" << endl;
 }
 
 void XMLScene::update(unsigned long t) {
-    shader->bind();
-    shader->update(t/400.0);
-    shader->unbind();
+	shader->bind();
+	shader->update(t/400.0);
+	shader->unbind();
 }
 
 void XMLScene::display() {
-    sceneVar=0;
-    // Clear image and depth buffer everytime we update the scene
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
-    // Initialize Model-View matrix as identity (no transformation
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    // Apply transformations corresponding to the camera position relative to the origin
-    addCameras(camera);
-    // Draw axis
-    axis.draw();
-    drawLights();
-    
-    /** GRAPH **/
-    float m[4][4];
-    glGetFloatv(GL_MODELVIEW_MATRIX,&m[0][0]);
-    map<char*,Node*> temp = parser->getGraph();
-    map<char*,Node*>::iterator it=temp.begin();
-    for(unsigned int i=0;i<temp.size();i++,it++){
-        if(strcmp(parser->getRootid(),it->second->getId())==0){
-            it->second->draw(m);
-            break;
-        }
-    }
-    glutSwapBuffers();
+	sceneVar=0;
+	// Clear image and depth buffer everytime we update the scene
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	// Initialize Model-View matrix as identity (no transformation
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// Apply transformations corresponding to the camera position relative to the origin
+	addCameras(camera);
+	drawLights();
+	// Draw axis
+	axis.draw();
+
+	/** GRAPH **/
+
+	float m[4][4];
+	glGetFloatv(GL_MODELVIEW_MATRIX,&m[0][0]);
+	map<char*,Node*> temp = parser->getGraph();
+	map<char*,Node*>::iterator it=temp.begin();
+	for(unsigned int i=0;i<temp.size();i++,it++){
+		if(strcmp(parser->getRootid(),it->second->getId())==0){
+			it->second->draw(m);
+			break;
+		}
+	}
+	glutSwapBuffers();
 }
 
 XMLScene::~XMLScene() {
-    delete(shader);
+	delete(shader);
 }
 
 void XMLScene::addLights(){
-    vector<Light*> lights = parser->getLights();
-    for(int i=0;i<lights.size();i++) {
-        CGFlight *currentLight = new CGFlight(i+GL_LIGHT0,lights[i]->getPosition());
-        currentLight->setAmbient(lights[i]->getAmbientComponent());
-        currentLight->setDiffuse(lights[i]->getDiffuseComponent());
-        currentLight->setSpecular(lights[i]->getSpecularComponent());
-        this->lights.push_back(currentLight);
-    }
+	vector<Light*> lights = parser->getLights();
+	for(unsigned int i=0;i<lights.size();i++) {
+		CGFlight *currentLight = new CGFlight(i+GL_LIGHT0,lights[i]->getPosition());
+		currentLight->setAmbient(lights[i]->getAmbientComponent());
+		currentLight->setDiffuse(lights[i]->getDiffuseComponent());
+		currentLight->setSpecular(lights[i]->getSpecularComponent());
+		if(strcmp(lights[i]->getEnabled(),(char*)"true")==0){
+			currentLight->enable();
+			cout << i << "enabled" << endl;
+		}else {
+			currentLight->disable();
+			cout << i << "disabled" << endl;
+		}
+		this->lights.push_back(currentLight);
+	}
 }
 
 void XMLScene::drawLights(){
-    vector<Light*> tempLights=parser->getLights();
-    for(int i=0;i<tempLights.size();i++){
-        if(strcmp(tempLights[i]->getEnabled(),"true")==0){
-            this->lights[i]->draw();
-        }
-    }
+	vector<Light*> tempLights=parser->getLights();
+	for(unsigned int i=0;i<tempLights.size();i++){
+			this->lights[i]->draw();
+	}
 }
 
 void XMLScene::setNodesAppearances() {
-    this->appearances = vector<CGFappearance*>();
-    for(int i=0;i<parser->getAppearances().size();i++){
-        CGFappearance *currentAppearance = new CGFappearance(
-                                                             parser->getAppearances()[i]->getAmbientComponent(),
-                                                             parser->getAppearances()[i]->getDiffuseComponent(),
-                                                             parser->getAppearances()[i]->getSpecularComponent(),
-                                                             parser->getAppearances()[i]->getShininess()
-                                                             );
-        
-       
-        if(parser->getAppearances()[i]->getTextureref()) {
-            if(strcmp("inherit",parser->getAppearances()[i]->getTextureref()) == 0){
-            }else {
-                char * filePath = (char*)"";
-                for(int j=0;j<parser->getTextures().size();j++){
-                    if(strcmp(parser->getAppearances()[i]->getTextureref(),parser->getTextures()[j]->getId())==0){
-                        filePath = parser->getTextures()[j]->getFile();
-                        cout << filePath << endl;
-                    }
-                }
-                if(strcmp(filePath, "")) {
-                    //CGFtexture * currentTexture = new CGFtexture(filePath);
-                    //currentAppearance->setTexture(currentTexture);
-                }
-            }
-        }
-        this->appearances.push_back(currentAppearance);
-    }
-    
-    map<char*,Node*> graph = parser->getGraph();
-    map<char*,Node*>::iterator it = graph.begin();
-    map<char*,Node*>::iterator ite = graph.end();
-    
-    for(;it!=ite;it++){
-        for(int i=0; i<parser->getAppearances().size();i++) {
-            if(strcmp(it->second->getAppearenceRef(),parser->getAppearances()[i]->getId())==0){
-                it->second->setAppearance(appearances[i]);
-            }
-        }
-    }
+	this->appearances = vector<CGFappearance*>();
+	for(unsigned int i=0;i<parser->getAppearances().size();i++){
+		CGFappearance *currentAppearance = new CGFappearance(
+				parser->getAppearances()[i]->getAmbientComponent(),
+				parser->getAppearances()[i]->getDiffuseComponent(),
+				parser->getAppearances()[i]->getSpecularComponent(),
+				parser->getAppearances()[i]->getShininess()
+		);
+
+
+		if(parser->getAppearances()[i]->getTextureref()) {
+			if(strcmp("inherit",parser->getAppearances()[i]->getTextureref()) == 0){
+			}else {
+				char * filePath = (char*)"";
+				for(unsigned int j=0;j<parser->getTextures().size();j++){
+					if(strcmp(parser->getAppearances()[i]->getTextureref(),parser->getTextures()[j]->getId())==0){
+						filePath = parser->getTextures()[j]->getFile();
+						cout << filePath << endl;
+					}
+				}
+				if(strcmp(filePath, "")) {
+					//CGFtexture * currentTexture = new CGFtexture(filePath);
+					//currentAppearance->setTexture(currentTexture);
+				}
+			}
+		}
+		this->appearances.push_back(currentAppearance);
+	}
+
+	map<char*,Node*> graph = parser->getGraph();
+	map<char*,Node*>::iterator it = graph.begin();
+	map<char*,Node*>::iterator ite = graph.end();
+
+	for(;it!=ite;it++){
+		for(int i=0; i<parser->getAppearances().size();i++) {
+			if(strcmp(it->second->getAppearenceRef(),parser->getAppearances()[i]->getId())==0){
+				it->second->setAppearance(appearances[i]);
+			}
+		}
+	}
 }
 
 void XMLScene::toggleLight(int lightId){
-    if(strcmp(parser->getLights()[lightId]->getEnabled(),"true")==0){
-        parser->getLights()[lightId]->setEnabled((char*)"false");
-        cout << "now is false" << endl;
-        lights[lightId]->disable();
-        lights[lightId]->update();
-    } else if(strcmp(parser->getLights()[lightId]->getEnabled(),"false")==0){
-        parser->getLights()[lightId]->setEnabled((char*)"true");
-        cout << "now is true" << endl;
-        lights[lightId]->enable();
-        lights[lightId]->update();
-    }
+	if(strcmp(parser->getLights()[lightId]->getEnabled(),"true")==0){
+		parser->getLights()[lightId]->setEnabled((char*)"false");
+		cout << "now is false" << endl;
+		lights[lightId]->disable();
+		lights[lightId]->update();
+	} else if(strcmp(parser->getLights()[lightId]->getEnabled(),"false")==0){
+		parser->getLights()[lightId]->setEnabled((char*)"true");
+		cout << "now is true" << endl;
+		lights[lightId]->enable();
+		lights[lightId]->update();
+	}
 }
 
 void XMLScene::addCameras(char* id){
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    vector<Camera*>cameraTemp = parser->getCameras();
-    for(int i=0;i<cameraTemp.size();i++){
-        if(strcmp(id,cameraTemp[i]->getId())==0){
-            if(cameraTemp[i]->getType()==0){
-                //perspective
-                gluPerspective(cameraTemp[i]->getPerspecAngle(), 1, cameraTemp[i]->getPerspecNear(), cameraTemp[i]->getPerspecFar());
-                gluLookAt(cameraTemp[i]->getPerspecPos()[0], cameraTemp[i]->getPerspecPos()[1], cameraTemp[i]->getPerspecPos()[2], cameraTemp[i]->getPerspecTarget()[0], cameraTemp[i]->getPerspecTarget()[1], cameraTemp[i]->getPerspecTarget()[2], 0, 1, 0);
-            }else{
-                //orthogonal
-                glOrtho(
-                cameraTemp[i]->getOrthoLeft(),
-                cameraTemp[i]->getOrthoRight(),
-                cameraTemp[i]->getOrthoBottom(),
-                cameraTemp[i]->getOrthoTop(),
-                cameraTemp[i]->getOrthoNear(),
-                cameraTemp[i]->getOrthoFar()
-                );
-                switch (cameraTemp[i]->getOrthoDirection()) {
-                    case 'x':{
-                        glRotated(-90,0,1,0);
-                    }
-                        break;
-                    case 'y':{
-                        glRotated(90,1,0,0);
-                    }
-                        break;
-                    case 'z':{
-                        
-                    }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-    glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	vector<Camera*>cameraTemp = parser->getCameras();
+	for(unsigned int i=0;i<cameraTemp.size();i++){
+		if(strcmp(id,cameraTemp[i]->getId())==0){
+			if(cameraTemp[i]->getType()==0){
+				//perspective
+				gluPerspective(cameraTemp[i]->getPerspecAngle(), 1, cameraTemp[i]->getPerspecNear(), cameraTemp[i]->getPerspecFar());
+				gluLookAt(cameraTemp[i]->getPerspecPos()[0], cameraTemp[i]->getPerspecPos()[1], cameraTemp[i]->getPerspecPos()[2], cameraTemp[i]->getPerspecTarget()[0], cameraTemp[i]->getPerspecTarget()[1], cameraTemp[i]->getPerspecTarget()[2], 0, 1, 0);
+			}else{
+				//orthogonal
+				glOrtho(
+						cameraTemp[i]->getOrthoLeft(),
+						cameraTemp[i]->getOrthoRight(),
+						cameraTemp[i]->getOrthoBottom(),
+						cameraTemp[i]->getOrthoTop(),
+						cameraTemp[i]->getOrthoNear(),
+						cameraTemp[i]->getOrthoFar()
+				);
+				switch (cameraTemp[i]->getOrthoDirection()) {
+				case 'x':{
+					glRotated(-90,0,1,0);
+				}
+				break;
+				case 'y':{
+					glRotated(90,1,0,0);
+				}
+				break;
+				case 'z':{
+
+				}
+				break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	glMatrixMode(GL_MODELVIEW);
 }
 
 void XMLScene::setDrawingType(char* drawingType){
-    if(strcmp(drawingType,(char*)"fill")==0){
-        cout << "fill set" << endl;
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    } else if(strcmp(drawingType,(char*)"point")==0){
-        cout << "point set" << endl;
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-    } else  {
-        cout << "line set" << endl;
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
+	if(strcmp(drawingType,(char*)"fill")==0){
+		cout << "fill set" << endl;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	} else if(strcmp(drawingType,(char*)"point")==0){
+		cout << "point set" << endl;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	} else  {
+		cout << "line set" << endl;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
 }
 

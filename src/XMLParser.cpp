@@ -7,8 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	//const char *p = "tiny.anf";
-    const char *p = "/Users/ricardo/Documents/compiledProject/CGFlib/CGFexample/data/tiny.anf";
+	const char *p = "tiny.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );

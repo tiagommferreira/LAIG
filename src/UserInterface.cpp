@@ -25,9 +25,9 @@ void UserInterface::initGUI() {
     addColumnToPanel(generalPanel);
     drawMode = addPanelToPanel(generalPanel,(char*)"Set drawing texture",1);
     radio = addRadioGroupToPanel(drawMode,0,8);
-    addRadioButtonToGroup(radio,(char*)"wired");
-    addRadioButtonToGroup(radio,(char*)"normal");
-    addRadioButtonToGroup(radio,(char*)"outra cena");
+    addRadioButtonToGroup(radio,(char*)"fill");
+    addRadioButtonToGroup(radio,(char*)"point");
+    addRadioButtonToGroup(radio,(char*)"line");
     
     addColumnToPanel(generalPanel);
     cameraPanel = addPanelToPanel(generalPanel,(char*) "Cameras",1);
@@ -44,8 +44,25 @@ void UserInterface::processGUI(GLUI_Control *ctrl) {
         //fazer uma função para activar ou desativar uma certa luz na XMLscene
     }else if(ctrl->user_id==8){
         cout << "Change of the drawing mode, current ->" << radio->get_int_val() << endl;
+        switch (radio->get_int_val()) {
+            case 0:{
+                ((XMLScene *) scene)->setDrawingType((char*)"fill");
+            }
+                break;
+            case 1:{
+                ((XMLScene *) scene)->setDrawingType((char*)"point");
+            }
+                break;
+            case 2: {
+                ((XMLScene *) scene)->setDrawingType((char*)"line");
+            }
+                break;
+            default:
+                break;
+        }
     }else if(ctrl->user_id==9) {
         cout << "Camera change, current camera->" << (list->get_int_val()) << endl;
+        ((XMLScene *) scene)->setCamera((char*)((XMLScene *) scene)->getParser()->getCameras()[list->get_int_val()]->getId());
     }else{
         cout << "dafuq\n" << endl;
     }

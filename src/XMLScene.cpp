@@ -19,9 +19,9 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * a
 
 void XMLScene::init() {
     /** Parses the information from xml to c++ **/
-    //shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
+    shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
     parser = new XMLParser();
-    
+    camera = parser->getCameras()[0]->getInitial();
     glEnable(GL_NORMALIZE);
     
     cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
@@ -56,7 +56,7 @@ void XMLScene::init() {
         glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     }
     
-    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
     
     cout << "drawing properties" << endl;
     //DRAWING PROPERTIES
@@ -86,9 +86,9 @@ void XMLScene::init() {
 }
 
 void XMLScene::update(unsigned long t) {
-  /*  shader->bind();
+    shader->bind();
     shader->update(t/400.0);
-    shader->unbind();*/
+    shader->unbind();
 }
 
 void XMLScene::display() {
@@ -101,7 +101,7 @@ void XMLScene::display() {
     glLoadIdentity();
     
     // Apply transformations corresponding to the camera position relative to the origin
-    CGFscene::activeCamera->applyView();
+    addCameras(camera);
     // Draw axis
     axis.draw();
     drawLights();
@@ -109,7 +109,6 @@ void XMLScene::display() {
     /** GRAPH **/
     float m[4][4];
     glGetFloatv(GL_MODELVIEW_MATRIX,&m[0][0]);
-    
     map<char*,Node*> temp = parser->getGraph();
     map<char*,Node*>::iterator it=temp.begin();
     for(unsigned int i=0;i<temp.size();i++,it++){
@@ -157,18 +156,19 @@ void XMLScene::setNodesAppearances() {
         
        
         if(parser->getAppearances()[i]->getTextureref()) {
-            if(strcmp("inherit",parser->getAppearances()[i]->getTextureref())){
+            if(strcmp("inherit",parser->getAppearances()[i]->getTextureref()) == 0){
             }else {
-                char * filePath;
-                cout << parser->getTextures().size() << endl;
+                char * filePath = (char*)"";
                 for(int j=0;j<parser->getTextures().size();j++){
                     if(strcmp(parser->getAppearances()[i]->getTextureref(),parser->getTextures()[j]->getId())==0){
                         filePath = parser->getTextures()[j]->getFile();
                         cout << filePath << endl;
                     }
                 }
-                CGFtexture * currentTexture = new CGFtexture(filePath);
-                currentAppearance->setTexture(currentTexture);
+                if(strcmp(filePath, "")) {
+                    //CGFtexture * currentTexture = new CGFtexture(filePath);
+                    //currentAppearance->setTexture(currentTexture);
+                }
             }
         }
         this->appearances.push_back(currentAppearance);
@@ -198,6 +198,61 @@ void XMLScene::toggleLight(int lightId){
         cout << "now is true" << endl;
         lights[lightId]->enable();
         lights[lightId]->update();
+    }
+}
+
+void XMLScene::addCameras(char* id){
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    vector<Camera*>cameraTemp = parser->getCameras();
+    for(int i=0;i<cameraTemp.size();i++){
+        if(strcmp(id,cameraTemp[i]->getId())==0){
+            if(cameraTemp[i]->getType()==0){
+                //perspective
+                gluPerspective(cameraTemp[i]->getPerspecAngle(), 1, cameraTemp[i]->getPerspecNear(), cameraTemp[i]->getPerspecFar());
+                gluLookAt(cameraTemp[i]->getPerspecPos()[0], cameraTemp[i]->getPerspecPos()[1], cameraTemp[i]->getPerspecPos()[2], cameraTemp[i]->getPerspecTarget()[0], cameraTemp[i]->getPerspecTarget()[1], cameraTemp[i]->getPerspecTarget()[2], 0, 1, 0);
+            }else{
+                //orthogonal
+                glOrtho(
+                cameraTemp[i]->getOrthoLeft(),
+                cameraTemp[i]->getOrthoRight(),
+                cameraTemp[i]->getOrthoBottom(),
+                cameraTemp[i]->getOrthoTop(),
+                cameraTemp[i]->getOrthoNear(),
+                cameraTemp[i]->getOrthoFar()
+                );
+                switch (cameraTemp[i]->getOrthoDirection()) {
+                    case 'x':{
+                        glRotated(-90,0,1,0);
+                    }
+                        break;
+                    case 'y':{
+                        glRotated(90,1,0,0);
+                    }
+                        break;
+                    case 'z':{
+                        
+                    }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void XMLScene::setDrawingType(char* drawingType){
+    if(strcmp(drawingType,(char*)"fill")==0){
+        cout << "fill set" << endl;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    } else if(strcmp(drawingType,(char*)"point")==0){
+        cout << "point set" << endl;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    } else  {
+        cout << "line set" << endl;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 }
 

@@ -27,12 +27,16 @@ public:
     
     void toggleLight(int lightId);
     
+    void addCameras(char*);
     
     void addLights();
     void drawLights();
     void setNodesAppearances();
+    void setCamera(char* camera){this->camera=camera;}
+    void setDrawingType(char*);
     
 protected:
+    char * camera;
     vector<CGFlight*>lights;
     vector<CGFappearance*>appearances;
     XMLParser* parser;

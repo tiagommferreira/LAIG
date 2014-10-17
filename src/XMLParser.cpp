@@ -306,6 +306,9 @@ XMLParser::XMLParser() {
             appearanceTemp->setShininess(atof(shininess));
             
             char * textureref = (char *) appearance->Attribute("textureref");
+            if(textureref == NULL){
+                textureref = (char*) "";
+            }
             appearanceTemp->setTextureref(textureref);
             
             //ATTRIBUTES
@@ -393,6 +396,8 @@ XMLParser::XMLParser() {
 
 			TiXmlElement *appearence = node->FirstChildElement("appearanceref");
 			if(appearence==NULL){
+                char * apearenceId = (char *) "";
+                currentNode->setAppearence(apearenceId);
 				cout << "appearence not found " << endl;
 			} else {
 				cout << "appearence found" << endl;

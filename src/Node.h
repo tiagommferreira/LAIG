@@ -19,18 +19,18 @@ private:
 	float transformMatrix[4][4];
 	char * id;
 	bool processed;
-    CGFappearance * appearance;
+	CGFappearance * appearance;
 
 public:
 	Node(){processed = false;}
-    
-    void setAppearance(CGFappearance * app){
-        this->appearance = app;
-    }
-    
-    CGFappearance * getAppearance() {
-        return this->appearance;
-    }
+
+	void setAppearance(CGFappearance * app){
+		this->appearance = app;
+	}
+
+	CGFappearance * getAppearance() {
+		return this->appearance;
+	}
 
 	void setAllPrimitives(vector<Primitive *> prim) {
 		this->primitives = prim;
@@ -39,6 +39,7 @@ public:
 	void setAllTransforms(vector<Transform * >trans){
 		this->transforms = trans;
 	}
+
 	void addPrimitive(Primitive *currentPrimitive){
 		this->primitives.push_back(currentPrimitive);
 	}
@@ -83,26 +84,27 @@ public:
 		this->id = id;
 	}
 
-
 	void drawRectangle(float xy1[2],float xy2[2]){
-        glBegin(GL_QUADS);
-        glTexCoord2d(0,0);
-        glVertex3d(xy1[0],xy1[1],0);
-        glTexCoord2d(1,0);
-        glVertex3d(xy2[0],xy1[1],0);
-        glTexCoord2d(1,1);
-        glVertex3d(xy2[0],xy2[1],0);
-        glTexCoord2d(0,1);
-        glVertex3d(xy1[0],xy2[1],0);
-        glEnd();
+		glNormal3f(0,0,1);
+		glBegin(GL_QUADS);
+		glTexCoord2d(0,0);
+		glVertex3d(xy1[0],xy1[1],0);
+		glTexCoord2d(1,0);
+		glVertex3d(xy2[0],xy1[1],0);
+		glTexCoord2d(1,1);
+		glVertex3d(xy2[0],xy2[1],0);
+		glTexCoord2d(0,1);
+		glVertex3d(xy1[0],xy2[1],0);
+		glEnd();
 	}
 
 	void drawTriangle(float xyz1[3],float xyz2[3], float xyz3[3]){
-			glBegin(GL_POLYGON);
-			glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
-			glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
-			glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
-			glEnd();
+		glNormal3f(0,0,1);
+		glBegin(GL_POLYGON);
+		glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
+		glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
+		glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
+		glEnd();
 	}
 
 	void drawCylinder(float base,float top, float height, int slices, int stacks){
@@ -110,7 +112,7 @@ public:
 	}
 
 	void drawSphere(float radious, int slices, int stacks){
-		glutSolidSphere(radious, slices, stacks);
+		gluSphere(gluNewQuadric(),radious, slices, stacks);
 	}
 
 	void drawTorus(float inner,float outter, int slices, int loops){
@@ -160,9 +162,11 @@ public:
 	void setProcessed(bool processed) {
 		this->processed = processed;
 	}
+
 	void setAllDescendents(vector<Node*> nodes) {
 		this->descendents = nodes;
 	}
+
 	void drawPrimitives() {
 		for(unsigned int i = 0; i < primitives.size(); i++) {
 			if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
@@ -202,14 +206,16 @@ public:
 
 	void draw(float pastMatrix[][4]){
 		float finalNodeMatrix[4][4];
-        
-        if(strcmp(appearenceRef,"inherit")==0){
-        } else {
-            appearance->apply();
-        }
+		//cout << "node " << id << " app: " << appearenceRef << endl;
+
+		if(strcmp(appearenceRef,"inherit")==0 || strcmp(appearenceRef,"")==0){
+		} else {
+			appearance->apply();
+		}
+
 		glPushMatrix();
-		glLoadIdentity();
-		glMultMatrixf(&pastMatrix[0][0]);
+		//glLoadIdentity();
+		//glMultMatrixf(&pastMatrix[0][0]);
 
 		if(transforms.size()!=0){
 			glMultMatrixf(&transformMatrix[0][0]);
@@ -226,7 +232,7 @@ public:
 		for(unsigned int i=0;i<descendents.size();i++) {
 			descendents[i]->draw(finalNodeMatrix);
 		}
-        glPopMatrix();
+		glPopMatrix();
 	}
 };
 #endif /* defined(__CGFExample__Node__) */

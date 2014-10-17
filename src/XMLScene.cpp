@@ -108,19 +108,22 @@ void XMLScene::display() {
 
 	// Apply transformations corresponding to the camera position relative to the origin
 	addCameras(camera);
+
 	drawLights();
 	// Draw axis
 	axis.draw();
 
 	/** GRAPH **/
-
 	float m[4][4];
 	glGetFloatv(GL_MODELVIEW_MATRIX,&m[0][0]);
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
 	for(unsigned int i=0;i<temp.size();i++,it++){
 		if(strcmp(parser->getRootid(),it->second->getId())==0){
+			glPushMatrix();
+			glLoadIdentity();
 			it->second->draw(m);
+			glPopMatrix();
 			break;
 		}
 	}
@@ -166,9 +169,9 @@ void XMLScene::setNodesAppearances() {
 				parser->getAppearances()[i]->getShininess()
 		);
 
-
 		if(parser->getAppearances()[i]->getTextureref()) {
 			if(strcmp("inherit",parser->getAppearances()[i]->getTextureref()) == 0){
+
 			}else {
 				char * filePath = (char*)"";
 				for(unsigned int j=0;j<parser->getTextures().size();j++){
@@ -178,8 +181,8 @@ void XMLScene::setNodesAppearances() {
 					}
 				}
 				if(strcmp(filePath, "")) {
-					//CGFtexture * currentTexture = new CGFtexture(filePath);
-					//currentAppearance->setTexture(currentTexture);
+					CGFtexture * currentTexture = new CGFtexture(filePath);
+					currentAppearance->setTexture(currentTexture);
 				}
 			}
 		}
@@ -197,6 +200,7 @@ void XMLScene::setNodesAppearances() {
 			}
 		}
 	}
+
 }
 
 void XMLScene::toggleLight(int lightId){

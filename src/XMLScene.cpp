@@ -73,10 +73,13 @@ void XMLScene::init() {
 	}
 
 	if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
+		fill = true;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
+		point = true;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 	}else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
+		wire = true;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	cout << "set background "<< endl;
@@ -113,10 +116,19 @@ void XMLScene::display() {
 	// Draw axis
 	axis.draw();
 
+	if(wire) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else if(point) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	}
+	else if(fill) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+
 	/** GRAPH **/
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
-	CGFappearance *defaultApp = NULL;
 	for(unsigned int i=0;i<temp.size();i++,it++){
 		if(strcmp(parser->getRootid(),it->second->getId())==0){
 			glPushMatrix();
@@ -196,10 +208,19 @@ void XMLScene::setNodesAppearances() {
 		for(int i=0; i<parser->getAppearances().size();i++) {
 			if(strcmp(it->second->getAppearenceRef(),parser->getAppearances()[i]->getId())==0){
 				it->second->setAppearance(appearances[i]);
+				setNodeChildApp(it->second);
 			}
 		}
 	}
 
+}
+
+void XMLScene::setNodeChildApp(Node* parent) {
+	for(int i = 0; i < parent->getDescendents().size(); i++) {
+		if(strcmp(parent->getDescendents()[i]->getAppearenceRef(), "inherit") == 0 || strcmp(parent->getDescendents()[i]->getAppearenceRef(),"")==0) {
+			parent->getDescendents()[i]->setParentAppearance(parent->getAppearance());
+		}
+	}
 }
 
 void XMLScene::toggleLight(int lightId){
@@ -261,13 +282,19 @@ void XMLScene::addCameras(char* id){
 void XMLScene::setDrawingType(char* drawingType){
 	if(strcmp(drawingType,(char*)"fill")==0){
 		cout << "fill set" << endl;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		fill = true;
+		wire = false;
+		point = false;
 	} else if(strcmp(drawingType,(char*)"point")==0){
 		cout << "point set" << endl;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		point = true;
+		wire = false;
+		fill = false;
 	} else  {
 		cout << "line set" << endl;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		wire = true;
+		fill = false;
+		point = false;
 	}
 }
 

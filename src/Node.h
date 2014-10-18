@@ -19,7 +19,8 @@ private:
 	float transformMatrix[4][4];
 	char * id;
 	bool processed;
-	CGFappearance * appearance;
+	CGFappearance * appearance = new CGFappearance();
+	CGFappearance * parentAppearance = new CGFappearance();
 
 public:
 	Node(){processed = false;}
@@ -207,7 +208,7 @@ public:
 	void draw(){
 
 		if(strcmp(appearenceRef,"inherit")==0 || strcmp(appearenceRef,"")==0){
-
+			parentAppearance->apply();
 		} else {
 			appearance->apply();
 		}
@@ -229,6 +230,14 @@ public:
 			descendents[i]->draw();
 		}
 		glPopMatrix();
+	}
+
+	CGFappearance* getParentAppearance() {
+		return parentAppearance;
+	}
+
+	void setParentAppearance(CGFappearance* parentAppearance) {
+		this->parentAppearance = parentAppearance;
 	}
 };
 #endif /* defined(__CGFExample__Node__) */

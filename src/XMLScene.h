@@ -34,6 +34,7 @@ public:
     void setNodesAppearances();
     void setCamera(char* camera){this->camera=camera;}
     void setDrawingType(char*);
+    void setNodeChildApp(Node*);
 
 
 protected:
@@ -42,6 +43,9 @@ protected:
     vector<CGFappearance*>appearances;
     XMLParser* parser;
     CGFshader* shader;
+    bool fill = false;
+    bool wire =  false;
+    bool point = false;
 };
 
 #endif

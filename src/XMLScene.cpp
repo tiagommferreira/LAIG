@@ -112,7 +112,6 @@ void XMLScene::display() {
 	// Apply transformations corresponding to the camera position relative to the origin
 
 	addCameras(camera);
-	//CGFscene::activeCamera->applyView();
 	drawLights();
 	// Draw axis
 	axis.draw();
@@ -128,6 +127,8 @@ void XMLScene::display() {
 	}
 
 	//GRAPH
+
+	glRotated(180,0,1,0);
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
 

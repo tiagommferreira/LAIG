@@ -110,8 +110,9 @@ void XMLScene::display() {
 	glLoadIdentity();
 
 	// Apply transformations corresponding to the camera position relative to the origin
-	addCameras(camera);
 
+	addCameras(camera);
+	//CGFscene::activeCamera->applyView();
 	drawLights();
 	// Draw axis
 	axis.draw();
@@ -126,9 +127,10 @@ void XMLScene::display() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	/** GRAPH **/
+	//GRAPH
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
+
 	for(unsigned int i=0;i<temp.size();i++,it++){
 		if(strcmp(parser->getRootid(),it->second->getId())==0){
 			glPushMatrix();
@@ -159,6 +161,12 @@ void XMLScene::addLights(){
 			currentLight->disable();
 			cout << i << "disabled" << endl;
 		}
+		if(strcmp(lights[i]->getType(),(char*) "spot")==0) {
+			currentLight->setAngle(lights[i]->getAngle());
+		   glLightf(GL_LIGHT0 + i,GL_SPOT_CUTOFF,lights[i]->getAngle());
+		   glLightf(GL_LIGHT0 + i,GL_SPOT_EXPONENT,lights[i]->getExponent());
+		   glLightfv(GL_LIGHT0 + i,GL_SPOT_DIRECTION,lights[i]->getTarget());
+		  }
 		this->lights.push_back(currentLight);
 	}
 }
@@ -205,7 +213,7 @@ void XMLScene::setNodesAppearances() {
 	map<char*,Node*>::iterator ite = graph.end();
 
 	for(;it!=ite;it++){
-		for(int i=0; i<parser->getAppearances().size();i++) {
+		for(unsigned int i=0; i<parser->getAppearances().size();i++) {
 			if(strcmp(it->second->getAppearenceRef(),parser->getAppearances()[i]->getId())==0){
 				it->second->setAppearance(appearances[i]);
 				setNodeChildApp(it->second);
@@ -216,7 +224,7 @@ void XMLScene::setNodesAppearances() {
 }
 
 void XMLScene::setNodeChildApp(Node* parent) {
-	for(int i = 0; i < parent->getDescendents().size(); i++) {
+	for(unsigned int i = 0; i < parent->getDescendents().size(); i++) {
 		if(strcmp(parent->getDescendents()[i]->getAppearenceRef(), "inherit") == 0 || strcmp(parent->getDescendents()[i]->getAppearenceRef(),"")==0) {
 			parent->getDescendents()[i]->setParentAppearance(parent->getAppearance());
 		}

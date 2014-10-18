@@ -6,6 +6,7 @@
 #include <vector>
 #include "Primitive.h"
 #include "Transform.h"
+#include <cmath>
 
 using namespace std;
 
@@ -110,10 +111,58 @@ public:
 
 	void drawCylinder(float base,float top, float height, int slices, int stacks){
 		gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
+		double pos = 0.0;
+		double incAngle = 360.0/12.0;
+		double delta = 2*(3.1415)/slices;
+		double angle = 0;
+		double posTextX = 0.0;
+		double posTextY = 0.0;
+
+		glPushMatrix();
+		glRotated(180,0,1,0);
+		glScaled(base,base,0);
+		for(int i=0; i < slices; i++) {
+			glBegin(GL_TRIANGLES);
+			glTexCoord2d((cos(angle + delta) * 0.5)+0.5 ,(sin(angle + delta) * 0.5)+0.5);
+			glVertex3d(cos(angle+delta),sin(angle+delta),1);
+			glTexCoord2d(0.5, 0.5);
+			glVertex3d(0,0,1);
+			glTexCoord2d((cos(angle)* 0.5)+0.5,(sin(angle)*0.5)+0.5);
+			glVertex3d(cos(angle),sin(angle),1);
+			glEnd();
+			angle += delta;
+			posTextX += incAngle;
+		}
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(0,0,height);
+		glScaled(base,base,0);
+		for(int i=0; i < slices; i++) {
+			glBegin(GL_TRIANGLES);
+			glTexCoord2d((cos(angle + delta) * 0.5)+0.5 ,(sin(angle + delta) * 0.5)+0.5);
+			glVertex3d(cos(angle+delta),sin(angle+delta),1);
+			glTexCoord2d(0.5, 0.5);
+			glVertex3d(0,0,1);
+			glTexCoord2d((cos(angle)* 0.5)+0.5,(sin(angle)*0.5)+0.5);
+			glVertex3d(cos(angle),sin(angle),1);
+			glEnd();
+			angle += delta;
+			posTextX += incAngle;
+		}
+		glPopMatrix();
 	}
 
 	void drawSphere(float radious, int slices, int stacks){
 		gluSphere(gluNewQuadric(),radious, slices, stacks);
+		glBegin(GL_LINE_LOOP);
+		for(int i =0; i <= 300; i++){
+			double angle = 2 * 3.1415 * i / 300;
+			double x = cos(angle);
+			double y = sin(angle);
+			glVertex2d(x,y);
+		}
+		glEnd();
 	}
 
 	void drawTorus(float inner,float outter, int slices, int loops){
@@ -124,8 +173,7 @@ public:
 		glPushMatrix();
 		glLoadIdentity();
 
-		for(int i = 0; i < transforms.size(); i++) {
-
+		for(unsigned int i = 0; i < transforms.size(); i++) {
 			cout << "transform type: " << transforms[i]->getType() << endl;
 
 			if(strcmp(transforms[i]->getType(), "translate") == 0) {

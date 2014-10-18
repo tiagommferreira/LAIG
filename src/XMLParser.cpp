@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "tiny.anf";
+	const char *p = "wall-e.xml";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );

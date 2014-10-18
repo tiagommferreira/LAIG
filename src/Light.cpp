@@ -68,5 +68,15 @@ void Light::setExponent(float exponent){
     this->exponent = exponent;
 }
 
+float Light::getAngle(){
+	return this->angle;
+}
 
+float* Light::getTarget(){
+	return this->target;
+}
+
+float Light::getExponent(){
+	return this->exponent;
+}
 

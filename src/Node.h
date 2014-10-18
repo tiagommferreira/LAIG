@@ -110,7 +110,9 @@ public:
 	}
 
 	void drawCylinder(float base,float top, float height, int slices, int stacks){
-		gluCylinder(gluNewQuadric(), base, top, height, slices, stacks);
+		GLUquadric *quadratic = gluNewQuadric();
+		gluQuadricTexture(quadratic, true);
+		gluCylinder(quadratic, base, top, height, slices, stacks);
 		double pos = 0.0;
 		double incAngle = 360.0/12.0;
 		double delta = 2*(3.1415)/slices;
@@ -154,11 +156,54 @@ public:
 	}
 
 	void drawSphere(float radious, int slices, int stacks){
-		gluSphere(gluNewQuadric(),radious, slices, stacks);
+		GLUquadric *quadratic = gluNewQuadric();
+		gluQuadricTexture(quadratic, true);
+		gluSphere(quadratic,radious, slices, stacks);
 	}
 
 	void drawTorus(float inner,float outter, int slices, int loops){
-		glutSolidTorus(inner, outter, slices, loops);
+		//glutSolidTorus(inner, outter, slices, loops);
+		double pi = acos(-1.0);
+		float vNormal[3];
+		double majorStep = 2.0f*pi / slices;
+		double minorStep = 2.0f*pi / loops;
+		int i, j;
+
+		for (i=0; i<slices; ++i)
+		{
+			double a0 = i * majorStep;
+			double a1 = a0 + majorStep;
+			GLfloat x0 = (GLfloat) cos(a0);
+			GLfloat y0 = (GLfloat) sin(a0);
+			GLfloat x1 = (GLfloat) cos(a1);
+			GLfloat y1 = (GLfloat) sin(a1);
+
+			glBegin(GL_TRIANGLE_STRIP);
+			for (j=0; j<=loops; ++j)
+			{
+				double b = j * minorStep;
+				GLfloat c = (GLfloat) cos(b);
+				GLfloat r = inner * c + outter;
+				GLfloat z = inner * (GLfloat) sin(b);
+
+				// First point
+				glTexCoord2f((float)(i)/(float)(loops), (float)(j)/(float)(slices));
+				vNormal[0] = x0*c;
+				vNormal[1] = y0*c;
+				vNormal[2] = z/inner;
+				//glNormalizeVector(vNormal);
+				glNormal3fv(vNormal);
+				glVertex3f(x0*r, y0*r, z);
+
+				glTexCoord2f((float)(i+1)/(float)(loops), (float)(j)/(float)(slices));
+				vNormal[0] = x1*c;
+				vNormal[1] = y1*c;
+				vNormal[2] = z/inner;
+				glNormal3f(vNormal[0],vNormal[1],vNormal[2]);
+				glVertex3f(x1*r, y1*r, z);
+			}
+			glEnd();
+		}
 	}
 
 	void setMatrix(){

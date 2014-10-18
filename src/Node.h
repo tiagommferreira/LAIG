@@ -137,7 +137,7 @@ public:
 
 		glPushMatrix();
 		glTranslated(0,0,height);
-		glScaled(base,base,0);
+		glScaled(top,top,0);
 		for(int i=0; i < slices; i++) {
 			glBegin(GL_TRIANGLES);
 			glTexCoord2d((cos(angle + delta) * 0.5)+0.5 ,(sin(angle + delta) * 0.5)+0.5);
@@ -155,14 +155,6 @@ public:
 
 	void drawSphere(float radious, int slices, int stacks){
 		gluSphere(gluNewQuadric(),radious, slices, stacks);
-		glBegin(GL_LINE_LOOP);
-		for(int i =0; i <= 300; i++){
-			double angle = 2 * 3.1415 * i / 300;
-			double x = cos(angle);
-			double y = sin(angle);
-			glVertex2d(x,y);
-		}
-		glEnd();
 	}
 
 	void drawTorus(float inner,float outter, int slices, int loops){

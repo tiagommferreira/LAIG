@@ -114,15 +114,14 @@ void XMLScene::display() {
 	axis.draw();
 
 	/** GRAPH **/
-	float m[4][4];
-	glGetFloatv(GL_MODELVIEW_MATRIX,&m[0][0]);
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
+	CGFappearance *defaultApp = NULL;
 	for(unsigned int i=0;i<temp.size();i++,it++){
 		if(strcmp(parser->getRootid(),it->second->getId())==0){
 			glPushMatrix();
 			glLoadIdentity();
-			it->second->draw(m);
+			it->second->draw();
 			glPopMatrix();
 			break;
 		}

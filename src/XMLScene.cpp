@@ -2,6 +2,7 @@
 #include "XMLParser.h"
 #include <string.h>
 #include <iostream>
+#include <math.h>
 
 //-------------------------------------------------------
 
@@ -151,7 +152,28 @@ XMLScene::~XMLScene() {
 void XMLScene::addLights(){
 	vector<Light*> lights = parser->getLights();
 	for(unsigned int i=0;i<lights.size();i++) {
-		CGFlight *currentLight = new CGFlight(i+GL_LIGHT0,lights[i]->getPosition());
+		//direcao se for luz omni
+		float spotDir[3]={0,0,0};
+		//init posicao com o o ultimo valor a 1
+		float lightPos[4] = {lights[i]->getPosition()[0],lights[i]->getPosition()[1],lights[i]->getPosition()[2],1.0};
+
+		if(strcmp(lights[i]->getType(),(char*) "spot")==0) {
+			//calcular target
+			float finalTarget[3] ={lights[i]->getTarget()[0] - lights[i]->getPosition()[0],
+					lights[i]->getTarget()[1]- lights[i]->getPosition()[1],
+					lights[i]->getTarget()[2]- lights[i]->getPosition()[2]};
+			//normalizar vetor
+			float unit = sqrt(finalTarget[0] * finalTarget[0] + finalTarget[1] * finalTarget[1] + finalTarget[2] * finalTarget[2]);
+			for (int j = 0; j < 3; j++) {
+				finalTarget[j] = finalTarget[j] / unit;
+				spotDir[j] = finalTarget[j];
+			}
+			glLightf(GL_LIGHT0 + i,GL_SPOT_CUTOFF,lights[i]->getAngle());
+			glLightf(GL_LIGHT0 + i,GL_SPOT_EXPONENT,lights[i]->getExponent());
+			glLightfv(GL_LIGHT0 + i,GL_SPOT_DIRECTION,lights[i]->getTarget());
+		}
+
+		CGFlight *currentLight = new CGFlight(i+GL_LIGHT0,lightPos, spotDir);
 		currentLight->setAmbient(lights[i]->getAmbientComponent());
 		currentLight->setDiffuse(lights[i]->getDiffuseComponent());
 		currentLight->setSpecular(lights[i]->getSpecularComponent());
@@ -162,12 +184,10 @@ void XMLScene::addLights(){
 			currentLight->disable();
 			cout << i << "disabled" << endl;
 		}
-		if(strcmp(lights[i]->getType(),(char*) "spot")==0) {
-			currentLight->setAngle(lights[i]->getAngle());
-		   glLightf(GL_LIGHT0 + i,GL_SPOT_CUTOFF,lights[i]->getAngle());
-		   glLightf(GL_LIGHT0 + i,GL_SPOT_EXPONENT,lights[i]->getExponent());
-		   glLightfv(GL_LIGHT0 + i,GL_SPOT_DIRECTION,lights[i]->getTarget());
-		  }
+
+		currentLight->update();
+
+
 		this->lights.push_back(currentLight);
 	}
 }
@@ -175,7 +195,7 @@ void XMLScene::addLights(){
 void XMLScene::drawLights(){
 	vector<Light*> tempLights=parser->getLights();
 	for(unsigned int i=0;i<tempLights.size();i++){
-			this->lights[i]->draw();
+		this->lights[i]->draw();
 	}
 }
 

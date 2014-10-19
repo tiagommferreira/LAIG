@@ -101,10 +101,29 @@ public:
 	}
 
 	void drawTriangle(float xyz1[3],float xyz2[3], float xyz3[3]){
+		float a,b,c;
+		a = sqrt((xyz3[0]-xyz2[0])*(xyz3[0]-xyz2[0])) + (xyz3[1]-xyz2[1])* (xyz3[1]-xyz2[1]) + (xyz3[2]-xyz2[2])*(xyz3[2]-xyz2[2]);
+		b = sqrt((xyz1[0]-xyz3[0])*(xyz1[0]-xyz3[0])) + (xyz1[1]-xyz3[1])* (xyz1[1]-xyz3[1]) + (xyz1[2]-xyz3[2])*(xyz1[2]-xyz3[2]);
+		c = sqrt((xyz2[0]-xyz1[0])*(xyz2[0]-xyz1[0])) + (xyz2[1]-xyz1[1])* (xyz2[1]-xyz1[1]) + (xyz2[2]-xyz1[2])*(xyz2[2]-xyz1[2]);
+
+		float cosA,cosB,cosY;
+		cosA = (-(a*a) + b*b + c*c ) / (2 * b * c);
+		cosB = ( (a*a) + -(b*b) + c*c) / (2*a*c);
+		cosY = ( a*a + b*b -(c*c)) / (2*a*b);
+
+		float angA, angB, angY;
+		angA = acos(cosA);
+		angB = acos(cosB);
+		angY = acos(cosY);
+
+
 		glNormal3f(0,0,1);
 		glBegin(GL_POLYGON);
+		glTexCoord2d(0,0);
 		glVertex3f(xyz1[0],xyz1[1], xyz1[2]);
+		glTexCoord2d(c,0);
 		glVertex3f(xyz2[0],xyz2[1], xyz2[2]);
+		glTexCoord2d(c - a*cosB, a*sin(angB));
 		glVertex3f(xyz3[0],xyz3[1], xyz3[2]);
 		glEnd();
 	}

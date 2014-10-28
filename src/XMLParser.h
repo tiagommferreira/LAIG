@@ -13,7 +13,6 @@
 #include "Animation.h"
 #include "Appearance.h"
 #include "tinyxml.h"
-#include "Plane.h"
 #include <map>
 
 class XMLParser

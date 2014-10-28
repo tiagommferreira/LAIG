@@ -151,6 +151,8 @@ void XMLScene::display() {
 			break;
 		}
 	}
+
+
 	glutSwapBuffers();
 }
 

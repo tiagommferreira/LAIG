@@ -8,7 +8,7 @@
 #include "UserInterface.h"
 #include "CGFappearance.h"
 #include "CGFapplication.h"
-#include "Plane.h"
+
 #include <vector>
 
 class XMLScene : public CGFscene

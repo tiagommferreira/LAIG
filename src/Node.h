@@ -7,6 +7,7 @@
 #include "Primitive.h"
 #include "Transform.h"
 #include "Animation.h"
+#include "Evaluator.h"
 #include <cmath>
 
 using namespace std;
@@ -388,7 +389,13 @@ public:
 						primitives[i]->getSlices(),
 						primitives[i]->getLoops());
 			} else if(strcmp(primitives[i]->getValue(),"plane")==0) {
-				//TODO  adicionar aqui a primitiva plane
+				Plane* plane = (Plane*) primitives[i];
+				Evaluator* eval = new Evaluator(NULL, plane->getParts(),plane->getParts(),2,"fill");
+				eval->draw();
+			} else if(strcmp(primitives[i]->getValue(),"patch")==0) {
+				Patch* patch = (Patch*) primitives[i];
+				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute());
+				eval->draw();
 			}
 		}
 	}
@@ -477,7 +484,6 @@ public:
 	void setParentAppearance(CGFappearance* parentAppearance) {
 		this->parentAppearance = parentAppearance;
 	}
-
 
 	bool isAnimated() const {
 		return animated;

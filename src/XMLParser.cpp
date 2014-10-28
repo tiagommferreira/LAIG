@@ -253,91 +253,151 @@ XMLParser::XMLParser() {
 			light = light->NextSiblingElement();
 		}
 	}
-    
-    //textures
-    cout << endl << "_____ TEXTURES INFO _____" << endl;
-    texturesElement = anfElement->FirstChildElement( "textures" );
-    
-    if(texturesElement){
-        TiXmlElement* texture=texturesElement->FirstChildElement();
-        
-        while(texture) {
-            Texture *textureTemp=new Texture();
-            
-            cout << "Texture found" << endl;
-            
-            char * idTexture = (char *) texture->Attribute("id");
-            textureTemp->setId(idTexture);
-            
-            char * file = (char *) texture->Attribute("file");
-            textureTemp->setFile(file);
-            
-            char * textlengths = (char *) texture->Attribute("texlength_s");
-            textureTemp->setTexlenghtS(atof(textlengths));
-            
-            char * textlengtht = (char *) texture->Attribute("texlength_t");
-            textureTemp->setTexlenghtT(atof(textlengtht));
-            
-            cout << "end of parsing texture information" << endl;
-            
-            textures.push_back(textureTemp);
-            texture = texture->NextSiblingElement();
-        }
-    }
-    
-    
-    //appearances
-    cout << endl << "_____ APPEARANCES INFO _____" << endl;
-    appearancesElement = anfElement->FirstChildElement( "appearances" );
-    
-    if(appearancesElement){
-        TiXmlElement* appearance=appearancesElement->FirstChildElement();
-        
-        while(appearance) {
-            Appearance *appearanceTemp=new Appearance();
-            
-            cout << "Appearance found" << endl;
-            
-            char * idAppearance = (char *) appearance->Attribute("id");
-            appearanceTemp->setId(idAppearance);
-            
-            char * shininess = (char *) appearance->Attribute("shininess");
-            appearanceTemp->setShininess(atof(shininess));
-            
-            char * textureref = (char *) appearance->Attribute("textureref");
-            if(textureref == NULL){
-                textureref = (char*) "";
-            }
-            appearanceTemp->setTextureref(textureref);
-            
-            //ATTRIBUTES
-            TiXmlElement* attr = appearance->FirstChildElement();
-            
-            while(attr) {
-                
-                char *attribute;
-                
-                if(strcmp(attr->Attribute("type"), "ambient") == 0) {
-                    attribute = (char *) attr->Attribute("value");
-                    appearanceTemp->setAmbientComponent(attribute);
-                }
-                else if(strcmp(attr->Attribute("type"), "diffuse") == 0) {
-                    attribute = (char *) attr->Attribute("value");
-                    appearanceTemp->setDiffuseComponent(attribute);
-                }
-                else if(strcmp(attr->Attribute("type"), "ambient") == 0) {
-                    attribute = (char *) attr->Attribute("value");
-                    appearanceTemp->setSpecularComponent(attribute);
-                }
-                attr = attr->NextSiblingElement();
-            }
-            
-            cout << "end of parsing appearence information" << endl;
-            
-            appearances.push_back(appearanceTemp);
-            appearance = appearance->NextSiblingElement();
-        }
-    }
+
+	//textures
+	cout << endl << "_____ TEXTURES INFO _____" << endl;
+	texturesElement = anfElement->FirstChildElement( "textures" );
+
+	if(texturesElement){
+		TiXmlElement* texture=texturesElement->FirstChildElement();
+
+		while(texture) {
+			Texture *textureTemp=new Texture();
+
+			cout << "Texture found" << endl;
+
+			char * idTexture = (char *) texture->Attribute("id");
+			textureTemp->setId(idTexture);
+
+			char * file = (char *) texture->Attribute("file");
+			textureTemp->setFile(file);
+
+			char * textlengths = (char *) texture->Attribute("texlength_s");
+			textureTemp->setTexlenghtS(atof(textlengths));
+
+			char * textlengtht = (char *) texture->Attribute("texlength_t");
+			textureTemp->setTexlenghtT(atof(textlengtht));
+
+			cout << "end of parsing texture information" << endl;
+
+			textures.push_back(textureTemp);
+			texture = texture->NextSiblingElement();
+		}
+	}
+
+
+	//appearances
+	cout << endl << "_____ APPEARANCES INFO _____" << endl;
+	appearancesElement = anfElement->FirstChildElement( "appearances" );
+
+	if(appearancesElement){
+		TiXmlElement* appearance=appearancesElement->FirstChildElement();
+
+		while(appearance) {
+			Appearance *appearanceTemp=new Appearance();
+
+			cout << "Appearance found" << endl;
+
+			char * idAppearance = (char *) appearance->Attribute("id");
+			appearanceTemp->setId(idAppearance);
+
+			char * shininess = (char *) appearance->Attribute("shininess");
+			appearanceTemp->setShininess(atof(shininess));
+
+			char * textureref = (char *) appearance->Attribute("textureref");
+			if(textureref == NULL){
+				textureref = (char*) "";
+			}
+			appearanceTemp->setTextureref(textureref);
+
+			//ATTRIBUTES
+			TiXmlElement* attr = appearance->FirstChildElement();
+
+			while(attr) {
+
+				char *attribute;
+
+				if(strcmp(attr->Attribute("type"), "ambient") == 0) {
+					attribute = (char *) attr->Attribute("value");
+					appearanceTemp->setAmbientComponent(attribute);
+				}
+				else if(strcmp(attr->Attribute("type"), "diffuse") == 0) {
+					attribute = (char *) attr->Attribute("value");
+					appearanceTemp->setDiffuseComponent(attribute);
+				}
+				else if(strcmp(attr->Attribute("type"), "ambient") == 0) {
+					attribute = (char *) attr->Attribute("value");
+					appearanceTemp->setSpecularComponent(attribute);
+				}
+				attr = attr->NextSiblingElement();
+			}
+
+			cout << "end of parsing appearence information" << endl;
+
+			appearances.push_back(appearanceTemp);
+			appearance = appearance->NextSiblingElement();
+		}
+	}
+
+	//animations
+	animationsElement = anfElement->FirstChildElement( "animations" );
+	if(animationsElement == NULL) {
+		cout << "fucking retard, put a animation block in the .anf" << endl;
+	}
+	else {
+		TiXmlElement *animation = animationsElement->FirstChild();
+
+		while(animation) {
+			char* id = (char*) animation->Attribute("id");
+			char* span = (char*) animation->Attribute("span");
+			char* type = (char*) animation->Attribute("type");
+			char* center;
+			char* radius;
+			char* startAng;
+			char* rotAng;
+			string id2;
+
+			Animation *animationTemp;
+
+			if(strcmp(type, "linear") == 0) {
+				center = animation->Attribute("center");
+				radius = animation->Attribute("radius");
+				startAng = animation->Attribute("startang");
+				rotAng = animation->Attribute("rotang");
+			}
+			//getControlPoints
+			TiXmlElement *controlPoint = animation->FirstChild();
+			vector<vector<float> > controlPoints;
+			while(controlPoint) {
+				char* xx;
+				char* yy;
+				char* zz;
+				vector<float> point;
+
+				xx = animation->Attribute("xx");
+				yy = animation->Attribute("yy");
+				zz = animation->Attribute("zz");
+
+				point.push_back(atof(xx));
+				point.push_back(atof(yy));
+				point.push_back(atof(zz));
+
+				controlPoints.push_back(point);
+				controlPoint = controlPoint->NextSiblingElement();
+			}
+
+			if(strcmp(type, "linear") == 0) {
+				animationTemp = new LinearAnimation(id2(id), atof(span), controlPoints);
+			}
+			else if(strcmp(type, "circular") == 0) {
+				//animationTemp = new CircularAnimation(id2(id), atof(span), atof(radius), atof(startAng), atof(rotAng));
+			}
+
+
+			animation = animation->NextSiblingElement();
+
+		}
+	}
 
 	// graph section
 	graphElement = anfElement->FirstChildElement( "graph" );
@@ -395,8 +455,8 @@ XMLParser::XMLParser() {
 
 			TiXmlElement *appearence = node->FirstChildElement("appearanceref");
 			if(appearence==NULL){
-                char * apearenceId = (char *) "";
-                currentNode->setAppearence(apearenceId);
+				char * apearenceId = (char *) "";
+				currentNode->setAppearence(apearenceId);
 				cout << "appearence not found " << endl;
 			} else {
 				cout << "appearence found" << endl;

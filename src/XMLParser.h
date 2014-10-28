@@ -50,6 +50,7 @@ protected:
     TiXmlElement* graphElement;
     TiXmlElement* appearancesElement;
     TiXmlElement* texturesElement;
+    TiXmlElement* animationsElement;
     
     Globals * global;
     vector<Camera*> cameras;

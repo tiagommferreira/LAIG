@@ -7,10 +7,10 @@ using namespace std;
 
 class Animation {
 private:
-	int id;
+	string id;
 	float time;
 public:
-	Animation(int id, float time){
+	Animation(string id, float time){
 		this->id = id;
 		this->time = time;
 	};
@@ -19,7 +19,7 @@ public:
 		return time;
 	}
 
-	int getId() {
+	string getId() {
 		return id;
 	}
 
@@ -30,7 +30,7 @@ class LinearAnimation: public Animation {
 private:
 	vector< vector<float> > controlPoints;
 public:
-	LinearAnimation(int id, float time, vector< vector<float> > controlPoints): Animation(id, time) {
+	LinearAnimation(string id, float time, vector< vector<float> > controlPoints): Animation(id, time) {
 		this->controlPoints = controlPoints;
 	}
 	vector< vector<float> > getControlPoints(){
@@ -42,16 +42,23 @@ public:
 class CircularAnimation: public Animation {
 private:
 	vector<float> center;
-	float radious;
+	float radius;
 	float initAngle;
 	float rotationAngle;
 public:
+	CircularAnimation(string id, float time, vector<float> center, float radius, float initAngle, float rotationAngle): Animation(id,time) {
+		this->center = center;
+		this->radius = radius;
+		this->initAngle = initAngle;
+		this->rotationAngle = rotationAngle;
+	}
+
 	vector<float> getCenter() {
 		return center;
 	}
 
 	float getRadious() {
-		return radious;
+		return radius;
 	}
 
 	float getInitAngle() {

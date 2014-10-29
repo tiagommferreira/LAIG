@@ -46,7 +46,9 @@ private:
 	float initAngle;
 	float rotationAngle;
 public:
-	CircularAnimation(string id, float time, vector<float> center, float radius, float initAngle, float rotationAngle): Animation(id,time) {
+	CircularAnimation(string id, float time, vector<float> center,
+			float radius, float initAngle, float rotationAngle):
+				Animation(id,time) {
 		this->center = center;
 		this->radius = radius;
 		this->initAngle = initAngle;

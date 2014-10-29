@@ -10,6 +10,7 @@
 #include "Node.h"
 #include "Transform.h"
 #include "Texture.h"
+#include "Animation.h"
 #include "Appearance.h"
 #include "tinyxml.h"
 #include <map>
@@ -57,6 +58,7 @@ protected:
     vector<Light*> lights;
     vector<Appearance*> appearances;
     vector<Texture*> textures;
+    vector<Animation*> animations;
     map<char*,Node*> graph;
     char* rootid;
     

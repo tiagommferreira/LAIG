@@ -345,7 +345,7 @@ XMLParser::XMLParser() {
 		cout << "fucking retard, put a animation block in the .anf" << endl;
 	}
 	else {
-		TiXmlElement *animation = animationsElement->FirstChild();
+		TiXmlElement *animation = animationsElement->FirstChildElement();
 
 		while(animation) {
 			char* id = (char*) animation->Attribute("id");
@@ -360,13 +360,13 @@ XMLParser::XMLParser() {
 			Animation *animationTemp;
 
 			if(strcmp(type, "linear") == 0) {
-				center = animation->Attribute("center");
-				radius = animation->Attribute("radius");
-				startAng = animation->Attribute("startang");
-				rotAng = animation->Attribute("rotang");
+				center = (char*)animation->Attribute("center");
+				radius = (char*)animation->Attribute("radius");
+				startAng = (char*)animation->Attribute("startang");
+				rotAng = (char*)animation->Attribute("rotang");
 			}
 			//getControlPoints
-			TiXmlElement *controlPoint = animation->FirstChild();
+			TiXmlElement *controlPoint = animation->FirstChildElement();
 			vector<vector<float> > controlPoints;
 			while(controlPoint) {
 				char* xx;
@@ -374,9 +374,9 @@ XMLParser::XMLParser() {
 				char* zz;
 				vector<float> point;
 
-				xx = animation->Attribute("xx");
-				yy = animation->Attribute("yy");
-				zz = animation->Attribute("zz");
+				xx = (char*)animation->Attribute("xx");
+				yy = (char*)animation->Attribute("yy");
+				zz = (char*)animation->Attribute("zz");
 
 				point.push_back(atof(xx));
 				point.push_back(atof(yy));
@@ -390,12 +390,27 @@ XMLParser::XMLParser() {
 				animationTemp = new LinearAnimation(id2(id), atof(span), controlPoints);
 			}
 			else if(strcmp(type, "circular") == 0) {
-				//animationTemp = new CircularAnimation(id2(id), atof(span), atof(radius), atof(startAng), atof(rotAng));
+				vector<float> centerPoint; float* centerPointTemp;
+
+				sscanf(center, "%f %f %f",&centerPointTemp[0],
+						&centerPointTemp[1],&centerPointTemp[2]);
+
+				for(int i=0;i<3;i++){
+					centerPoint.push_back(centerPointTemp[i]);
+				}
+
+				animationTemp = new CircularAnimation(
+						id2(id),
+						atof(span),
+						centerPoint,
+						atof(radius),
+						atof(startAng),
+						atof(rotAng)
+				);
+
 			}
-
-
+			animations.push_back(animationTemp);
 			animation = animation->NextSiblingElement();
-
 		}
 	}
 

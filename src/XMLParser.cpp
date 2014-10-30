@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "snowman.anf";
+	const char *p = "sim.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -339,59 +339,70 @@ XMLParser::XMLParser() {
 		}
 	}
 
+
 	//animations
-	animationsElement = anfElement->FirstChildElement( "animations" );
+	animationsElement = anfElement->FirstChildElement("animations");
 	if(animationsElement == NULL) {
-		cout << "fucking retard, put a animation block in the .anf" << endl;
+		cout << "There aren't animations in this anf" << endl;
 	}
 	else {
+		cout << "\n\n____ ANIMATIONS _____ \n\n";
 		TiXmlElement *animation = animationsElement->FirstChildElement();
 
 		while(animation) {
+
 			char* id = (char*) animation->Attribute("id");
+			cout << "specific animation found with the id of: " << id;
 			char* span = (char*) animation->Attribute("span");
 			char* type = (char*) animation->Attribute("type");
+			cout << " type:" << type << endl;
 			char* center;
 			char* radius;
 			char* startAng;
 			char* rotAng;
-			string id2;
 
-			Animation *animationTemp;
+			//General animation class
 
 			if(strcmp(type, "linear") == 0) {
+				// TODO checking if there isnt anything missing here..
+
+				//getControlPoints
+				TiXmlElement *controlPoint = animation->FirstChildElement();
+				vector<vector<float> > controlPoints;
+				while(controlPoint) {
+					cout << "starting control point - ";
+					char* xx;
+					char* yy;
+					char* zz;
+					vector<float> point;
+
+					xx = (char*)animation->Attribute("xx");
+					yy = (char*)animation->Attribute("yy");
+					zz = (char*)animation->Attribute("zz");
+
+					point.push_back(atof(xx));
+					point.push_back(atof(yy));
+					point.push_back(atof(zz));
+
+					controlPoints.push_back(point);
+					controlPoint = controlPoint->NextSiblingElement();
+					cout << "end of control points.\n";
+				}
+				LinearAnimation * animationTemp = new LinearAnimation(id, atof(span), controlPoints);
+				animations.push_back(animationTemp);
+			}
+			//else creates a circular animation
+			else if(strcmp(type,(char*) "circular") == 0) {
+				cout << "generating a circular animation\n\n";
+				cout << "start of circular parsing - ";
 				center = (char*)animation->Attribute("center");
 				radius = (char*)animation->Attribute("radius");
 				startAng = (char*)animation->Attribute("startang");
 				rotAng = (char*)animation->Attribute("rotang");
-			}
-			//getControlPoints
-			TiXmlElement *controlPoint = animation->FirstChildElement();
-			vector<vector<float> > controlPoints;
-			while(controlPoint) {
-				char* xx;
-				char* yy;
-				char* zz;
-				vector<float> point;
+				cout << "Successful\n";
 
-				xx = (char*)animation->Attribute("xx");
-				yy = (char*)animation->Attribute("yy");
-				zz = (char*)animation->Attribute("zz");
-
-				point.push_back(atof(xx));
-				point.push_back(atof(yy));
-				point.push_back(atof(zz));
-
-				controlPoints.push_back(point);
-				controlPoint = controlPoint->NextSiblingElement();
-			}
-
-			if(strcmp(type, "linear") == 0) {
-				animationTemp = new LinearAnimation(id2(id), atof(span), controlPoints);
-			}
-			else if(strcmp(type, "circular") == 0) {
-				vector<float> centerPoint; float* centerPointTemp;
-
+				vector<float> centerPoint;
+				float centerPointTemp[3];
 				sscanf(center, "%f %f %f",&centerPointTemp[0],
 						&centerPointTemp[1],&centerPointTemp[2]);
 
@@ -399,17 +410,16 @@ XMLParser::XMLParser() {
 					centerPoint.push_back(centerPointTemp[i]);
 				}
 
-				animationTemp = new CircularAnimation(
-						id2(id),
+				CircularAnimation * animationTemp= new CircularAnimation(
+						id,
 						atof(span),
 						centerPoint,
 						atof(radius),
 						atof(startAng),
 						atof(rotAng)
 				);
-
+				animations.push_back(animationTemp);
 			}
-			animations.push_back(animationTemp);
 			animation = animation->NextSiblingElement();
 		}
 	}
@@ -465,7 +475,6 @@ XMLParser::XMLParser() {
 					// transforms all read
 					currentNode->setMatrix();
 				}
-
 			}
 
 			TiXmlElement *appearence = node->FirstChildElement("appearanceref");
@@ -570,6 +579,21 @@ XMLParser::XMLParser() {
 				}
 				cout << "end of descendents" << endl;
 			}
+
+			TiXmlElement *animation = node->FirstChildElement("animationref");
+			if(animation==NULL){
+				cout << "There are no animations for this specific node\n";
+			}else {
+				cout << "Animation found\n";
+
+				char* animationRef = (char*) animation->Attribute("id");
+				if(animationRef==NULL){
+					cout << "there wasn't found an specific id for the animation\n";
+				} else {
+					cout << "animation with the id of: " << animationRef << " found\n";
+					currentNode->setAnimationRef(animationRef);
+				}
+			}
 			cout << "end of specific node" << endl;
 			graph[currentNode->getId()] = currentNode;
 			node = node->NextSiblingElement();
@@ -594,12 +618,12 @@ void XMLParser::setEmptyNodes(){
 	for(;it!=ite;it++) {
 		if(it->second->getDescendents().size()!=0) {
 			currentChields = it->second->getDescendents();
-			for(int i=0;i<currentChields.size();i++) {
+			for(unsigned int i=0;i<currentChields.size();i++) {
 				cout << "numero de filhos do node " << it->first << ", #" << currentChields.size() << endl;
 				for(;it2!=ite;it2++){
 					if(strcmp(it2->first,currentChields[i]->getId())==0){
 						currentChields[i] = it2->second;
-						cout << " chield: " << currentChields[i]->getId() << endl;
+						cout << " Child: " << currentChields[i]->getId() << endl;
 					}
 				}
 				it2=graph.begin();

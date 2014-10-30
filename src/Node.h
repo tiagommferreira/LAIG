@@ -23,6 +23,10 @@ private:
 	CGFappearance * appearance = new CGFappearance();
 	CGFappearance * parentAppearance = new CGFappearance();
 
+	// second project
+
+	char* animationRef;
+
 public:
 	Node(){processed = false;}
 
@@ -342,6 +346,14 @@ public:
 
 	void setParentAppearance(CGFappearance* parentAppearance) {
 		this->parentAppearance = parentAppearance;
+	}
+
+	char* getAnimationRef() const {
+		return animationRef;
+	}
+
+	void setAnimationRef(char* animationRef) {
+		this->animationRef = animationRef;
 	}
 };
 #endif /* defined(__CGFExample__Node__) */

@@ -88,7 +88,7 @@ void XMLScene::init() {
 	float* backColor = parser->getGlobals()->getBackgroundColor();
 	glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
 
-	// initialize appearences;
+	// initialize appearances;
 	setNodesAppearances();
 
 	setUpdatePeriod(30);
@@ -98,6 +98,14 @@ void XMLScene::init() {
 void XMLScene::update(unsigned long t) {
 	shader->bind();
 	shader->update(t/400.0);
+	map<char*,Node*> temp = parser->getGraph();
+	map<char*,Node*>::iterator it=temp.begin();
+	for(;it!=temp.end();it++){
+		if(it->second->isAnimated()){
+			it->second->update();
+		}
+	}
+
 	shader->unbind();
 }
 

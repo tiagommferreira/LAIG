@@ -6,6 +6,7 @@
 #include <vector>
 #include "Primitive.h"
 #include "Transform.h"
+#include "Animation.h"
 #include <cmath>
 
 using namespace std;
@@ -22,10 +23,9 @@ private:
 	bool processed;
 	CGFappearance * appearance = new CGFappearance();
 	CGFappearance * parentAppearance = new CGFappearance();
-
-	// second project
-
-	char* animationRef;
+	bool animated;
+	float currentAngle, deltaAngle;
+	Animation* animation;
 
 public:
 	Node(){processed = false;}
@@ -233,30 +233,55 @@ public:
 		glPushMatrix();
 		glLoadIdentity();
 
-		for(unsigned int i = 0; i < transforms.size(); i++) {
-			cout << "transform type: " << transforms[i]->getType() << endl;
+		if(isAnimated()){
+				// se for animado ignora-se as transformacoes
+			if(this->animation->getType()==0){
+				// circular animation
+				CircularAnimation *circ = (CircularAnimation*) this->animation;
 
-			if(strcmp(transforms[i]->getType(), "translate") == 0) {
-				glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
+				glTranslated(circ->getCenter()[0],circ->getCenter()[1],circ->getCenter()[2]); // poem na posicao inicial
+				glRotated(circ->getInitAngle(),0,0,1); // roda o angulo inicial
+
+
+				cout << "Translate values: " << circ->getCenter()[0] << ", " << circ->getCenter()[1]
+					 << ", " << circ->getCenter()[2] << endl;
+				cout << "Rotate Value: " << circ->getInitAngle() << endl;
+				cout << "Translate Value: " << circ->getRadious() << endl;
+
+				currentAngle=0; // sets the initial angle to 0
+				deltaAngle = circ->getRotationAngle() / (33.3 * circ->getTime()); // TODO tirar o hardcoded 33.3(update period time)
+
+			}else {
+				//TODO linear animation
 			}
-			else if(strcmp(transforms[i]->getType(), "rotate") == 0) {
-				cout << "ROTATE " << transforms[i]->getAxis() << " " << transforms[i]->getAngle() << endl;
-				if(transforms[i]->getAxis() == 'x') {
-					glRotated(transforms[i]->getAngle(),1,0,0);
-				}
-				else if(transforms[i]->getAxis() == 'y') {
-					glRotated(transforms[i]->getAngle(),0,1,0);
-				}
-				else if(transforms[i]->getAxis() == 'z') {
-					glRotated(transforms[i]->getAngle(),0,0,1);
-				}
-			}
-			else if(strcmp(transforms[i]->getType(), "scale") == 0) {
-				glScaled(transforms[i]->getFactor()[0],transforms[i]->getFactor()[1],transforms[i]->getFactor()[2]);
+		}else{
+				// se nao faz as transformacoes normalmente
+			for(unsigned int i = 0; i < transforms.size(); i++) {
+						cout << "transform type: " << transforms[i]->getType() << endl;
+
+						if(strcmp(transforms[i]->getType(), "translate") == 0) {
+							glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
+						}
+						else if(strcmp(transforms[i]->getType(), "rotate") == 0) {
+							cout << "ROTATE " << transforms[i]->getAxis() << " " << transforms[i]->getAngle() << endl;
+							if(transforms[i]->getAxis() == 'x') {
+								glRotated(transforms[i]->getAngle(),1,0,0);
+							}
+							else if(transforms[i]->getAxis() == 'y') {
+								glRotated(transforms[i]->getAngle(),0,1,0);
+							}
+							else if(transforms[i]->getAxis() == 'z') {
+								glRotated(transforms[i]->getAngle(),0,0,1);
+							}
+						}
+						else if(strcmp(transforms[i]->getType(), "scale") == 0) {
+							glScaled(transforms[i]->getFactor()[0],transforms[i]->getFactor()[1],transforms[i]->getFactor()[2]);
+						}
 			}
 		}
 
 		glGetFloatv(GL_MODELVIEW_MATRIX, &transformMatrix[0][0]);
+
 		glPopMatrix();
 	}
 
@@ -313,6 +338,14 @@ public:
 		}
 	}
 
+	void update(){
+		CircularAnimation *circ = (CircularAnimation*) this->animation;
+		if(circ->getRotationAngle() > currentAngle){
+			currentAngle+=deltaAngle;
+		}
+		cout << "max angle is: " << circ->getRotationAngle() << ", current is: " << currentAngle << endl;
+	}
+
 	void draw(){
 
 		if(strcmp(appearenceRef,"inherit")==0 || strcmp(appearenceRef,"")==0){
@@ -323,15 +356,20 @@ public:
 
 		glPushMatrix();
 
-		if(transforms.size()!=0){
+		if(this->isAnimated()){//se for animado
+			CircularAnimation *circ = (CircularAnimation*) this->animation;
 			glMultMatrixf(&transformMatrix[0][0]);
-		}
-		else {
+			glRotated(currentAngle,0,0,1);
+			glTranslated(circ->getRadious(),0,0); // incrementa o raio da animacao
+
+		} else {// se nao for animado
+			if(transforms.size()!=0){
+				glMultMatrixf(&transformMatrix[0][0]);
+			}
 		}
 
 		if(primitives.size()!=0) {
 			drawPrimitives();
-		}else{
 		}
 
 		for(unsigned int i=0;i<descendents.size();i++) {
@@ -348,12 +386,17 @@ public:
 		this->parentAppearance = parentAppearance;
 	}
 
-	char* getAnimationRef() const {
-		return animationRef;
+
+	bool isAnimated() const {
+		return animated;
 	}
 
-	void setAnimationRef(char* animationRef) {
-		this->animationRef = animationRef;
+	void setAnimated(bool animated) {
+		this->animated = animated;
+	}
+
+	void setAnimation( Animation*& animation) {
+		this->animation = animation;
 	}
 };
 #endif /* defined(__CGFExample__Node__) */

@@ -3,7 +3,7 @@
 #include "CGFappearance.h"
 #include "CGFapplication.h"
 #include "CGFaxis.h"
-
+#include "cstring"
 #include <iostream>
 
 XMLParser::XMLParser() {
@@ -388,7 +388,7 @@ XMLParser::XMLParser() {
 					controlPoint = controlPoint->NextSiblingElement();
 					cout << "end of control points.\n";
 				}
-				LinearAnimation * animationTemp = new LinearAnimation(id, atof(span), controlPoints);
+				LinearAnimation * animationTemp = new LinearAnimation(id, atof(span), controlPoints,1);
 				animations.push_back(animationTemp);
 			}
 			//else creates a circular animation
@@ -416,7 +416,8 @@ XMLParser::XMLParser() {
 						centerPoint,
 						atof(radius),
 						atof(startAng),
-						atof(rotAng)
+						atof(rotAng),
+						0 // circular
 				);
 				animations.push_back(animationTemp);
 			}
@@ -472,8 +473,6 @@ XMLParser::XMLParser() {
 						currentNode->addTransform(transforTemp);
 						transform = transform->NextSiblingElement();
 					}
-					// transforms all read
-					currentNode->setMatrix();
 				}
 			}
 
@@ -582,18 +581,29 @@ XMLParser::XMLParser() {
 
 			TiXmlElement *animation = node->FirstChildElement("animationref");
 			if(animation==NULL){
+				currentNode->setAnimated(false);
 				cout << "There are no animations for this specific node\n";
 			}else {
+				currentNode->setAnimated(true);
 				cout << "Animation found\n";
 
-				char* animationRef = (char*) animation->Attribute("id");
-				if(animationRef==NULL){
-					cout << "there wasn't found an specific id for the animation\n";
-				} else {
-					cout << "animation with the id of: " << animationRef << " found\n";
-					currentNode->setAnimationRef(animationRef);
+				string animationRef = (char*) animation->Attribute("id");
+				cout << animationRef << endl;
+
+				cout << "animation with the id of: " << animationRef << " found\n";
+				for(unsigned int i=0;i<animations.size();i++){
+					if(animationRef==animations[i]->getId()){
+						currentNode->setAnimation(animations[i]);
+						cout << "Node associated with a specific animation" << endl;
+					} else {
+						cout << "There wasn't an animation with the specified id of: " << animationRef << endl;
+					}
 				}
 			}
+			cout << "setting node matrix\n";
+			// transforms all read
+			currentNode->setMatrix();
+			cout << "end of seting node matrix\n";
 			cout << "end of specific node" << endl;
 			graph[currentNode->getId()] = currentNode;
 			node = node->NextSiblingElement();

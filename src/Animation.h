@@ -9,10 +9,12 @@ class Animation {
 private:
 	string id;
 	float time;
+	int type;
 public:
-	Animation(string id, float time){
+	Animation(string id, float time,int type){
 		this->id = id;
 		this->time = time;
+		this->type = type; // 0 - circular , 1 - linear
 	};
 
 	float getTime() {
@@ -23,21 +25,23 @@ public:
 		return id;
 	}
 
+	int getType() const {
+		return type;
+	}
 };
-
 
 class LinearAnimation: public Animation {
 private:
 	vector< vector<float> > controlPoints;
 public:
-	LinearAnimation(string id, float time, vector< vector<float> > controlPoints): Animation(id, time) {
+	LinearAnimation(string id, float time, vector< vector<float> > controlPoints, int type):
+		Animation(id, time, type) {
 		this->controlPoints = controlPoints;
 	}
 	vector< vector<float> > getControlPoints(){
 		return controlPoints;
 	}
 };
-
 
 class CircularAnimation: public Animation {
 private:
@@ -47,8 +51,8 @@ private:
 	float rotationAngle;
 public:
 	CircularAnimation(string id, float time, vector<float> center,
-			float radius, float initAngle, float rotationAngle):
-				Animation(id,time) {
+			float radius, float initAngle, float rotationAngle, int type):
+				Animation(id,time, type) {
 		this->center = center;
 		this->radius = radius;
 		this->initAngle = initAngle;

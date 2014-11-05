@@ -23,8 +23,18 @@ private:
 	bool processed;
 	CGFappearance * appearance = new CGFappearance();
 	CGFappearance * parentAppearance = new CGFappearance();
+
+	//second project
+
 	bool animated;
+	//circular animation
 	float currentAngle, deltaAngle;
+	//linear animation
+	float deltaX,deltaY,deltaZ,currentX,currentY,currentZ;
+	vector<float> distances;
+	int currentAnimState;
+
+	//general animation
 	Animation* animation;
 
 public:
@@ -236,23 +246,30 @@ public:
 		if(isAnimated()){
 				// se for animado ignora-se as transformacoes
 			if(this->animation->getType()==0){
-				// circular animation
 				CircularAnimation *circ = (CircularAnimation*) this->animation;
-
 				glTranslated(circ->getCenter()[0],circ->getCenter()[1],circ->getCenter()[2]); // poem na posicao inicial
 				glRotated(circ->getInitAngle(),0,0,1); // roda o angulo inicial
-
-
-				cout << "Translate values: " << circ->getCenter()[0] << ", " << circ->getCenter()[1]
-					 << ", " << circ->getCenter()[2] << endl;
-				cout << "Rotate Value: " << circ->getInitAngle() << endl;
-				cout << "Translate Value: " << circ->getRadious() << endl;
-
 				currentAngle=0; // sets the initial angle to 0
 				deltaAngle = circ->getRotationAngle() / (33.3 * circ->getTime()); // TODO tirar o hardcoded 33.3(update period time)
 
 			}else {
-				//TODO linear animation
+				LinearAnimation *linear = (LinearAnimation*) this->animation;
+				currentX = linear->getControlPoints()[0][0];
+								currentY = linear->getControlPoints()[0][1];
+								currentZ = linear->getControlPoints()[0][2];
+
+				glTranslated(currentX,currentY,currentZ);
+
+				float fullDistance=0;
+				for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
+					float currentDistance=sqrt(pow((linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0]),2)+
+							pow((linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1]),2) +
+							pow((linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2]),2));
+					fullDistance += currentDistance;
+					distances.push_back(currentDistance);
+				}
+				distances.push_back(fullDistance);
+				currentAnimState=0;
 			}
 		}else{
 				// se nao faz as transformacoes normalmente
@@ -339,11 +356,25 @@ public:
 	}
 
 	void update(){
-		CircularAnimation *circ = (CircularAnimation*) this->animation;
-		if(circ->getRotationAngle() > currentAngle){
-			currentAngle+=deltaAngle;
+		if(animation->getType()==0){
+			CircularAnimation *circ = (CircularAnimation*) this->animation;
+			if(circ->getRotationAngle() > currentAngle){
+				currentAngle+=deltaAngle;
+			}
+		}else {
+			// TODO retirar hardcoded 33.33
+			LinearAnimation *linear = (LinearAnimation*) this->animation;
+			if(currentAnimState==0){
+				deltaX = (linear->getControlPoints()[1][0] - linear->getControlPoints()[0][0])/ (linear->getTime() * 33.333);
+				deltaY = (linear->getControlPoints()[1][1] - linear->getControlPoints()[0][1])/ (linear->getTime() * 33.333);
+				deltaZ = (linear->getControlPoints()[1][2] - linear->getControlPoints()[0][2])/ (linear->getTime() * 33.333);
+
+				currentX += deltaX;
+				currentY += deltaY;
+				currentZ += deltaZ;
+				cout << "x# " << currentX << " y#" << currentY  << " #z" << currentZ << endl;
+			}
 		}
-		cout << "max angle is: " << circ->getRotationAngle() << ", current is: " << currentAngle << endl;
 	}
 
 	void draw(){
@@ -357,11 +388,20 @@ public:
 		glPushMatrix();
 
 		if(this->isAnimated()){//se for animado
-			CircularAnimation *circ = (CircularAnimation*) this->animation;
-			glMultMatrixf(&transformMatrix[0][0]);
-			glRotated(currentAngle,0,0,1);
-			glTranslated(circ->getRadious(),0,0); // incrementa o raio da animacao
 
+			if(this->animation->getType()==0){
+				// circular
+				CircularAnimation *circ = (CircularAnimation*) this->animation;
+				glMultMatrixf(&transformMatrix[0][0]);
+				glRotated(currentAngle,0,0,1);
+				glTranslated(circ->getRadious(),0,0); // incrementa o raio da animacao
+			} else {
+				// linear
+				LinearAnimation *linear = (LinearAnimation*) this->animation;
+					glMultMatrixf(&transformMatrix[0][0]);
+					glTranslated(currentX,currentY,currentZ);
+
+			}
 		} else {// se nao for animado
 			if(transforms.size()!=0){
 				glMultMatrixf(&transformMatrix[0][0]);

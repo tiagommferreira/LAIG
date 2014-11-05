@@ -360,15 +360,14 @@ XMLParser::XMLParser() {
 			char* radius;
 			char* startAng;
 			char* rotAng;
-
 			//General animation class
-
 			if(strcmp(type, "linear") == 0) {
 				// TODO checking if there isnt anything missing here..
 
 				//getControlPoints
 				TiXmlElement *controlPoint = animation->FirstChildElement();
 				vector<vector<float> > controlPoints;
+
 				while(controlPoint) {
 					cout << "starting control point - ";
 					char* xx;
@@ -376,9 +375,9 @@ XMLParser::XMLParser() {
 					char* zz;
 					vector<float> point;
 
-					xx = (char*)animation->Attribute("xx");
-					yy = (char*)animation->Attribute("yy");
-					zz = (char*)animation->Attribute("zz");
+					xx = (char*)controlPoint->Attribute("xx");
+					yy = (char*)controlPoint->Attribute("yy");
+					zz = (char*)controlPoint->Attribute("zz");
 
 					point.push_back(atof(xx));
 					point.push_back(atof(yy));
@@ -386,7 +385,7 @@ XMLParser::XMLParser() {
 
 					controlPoints.push_back(point);
 					controlPoint = controlPoint->NextSiblingElement();
-					cout << "end of control points.\n";
+					cout << "end of control point with the value of: " << xx << ", " << yy << ", " << zz << endl;
 				}
 				LinearAnimation * animationTemp = new LinearAnimation(id, atof(span), controlPoints,1);
 				animations.push_back(animationTemp);

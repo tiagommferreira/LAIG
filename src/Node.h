@@ -30,12 +30,16 @@ private:
 	//circular animation
 	float currentAngle, deltaAngle;
 	//linear animation
-	float deltaX,deltaY,deltaZ,currentX,currentY,currentZ;
+	vector<float> deltaX;
+	vector<float>deltaY;
+	vector<float>deltaZ;
+	float currentX,currentY,currentZ;
 	vector<float> distances;
 	int currentAnimState;
 
 	//general animation
 	Animation* animation;
+	bool animationOver;
 
 public:
 	Node(){processed = false;}
@@ -244,6 +248,7 @@ public:
 		glLoadIdentity();
 
 		if(isAnimated()){
+			animationOver=false;
 				// se for animado ignora-se as transformacoes
 			if(this->animation->getType()==0){
 				CircularAnimation *circ = (CircularAnimation*) this->animation;
@@ -262,6 +267,14 @@ public:
 
 				float fullDistance=0;
 				for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
+					float deltaX,deltaY,deltaZ;
+					deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0]) / (linear->getTime() * 33.333);
+					deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1]) / (linear->getTime() * 33.333);
+					deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2]) / (linear->getTime() * 33.333);
+					this->deltaX.push_back(deltaX);
+					this->deltaY.push_back(deltaY);
+					this->deltaZ.push_back(deltaZ);
+
 					float currentDistance=sqrt(pow((linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0]),2)+
 							pow((linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1]),2) +
 							pow((linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2]),2));
@@ -356,24 +369,36 @@ public:
 	}
 
 	void update(){
-		if(animation->getType()==0){
-			CircularAnimation *circ = (CircularAnimation*) this->animation;
-			if(circ->getRotationAngle() > currentAngle){
-				currentAngle+=deltaAngle;
-			}
-		}else {
-			// TODO retirar hardcoded 33.33
-			LinearAnimation *linear = (LinearAnimation*) this->animation;
-			if(currentAnimState==0){
-				deltaX = (linear->getControlPoints()[1][0] - linear->getControlPoints()[0][0])/ (linear->getTime() * 33.333);
-				deltaY = (linear->getControlPoints()[1][1] - linear->getControlPoints()[0][1])/ (linear->getTime() * 33.333);
-				deltaZ = (linear->getControlPoints()[1][2] - linear->getControlPoints()[0][2])/ (linear->getTime() * 33.333);
+		if(!animationOver){
+			if(animation->getType()==0){
+				//circular animation
+				CircularAnimation *circ = (CircularAnimation*) this->animation;
+				if(circ->getRotationAngle() > currentAngle){
+					currentAngle+=deltaAngle;
+				} else{
+					animationOver=true;
+				}
+			}else {
+				LinearAnimation *linear = (LinearAnimation*) this->animation;
+				//linear animation
+				currentX += deltaX[currentAnimState];
+				currentY += deltaY[currentAnimState];
+				currentZ += deltaZ[currentAnimState];
+				if(currentX-0.005 < linear->getControlPoints()[currentAnimState+1][0] &&
+						currentX+0.005 > linear->getControlPoints()[currentAnimState+1][0] &&
+						currentY-0.005 < linear->getControlPoints()[currentAnimState+1][1] &&
+						currentY+0.005 > linear->getControlPoints()[currentAnimState+1][1] &&
+						currentZ-0.005 < linear->getControlPoints()[currentAnimState+1][2] &&
+						currentZ+0.005 > linear->getControlPoints()[currentAnimState+1][2]){
+					currentAnimState++;
+					if(currentAnimState ==linear->getControlPoints().size()-1 ){
+						animationOver=true;
+					}
 
-				currentX += deltaX;
-				currentY += deltaY;
-				currentZ += deltaZ;
-				cout << "x# " << currentX << " y#" << currentY  << " #z" << currentZ << endl;
+				}
 			}
+		} else {
+			cout << "nothing to update animation is over already" << endl;
 		}
 	}
 

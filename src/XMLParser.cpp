@@ -602,6 +602,9 @@ XMLParser::XMLParser() {
 			cout << "setting node matrix\n";
 			// transforms all read
 			currentNode->setMatrix();
+			if(currentNode->isAnimated()){
+				currentNode->setAnimationMatrix();
+			}
 			cout << "end of seting node matrix\n";
 			cout << "end of specific node" << endl;
 			graph[currentNode->getId()] = currentNode;

@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "sim.anf";
+	const char *p = "cenoide.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -441,6 +441,15 @@ XMLParser::XMLParser() {
 			Node* currentNode = new Node();
 			currentNode->setId(id);
 
+			char * displayList = (char *)node->Attribute("displaylist");
+			if(displayList == NULL){
+				cout << "current node isn't a display list" << endl;
+				currentNode->setDisplayList(false);
+			}else{
+				cout << "current node is a display list" << endl;
+				currentNode->setDisplayList(true);
+			}
+
 			TiXmlElement *transforms=node->FirstChildElement("transforms");
 			if(transforms==NULL){
 				cout << "transformations not found " << endl;
@@ -605,6 +614,11 @@ XMLParser::XMLParser() {
 			if(currentNode->isAnimated()){
 				currentNode->setAnimationMatrix();
 			}
+			if(currentNode->isDisplayList()){
+				currentNode->createDisplayList();
+			}
+			//TODO verificar se o pai é uma displaylist e se for chamar tambem com display list para os filhos
+			//TODO perguntar se houver uma displaylist numa animação se faz 1 de sentido, lawl ( pq vai ficar parado )
 			cout << "end of seting node matrix\n";
 			cout << "end of specific node" << endl;
 			graph[currentNode->getId()] = currentNode;

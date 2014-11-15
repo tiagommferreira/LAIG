@@ -24,14 +24,15 @@ private:
 	char * appearenceRef;
 	vector<Node *> descendents;
 	float transformMatrix[4][4];
-	float animationMatrix[4][4];
 	char * id;
 	bool processed;
 	CGFappearance * appearance = new CGFappearance();
 	CGFappearance * parentAppearance = new CGFappearance();
 
+	GLuint index;
 	//second project
-
+	float animationMatrix[4][4];
+	bool displayList;
 	bool animated;
 	//circular animation
 	float currentAngle, deltaAngle;
@@ -48,7 +49,7 @@ private:
 	bool animationOver;
 
 public:
-	Node(){processed = false;}
+	Node(){processed = false;displayList=false;}
 
 	void setAppearance(CGFappearance * app){
 		this->appearance = app;
@@ -301,33 +302,45 @@ public:
 		glPopMatrix();
 	}
 
+	void createDisplayList(){
+		cout << "display list created for the current node" << endl;
+		this->index = glGenLists(primitives.size());
+
+		for(int i=0;i<primitives.size();i++) {
+			glNewList(index+i, GL_COMPILE);
+			drawPrimitives();
+			glEndList();
+		}
+	}
+
+
 	void setMatrix(){
 		glPushMatrix();
 		glLoadIdentity();
 
 				// se nao faz as transformacoes normalmente
-			for(unsigned int i = 0; i < transforms.size(); i++) {
-						cout << "transform type: " << transforms[i]->getType() << endl;
+		for(unsigned int i = 0; i < transforms.size(); i++) {
+					cout << "transform type: " << transforms[i]->getType() << endl;
 
-						if(strcmp(transforms[i]->getType(), "translate") == 0) {
-							glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
+					if(strcmp(transforms[i]->getType(), "translate") == 0) {
+						glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
+					}
+					else if(strcmp(transforms[i]->getType(), "rotate") == 0) {
+						cout << "ROTATE " << transforms[i]->getAxis() << " " << transforms[i]->getAngle() << endl;
+						if(transforms[i]->getAxis() == 'x') {
+							glRotated(transforms[i]->getAngle(),1,0,0);
 						}
-						else if(strcmp(transforms[i]->getType(), "rotate") == 0) {
-							cout << "ROTATE " << transforms[i]->getAxis() << " " << transforms[i]->getAngle() << endl;
-							if(transforms[i]->getAxis() == 'x') {
-								glRotated(transforms[i]->getAngle(),1,0,0);
-							}
-							else if(transforms[i]->getAxis() == 'y') {
-								glRotated(transforms[i]->getAngle(),0,1,0);
-							}
-							else if(transforms[i]->getAxis() == 'z') {
-								glRotated(transforms[i]->getAngle(),0,0,1);
-							}
+						else if(transforms[i]->getAxis() == 'y') {
+							glRotated(transforms[i]->getAngle(),0,1,0);
 						}
-						else if(strcmp(transforms[i]->getType(), "scale") == 0) {
-							glScaled(transforms[i]->getFactor()[0],transforms[i]->getFactor()[1],transforms[i]->getFactor()[2]);
+						else if(transforms[i]->getAxis() == 'z') {
+							glRotated(transforms[i]->getAngle(),0,0,1);
 						}
-			}
+					}
+					else if(strcmp(transforms[i]->getType(), "scale") == 0) {
+						glScaled(transforms[i]->getFactor()[0],transforms[i]->getFactor()[1],transforms[i]->getFactor()[2]);
+					}
+		}
 
 		glGetFloatv(GL_MODELVIEW_MATRIX, &transformMatrix[0][0]);
 		glPopMatrix();
@@ -448,9 +461,21 @@ public:
 				glMultMatrixf(&transformMatrix[0][0]);
 			}
 		}
+		if(isDisplayList()){
+			//call display list
+			GLubyte list[primitives.size()];
+			for(int i=0;i<primitives.size();i++){
+				list[0]=0;
+			}
+			glListBase(index);
+			glCallLists(primitives.size(), GL_UNSIGNED_BYTE, list);
 
-		if(primitives.size()!=0) {
-			drawPrimitives();
+
+		} else {
+			//senao desenha as primitivas normalmente
+			if(primitives.size()!=0) {
+						drawPrimitives();
+			}
 		}
 
 		for(unsigned int i=0;i<descendents.size();i++) {
@@ -478,6 +503,14 @@ public:
 
 	void setAnimation( Animation*& animation) {
 		this->animation = animation;
+	}
+
+	bool isDisplayList() const {
+		return displayList;
+	}
+
+	void setDisplayList(bool displayList) {
+		this->displayList = displayList;
 	}
 };
 #endif /* defined(__CGFExample__Node__) */

@@ -268,8 +268,6 @@ public:
 							currentY = linear->getControlPoints()[0][1];
 							currentZ = linear->getControlPoints()[0][2];
 
-			glTranslated(currentX,currentY,currentZ);
-
 			float fullDistance=0;
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float currentDistance=sqrt(pow((linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0]),2)+
@@ -453,8 +451,8 @@ public:
 			} else {
 				// linear
 				LinearAnimation *linear = (LinearAnimation*) this->animation;
-					glMultMatrixf(&animationMatrix[0][0]);
-					glTranslated(currentX,currentY,currentZ);
+				glTranslated(currentX,currentY,currentZ);
+				glMultMatrixf(&animationMatrix[0][0]);
 			}
 		} else {// se nao for animado
 			if(transforms.size()!=0){
@@ -462,15 +460,7 @@ public:
 			}
 		}
 		if(isDisplayList()){
-			//call display list
-			GLubyte list[primitives.size()];
-			for(int i=0;i<primitives.size();i++){
-				list[0]=0;
-			}
-			glListBase(index);
-			glCallLists(primitives.size(), GL_UNSIGNED_BYTE, list);
-
-
+			glCallList(index);
 		} else {
 			//senao desenha as primitivas normalmente
 			if(primitives.size()!=0) {

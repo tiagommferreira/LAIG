@@ -13,6 +13,7 @@
 #include "Animation.h"
 #include "Appearance.h"
 #include "tinyxml.h"
+#include "Plane.h"
 #include <map>
 
 class XMLParser
@@ -38,7 +39,10 @@ public:
     map<char*,Node*> getGraph(){return this->graph;}
     char* getRootid(){return rootid;}
     void setEmptyNodes();
-   
+    void setChildrenDisplayLists();
+    Plane * getPlane(){
+    	return this->plane;
+    }
     
 protected:
     
@@ -59,6 +63,7 @@ protected:
     vector<Texture*> textures;
     vector<Animation*> animations;
     map<char*,Node*> graph;
+    Plane * plane;
     char* rootid;
     
 };

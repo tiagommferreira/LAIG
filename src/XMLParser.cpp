@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "sim.anf";
+	const char *p = "cena.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -631,7 +631,10 @@ XMLParser::XMLParser() {
 		cout << "Fill empty Nodes" << endl;
 		setEmptyNodes();
 		cout << "Empty nodes filled" << endl;
-
+		map<char*,Node*>::iterator it = graph.begin();
+		for(;it!=graph.end();it++){
+			setChildrenDisplayLists();
+		}
 	}
 }
 
@@ -655,6 +658,21 @@ void XMLParser::setEmptyNodes(){
 				it2=graph.begin();
 			}
 			it->second->setAllDescendents(currentChields);
+		}
+	}
+}
+
+void XMLParser::setChildrenDisplayLists(){
+	map<char*,Node*>::iterator it=graph.begin();
+	map<char*,Node*>::iterator ite = graph.end();
+	vector<Node*> currentChildren;
+	for(;it!=ite;it++){
+		currentChildren=it->second->getDescendents();
+		if(it->second->isDisplayList()){
+			for(unsigned int i=0;i<currentChildren.size();i++){
+				currentChildren[i]->setDisplayList(true);
+				currentChildren[i]->createDisplayList();
+			}
 		}
 	}
 }

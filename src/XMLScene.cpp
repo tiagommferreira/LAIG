@@ -20,6 +20,7 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * a
 
 void XMLScene::init() {
 	/** Parses the information from xml to c++ **/
+
 	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
 	parser = new XMLParser();
 	camera = parser->getCameras()[0]->getInitial();
@@ -92,6 +93,7 @@ void XMLScene::init() {
 	setNodesAppearances();
 
 	setUpdatePeriod(30);
+
 	cout << "start updating" << endl;
 }
 
@@ -136,7 +138,7 @@ void XMLScene::display() {
 	}
 
 	//GRAPH
-
+	/*
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
 
@@ -148,7 +150,8 @@ void XMLScene::display() {
 			glPopMatrix();
 			break;
 		}
-	}
+	}*/
+	parser->getPlane()->draw();
 	glutSwapBuffers();
 }
 

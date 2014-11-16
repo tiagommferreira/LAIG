@@ -10,12 +10,6 @@
 #include <cmath>
 
 using namespace std;
-//TODO mudar a matriz de animação
-/**
- * Por tipo uma matriz de animação a parte e fazer na mesma a das transformações
- * e depois verificar se é animado aplica essa matriz ou entao se não for aplicar a outra normalmente
- * para que os filhos desse tenham na mesma as transformações
- */
 class Node {
 private:
 	vector<Node*> graph;
@@ -393,6 +387,8 @@ public:
 						primitives[i]->getOutter(),
 						primitives[i]->getSlices(),
 						primitives[i]->getLoops());
+			} else if(strcmp(primitives[i]->getValue(),"plane")==0) {
+				//TODO  adicionar aqui a primitiva plane
 			}
 		}
 	}
@@ -426,12 +422,11 @@ public:
 				}
 			}
 		} else {
-			//cout << "nothing to update animation is over already" << endl;
+			//nothing to update animation is over already
 		}
 	}
 
 	void draw(){
-
 		if(strcmp(appearenceRef,"inherit")==0 || strcmp(appearenceRef,"")==0){
 			parentAppearance->apply();
 		} else {

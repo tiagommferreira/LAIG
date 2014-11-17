@@ -98,9 +98,9 @@ private:
 	int partsU;
 	int partsV;
 	char* compute;
-	GLfloat* points;
+	vector<vector<GLfloat> > points;
 public:
-	Patch(int order,int partsU, int partsV, char* compute,char* value, GLfloat* points): Primitive(value) {
+	Patch(int order,int partsU, int partsV, char* compute,char* value, vector<vector<GLfloat> > points): Primitive(value) {
 		this->order = order;
 		this->partsU = partsU;
 		this->partsV = partsV;
@@ -119,7 +119,7 @@ public:
 	char* getCompute() {
 		return compute;
 	}
-	GLfloat* getPoints() {
+	vector<vector<GLfloat> > getPoints() {
 		return points;
 	}
 };

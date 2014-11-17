@@ -400,17 +400,22 @@ public:
 				eval->draw();
 			} else if(strcmp(primitives[i]->getValue(),"patch")==0) {
 				Patch* patch = (Patch*) primitives[i];
-				GLfloat* ctrlpoints = patch->getPoints();
-
-				for(int i = 0; i<4;i++) {
-					for(int j = 0;j<3; j++) {
-						cout << ctrlpoints << "   ";
-						ctrlpoints++;
+				vector<vector<GLfloat> > points = patch->getPoints();
+/*
+				GLfloat ctrlpoints[4][3] = {	{  points[0][0], points[0][1], points[0][2]},
+												{  points[1][0], points[1][1], points[1][2]},
+												{  points[2][0], points[2][1], points[2][2]},
+												{  points[3][0], points[3][1], points[3][2]} };
+*/
+				GLfloat ctrlpoints[points.size()][3];
+				for(int i = 0; i<points.size();i++){
+					for(int j = 0; j<3;j++){
+						ctrlpoints[i][j] = points[i][j];
 					}
-					cout << endl;
 				}
 
-				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute(),ctrlpoints);
+
+				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute(),&ctrlpoints[0][0]);
 				eval->draw();
 			}
 		}

@@ -7,12 +7,13 @@
 class Evaluator{
 public:
 		void draw();
-		Evaluator(CGFtexture*,int,int,int,char*);
+		Evaluator(CGFtexture*,int,int,int,char*,GLfloat*);
 		~Evaluator();
 	private:
 		CGFtexture *texture;
 		int vPatches,uPatches;
 		int degree;
 		char* compute;
+		GLfloat* ctrlpoints;
 };
 #endif

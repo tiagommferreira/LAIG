@@ -569,7 +569,29 @@ XMLParser::XMLParser() {
 							char* partsU = (char*) primitive->Attribute("partsU");
 							char* partsV = (char*) primitive->Attribute("partsV");
 							char* compute = (char*) primitive->Attribute("compute");
-							patchTemp = new Patch(atoi(order),atoi(partsU),atoi(partsV),compute,(char*)primitive->Value());
+
+							GLfloat points[(atoi(order)+1)*(atoi(order)+1)][3];
+							int counter = 0;
+							cout << "ARRAY SIZE: " << (atoi(order)+1)*(atoi(order)+1) << endl;
+							TiXmlElement *ctrlPoint = primitive->FirstChildElement();
+
+							while(ctrlPoint) {
+								char* xPoint = (char*) ctrlPoint->Attribute("x");
+								char* yPoint = (char*) ctrlPoint->Attribute("y");
+								char* zPoint = (char*) ctrlPoint->Attribute("z");
+
+								points[counter][0] = atof(xPoint);
+								cout << "X: " << points[counter][0] << endl;
+								points[counter][1] = atof(yPoint);
+								cout << "Y: " << points[counter][1] << endl;
+								points[counter][2] = atof(zPoint);
+								cout << "Z: " << points[counter][2] << endl;
+								counter++;
+
+								ctrlPoint = ctrlPoint->NextSiblingElement();
+							}
+
+							patchTemp = new Patch(atoi(order),atoi(partsU),atoi(partsV),compute,(char*)primitive->Value(), &points[0][0]);
 						}
 
 						if(strcmp(primitive->Value(),"patch")==0){

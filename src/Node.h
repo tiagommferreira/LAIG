@@ -249,7 +249,7 @@ public:
 		glPushMatrix();
 		glLoadIdentity();
 		animationOver=false;
-			// se for animado ignora-se as transformacoes
+		// se for animado ignora-se as transformacoes
 		if(this->animation->getType()==0){
 			CircularAnimation *circ = (CircularAnimation*) this->animation;
 			glTranslated(circ->getCenter()[0],circ->getCenter()[1],circ->getCenter()[2]); // poem na posicao inicial
@@ -260,8 +260,8 @@ public:
 		}else {
 			LinearAnimation *linear = (LinearAnimation*) this->animation;
 			currentX = linear->getControlPoints()[0][0];
-							currentY = linear->getControlPoints()[0][1];
-							currentZ = linear->getControlPoints()[0][2];
+			currentY = linear->getControlPoints()[0][1];
+			currentZ = linear->getControlPoints()[0][2];
 
 			float fullDistance=0;
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
@@ -276,11 +276,11 @@ public:
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-						/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+								/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-						/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+								/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-						/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+								/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
 
 				cout << "sim "<< distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] << endl;
 				this->deltaX.push_back(deltaX);
@@ -311,28 +311,28 @@ public:
 		glPushMatrix();
 		glLoadIdentity();
 
-				// se nao faz as transformacoes normalmente
+		// se nao faz as transformacoes normalmente
 		for(unsigned int i = 0; i < transforms.size(); i++) {
-					cout << "transform type: " << transforms[i]->getType() << endl;
+			cout << "transform type: " << transforms[i]->getType() << endl;
 
-					if(strcmp(transforms[i]->getType(), "translate") == 0) {
-						glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
-					}
-					else if(strcmp(transforms[i]->getType(), "rotate") == 0) {
-						cout << "ROTATE " << transforms[i]->getAxis() << " " << transforms[i]->getAngle() << endl;
-						if(transforms[i]->getAxis() == 'x') {
-							glRotated(transforms[i]->getAngle(),1,0,0);
-						}
-						else if(transforms[i]->getAxis() == 'y') {
-							glRotated(transforms[i]->getAngle(),0,1,0);
-						}
-						else if(transforms[i]->getAxis() == 'z') {
-							glRotated(transforms[i]->getAngle(),0,0,1);
-						}
-					}
-					else if(strcmp(transforms[i]->getType(), "scale") == 0) {
-						glScaled(transforms[i]->getFactor()[0],transforms[i]->getFactor()[1],transforms[i]->getFactor()[2]);
-					}
+			if(strcmp(transforms[i]->getType(), "translate") == 0) {
+				glTranslated(transforms[i]->getTo()[0],transforms[i]->getTo()[1],transforms[i]->getTo()[2]);
+			}
+			else if(strcmp(transforms[i]->getType(), "rotate") == 0) {
+				cout << "ROTATE " << transforms[i]->getAxis() << " " << transforms[i]->getAngle() << endl;
+				if(transforms[i]->getAxis() == 'x') {
+					glRotated(transforms[i]->getAngle(),1,0,0);
+				}
+				else if(transforms[i]->getAxis() == 'y') {
+					glRotated(transforms[i]->getAngle(),0,1,0);
+				}
+				else if(transforms[i]->getAxis() == 'z') {
+					glRotated(transforms[i]->getAngle(),0,0,1);
+				}
+			}
+			else if(strcmp(transforms[i]->getType(), "scale") == 0) {
+				glScaled(transforms[i]->getFactor()[0],transforms[i]->getFactor()[1],transforms[i]->getFactor()[2]);
+			}
 		}
 
 		glGetFloatv(GL_MODELVIEW_MATRIX, &transformMatrix[0][0]);
@@ -390,11 +390,27 @@ public:
 						primitives[i]->getLoops());
 			} else if(strcmp(primitives[i]->getValue(),"plane")==0) {
 				Plane* plane = (Plane*) primitives[i];
-				Evaluator* eval = new Evaluator(NULL, plane->getParts(),plane->getParts(),2,"fill");
+
+				GLfloat ctrlpoints[4][3] = {	{  -0.5, 0.0, 0.5},
+						{  -0.5, 0.0, -0.5},
+						{ 0.5, 0.0, 0.5},
+						{ 0.5, 0.0, -0.5} };
+
+				Evaluator* eval = new Evaluator(NULL, plane->getParts(),plane->getParts(),2,"fill", &ctrlpoints[0][0]);
 				eval->draw();
 			} else if(strcmp(primitives[i]->getValue(),"patch")==0) {
 				Patch* patch = (Patch*) primitives[i];
-				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute());
+				GLfloat* ctrlpoints = patch->getPoints();
+
+				for(int i = 0; i<4;i++) {
+					for(int j = 0;j<3; j++) {
+						cout << ctrlpoints << "   ";
+						ctrlpoints++;
+					}
+					cout << endl;
+				}
+
+				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute(),ctrlpoints);
 				eval->draw();
 			}
 		}
@@ -467,7 +483,7 @@ public:
 		} else {
 			//senao desenha as primitivas normalmente
 			if(primitives.size()!=0) {
-						drawPrimitives();
+				drawPrimitives();
 			}
 		}
 

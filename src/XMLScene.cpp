@@ -138,7 +138,7 @@ void XMLScene::display() {
 	}
 
 	//GRAPH
-	/*
+
 	map<char*,Node*> temp = parser->getGraph();
 	map<char*,Node*>::iterator it=temp.begin();
 
@@ -150,8 +150,7 @@ void XMLScene::display() {
 			glPopMatrix();
 			break;
 		}
-	}*/
-	parser->getPlane()->draw();
+	}
 	glutSwapBuffers();
 }
 

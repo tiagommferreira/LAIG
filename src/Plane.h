@@ -7,9 +7,11 @@
 class Plane{
 public:
 		void draw();
-		Plane();
+		Plane(CGFtexture*,int,int,int);
 		~Plane();
 	private:
-		CGFtexture *myTexture;
+		CGFtexture *texture;
+		int vPatches,uPatches;
+		int degree;
 };
 #endif

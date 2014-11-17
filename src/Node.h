@@ -454,6 +454,7 @@ public:
 				glMultMatrixf(&transformMatrix[0][0]);
 			}
 		}
+
 		if(isDisplayList()){
 			glCallList(index);
 		} else {

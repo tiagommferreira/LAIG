@@ -157,11 +157,6 @@ public:
 
 class Flag: public Primitive {
 private:
-		Flag(Texture* tex);
-		void draw();
-		void update(unsigned long t);
-
-		void setWind(int wind);
 public:
 
 

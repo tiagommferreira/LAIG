@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "cena.anf";
+	const char *p = "cenoide.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -621,24 +621,28 @@ XMLParser::XMLParser() {
 			}
 
 			TiXmlElement *animation = node->FirstChildElement("animationref");
+
 			if(animation==NULL){
 				currentNode->setAnimated(false);
 				cout << "There are no animations for this specific node\n";
 			}else {
-				currentNode->setAnimated(true);
-				cout << "Animation found\n";
+				while(animation){
+					currentNode->setAnimated(true);
+					cout << "Animation found\n";
 
-				string animationRef = (char*) animation->Attribute("id");
-				cout << animationRef << endl;
+					string animationRef = (char*) animation->Attribute("id");
+					cout << animationRef << endl;
 
-				cout << "animation with the id of: " << animationRef << " found\n";
-				for(unsigned int i=0;i<animations.size();i++){
-					if(animationRef==animations[i]->getId()){
-						currentNode->setAnimation(animations[i]);
-						cout << "Node associated with a specific animation" << endl;
-					} else {
-						cout << "There wasn't an animation with the specified id of: " << animationRef << endl;
+					cout << "animation with the id of: " << animationRef << " found\n";
+					for(unsigned int i=0;i<animations.size();i++){
+						if(animationRef==animations[i]->getId()){
+							currentNode->setAnimation(animations[i]);
+							cout << "Node associated with a specific animation" << endl;
+						} else {
+							cout << "There wasn't an animation with the specified id of: " << animationRef << endl;
+						}
 					}
+					animation = animation->NextSiblingElement("animationref");
 				}
 			}
 			cout << "setting node matrix\n";

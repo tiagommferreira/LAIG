@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "cena.anf";
+	const char *p = "cenoide.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -645,6 +645,7 @@ XMLParser::XMLParser() {
 			// transforms all read
 			currentNode->setMatrix();
 			if(currentNode->isAnimated()){
+				currentNode->calculateAnimations();
 				currentNode->setAnimationMatrix();
 			}
 			if(currentNode->isDisplayList()){

@@ -29,19 +29,9 @@ private:
 	float animationMatrix[4][4];
 	bool displayList;
 	bool animated;
-	//circular animation
-	float currentAngle, deltaAngle;
-	//linear animation
-	vector<float> deltaX;
-	vector<float>deltaY;
-	vector<float>deltaZ;
-	float currentX,currentY,currentZ;
-	vector<float> distances;
-	int currentAnimState;
 
 	//general animation
 	Animation* animation;
-	bool animationOver;
 
 public:
 	Node(){processed = false;displayList=false;}
@@ -245,51 +235,65 @@ public:
 		}
 	}
 
-	void setAnimationMatrix(){
-		glPushMatrix();
-		glLoadIdentity();
-		animationOver=false;
+	void calculateAnimations(){
+		animation->setOver(false);
 		// se for animado ignora-se as transformacoes
 		if(this->animation->getType()==0){
 			CircularAnimation *circ = (CircularAnimation*) this->animation;
-			glTranslated(circ->getCenter()[0],circ->getCenter()[1],circ->getCenter()[2]); // poem na posicao inicial
-			glRotated(circ->getInitAngle(),0,0,1); // roda o angulo inicial
-			currentAngle=0; // sets the initial angle to 0
-			deltaAngle = circ->getRotationAngle() / (33.3 * circ->getTime()); // TODO tirar o hardcoded 33.3(update period time)
-
+			circ->setCurrentAngle(0); // sets the initial angle to 0
+			circ->setDeltaAngle(circ->getRotationAngle() / (33.3 * circ->getTime()));  // TODO tirar o hardcoded 33.3(update period time)
+			this->animation = circ;
 		}else {
 			LinearAnimation *linear = (LinearAnimation*) this->animation;
-			currentX = linear->getControlPoints()[0][0];
-			currentY = linear->getControlPoints()[0][1];
-			currentZ = linear->getControlPoints()[0][2];
-
+			linear->setCurrentX(linear->getControlPoints()[0][0]);
+			linear->setCurrentY(linear->getControlPoints()[0][1]);
+			linear->setCurrentZ(linear->getControlPoints()[0][2]);
 			float fullDistance=0;
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float currentDistance=sqrt(pow((linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0]),2)+
 						pow((linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1]),2) +
 						pow((linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2]),2));
 				fullDistance += currentDistance;
-				distances.push_back(currentDistance);
+				linear->addDistance(currentDistance);
 			}
-			distances.push_back(fullDistance);
+			linear->addDistance(fullDistance);
 
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-										/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+																/ (linear->getDistances()[i]*linear->getTime()/
+																		linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-										/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+																/ (linear->getDistances()[i]*linear->getTime()/
+																		linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-										/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+																/ (linear->getDistances()[i]*linear->getTime()/
+																		linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 
-				cout << "sim "<< distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] << endl;
-				this->deltaX.push_back(deltaX);
-				this->deltaY.push_back(deltaY);
-				this->deltaZ.push_back(deltaZ);
+				linear->addDeltaX(deltaX);
+				linear->addDeltaY(deltaY);
+				linear->addDeltaZ(deltaZ);
 			}
+			linear->addDistance(fullDistance);
 
-			distances.push_back(fullDistance);
-			currentAnimState=0;
+			linear->setCurrentAnimState(0);
+			this->animation = linear;
+		}
+	}
+
+	void setAnimationMatrix(){
+		glPushMatrix();
+		glLoadIdentity();
+		animation->setOver(false);
+		// se for animado ignora-se as transformacoes
+		if(this->animation->getType()==0){
+			CircularAnimation *circ = (CircularAnimation*) this->animation;
+			glTranslated(circ->getCenter()[0],circ->getCenter()[1],circ->getCenter()[2]); // poem na posicao inicial
+			glRotated(circ->getInitAngle(),0,0,1); // roda o angulo inicial
+
+		}else {
+			LinearAnimation *linear = (LinearAnimation*) this->animation;
+			glTranslated(linear->getCurrentX(),linear->getCurrentY(),linear->getCurrentZ());
 		}
 		glGetFloatv(GL_MODELVIEW_MATRIX, &animationMatrix[0][0]);
 		glPopMatrix();
@@ -407,8 +411,6 @@ public:
 						ctrlpoints[i][j] = points[i][j];
 					}
 				}
-
-
 				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute(),&ctrlpoints[0][0]);
 				eval->draw();
 			}else if(strcmp(primitives[i]->getValue(),"vehicle")==0) {
@@ -419,35 +421,40 @@ public:
 	}
 
 	void update(){
-		if(!animationOver){
+		if(!animation->isOver()){
 			if(animation->getType()==0){
 				//circular animation
 				CircularAnimation *circ = (CircularAnimation*) this->animation;
-				if(circ->getRotationAngle() > currentAngle){
-					currentAngle+=deltaAngle;
+				if(circ->getRotationAngle() > circ->getCurrentAngle()){
+					circ->setCurrentAngle(circ->getCurrentAngle() + circ->getDeltaAngle());
 				} else{
-					animationOver=true;
+					circ->setOver(true);
 				}
+				this->animation = circ;
 			}else {
 				LinearAnimation *linear = (LinearAnimation*) this->animation;
 				//linear animation
-				currentX += deltaX[currentAnimState];
-				currentY += deltaY[currentAnimState];
-				currentZ += deltaZ[currentAnimState];
-				if(currentX-0.05 < linear->getControlPoints()[currentAnimState+1][0] &&
-						currentX+0.05 > linear->getControlPoints()[currentAnimState+1][0] &&
-						currentY-0.05 < linear->getControlPoints()[currentAnimState+1][1] &&
-						currentY+0.05 > linear->getControlPoints()[currentAnimState+1][1] &&
-						currentZ-0.05 < linear->getControlPoints()[currentAnimState+1][2] &&
-						currentZ+0.05 > linear->getControlPoints()[currentAnimState+1][2]){
-					currentAnimState++;
-					if(currentAnimState ==linear->getControlPoints().size()-1 ){
-						animationOver=true;
+				linear->setCurrentX(linear->getCurrentX()+linear->getDeltaX()[linear->getCurrentAnimState()]);
+				linear->setCurrentY(linear->getCurrentY()+linear->getDeltaY()[linear->getCurrentAnimState()]);
+				linear->setCurrentZ(linear->getCurrentZ()+linear->getDeltaZ()[linear->getCurrentAnimState()]);
+
+				if(linear->getCurrentX()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
+						linear->getCurrentX()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
+						linear->getCurrentY()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
+						linear->getCurrentY()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
+						linear->getCurrentZ()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][2] &&
+						linear->getCurrentZ()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][2]){
+					linear->setCurrentAnimState(linear->getCurrentAnimState()+1);
+					if(linear->getCurrentAnimState() == linear->getControlPoints().size()-1 ){
+						linear->setOver(true);
 					}
 				}
+				this->animation = linear;
+				cout << "current z#" << linear->getCurrentZ() << endl;
 			}
+
 		} else {
-			//nothing to update animation is over already
+			cout << "animation over" << endl;
 		}
 	}
 
@@ -466,12 +473,12 @@ public:
 				// circular
 				CircularAnimation *circ = (CircularAnimation*) this->animation;
 				glMultMatrixf(&animationMatrix[0][0]);
-				glRotated(currentAngle,0,1,0);
+				glRotated(circ->getCurrentAngle(),0,1,0);
 				glTranslated(circ->getRadious(),0,0); // incrementa o raio da animacao
 			} else {
 				// linear
 				LinearAnimation *linear = (LinearAnimation*) this->animation;
-				glTranslated(currentX,currentY,currentZ);
+				glTranslated(linear->getCurrentX(),linear->getCurrentY(),linear->getCurrentZ());
 				glMultMatrixf(&animationMatrix[0][0]);
 			}
 		} else {// se nao for animado

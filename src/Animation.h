@@ -48,6 +48,7 @@ private:
 	float currentX,currentY,currentZ;
 	vector<float> distances;
 	int currentAnimState;
+	float lastDistance;
 public:
 	LinearAnimation(string id, float time, vector< vector<float> > controlPoints, int type):
 		Animation(id, time, type) {
@@ -139,6 +140,14 @@ public:
 
 	void setDistances(const vector<float>& distances) {
 		this->distances = distances;
+	}
+
+	float getLastDistance() const {
+		return lastDistance;
+	}
+
+	void setLastDistance(float lastDistance) {
+		this->lastDistance = lastDistance;
 	}
 };
 

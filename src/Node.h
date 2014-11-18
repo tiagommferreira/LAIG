@@ -256,20 +256,23 @@ public:
 						pow((linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2]),2));
 				fullDistance += currentDistance;
 				linear->addDistance(currentDistance);
+
 			}
 			linear->addDistance(fullDistance);
+
+
 
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-																		/ (linear->getDistances()[i]*linear->getTime()/
-																				linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																						/ (linear->getDistances()[i]*linear->getTime()/
+																								linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-																		/ (linear->getDistances()[i]*linear->getTime()/
-																				linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																						/ (linear->getDistances()[i]*linear->getTime()/
+																								linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-																		/ (linear->getDistances()[i]*linear->getTime()/
-																				linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																						/ (linear->getDistances()[i]*linear->getTime()/
+																								linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 
 				linear->addDeltaX(deltaX);
 				linear->addDeltaY(deltaY);
@@ -285,6 +288,7 @@ public:
 		glPushMatrix();
 		glLoadIdentity();
 		animations[currentAnimation]->setOver(false);
+
 		// se for animado ignora-se as transformacoes
 		if(this->animations[currentAnimation]->getType()==0){
 			CircularAnimation *circ = (CircularAnimation*) this->animations[currentAnimation];
@@ -409,7 +413,8 @@ public:
 						ctrlpoints[i][j] = points[i][j];
 					}
 				}
-				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute(),&ctrlpoints[0][0]);
+				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),
+						patch->getOrder(),patch->getCompute(),&ctrlpoints[0][0]);
 				eval->draw();
 			}else if(strcmp(primitives[i]->getValue(),"vehicle")==0) {
 				Vehicle* v = (Vehicle*) primitives[i];
@@ -437,28 +442,28 @@ public:
 				linear->setCurrentY(linear->getCurrentY()+linear->getDeltaY()[linear->getCurrentAnimState()]);
 				linear->setCurrentZ(linear->getCurrentZ()+linear->getDeltaZ()[linear->getCurrentAnimState()]);
 
-				cout << "current x#" << cout << linear->getCurrentX() << endl;
-				cout << "current y#" << cout << linear->getCurrentY() << endl;
-				cout << "current z#" << cout << linear->getCurrentZ() << endl;
-				cout << "expected x#" << cout << linear->getControlPoints()[linear->getCurrentAnimState()+1][0] << endl;
-				cout << "expected y#" << cout << linear->getControlPoints()[linear->getCurrentAnimState()+1][1] << endl;
-				cout << "expected z#" << cout << linear->getControlPoints()[linear->getCurrentAnimState()+1][2] << endl;
+				float newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
+						pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
+						pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
 
-				if((linear->getCurrentX()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
-						linear->getCurrentX()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
-						linear->getCurrentY()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
-						linear->getCurrentY()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
-						linear->getCurrentZ()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][2] &&
-						linear->getCurrentZ()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][2])
+				cout << "New distance: " << newDistance << endl << "LastDistance: " << linear->getLastDistance() << endl;
 
-				){
+				if(newDistance - linear->getLastDistance() > 0){
 
 					linear->setCurrentAnimState(linear->getCurrentAnimState()+1);
+
 					if(linear->getCurrentAnimState() == linear->getControlPoints().size()-1 ){
 						linear->setOver(true);
+					} else {
+						newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
+								pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
+								pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
+						linear->setLastDistance(newDistance);
 					}
 				}
 
+
+				linear->setLastDistance(newDistance);
 				this->animations[currentAnimation] = linear;
 			}
 

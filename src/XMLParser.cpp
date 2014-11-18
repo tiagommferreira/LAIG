@@ -655,8 +655,6 @@ XMLParser::XMLParser() {
 			if(currentNode->isDisplayList()){
 				currentNode->createDisplayList();
 			}
-			//TODO verificar se o pai é uma displaylist e se for chamar tambem com display list para os filhos
-			//TODO perguntar se houver uma displaylist numa animação se faz 1 de sentido, lawl ( pq vai ficar parado )
 			cout << "end of seting node matrix\n";
 			cout << "end of specific node" << endl;
 			graph[currentNode->getId()] = currentNode;

@@ -4,12 +4,6 @@
 #include <iostream>
 
 using namespace std;
-/*
-GLfloat ctrlpoints[4][3] = {	{  -0.5, 0.0, 0.5},
-								{  -0.5, 0.0, -0.5},
-								{ 0.5, 0.0, 0.5},
-								{ 0.5, 0.0, -0.5} };
- */
 
 GLfloat nrmlcompon[4][3] = {	{  0.0, 1.0, 0.0},
 		{  0.0, 1.0, 0.0},

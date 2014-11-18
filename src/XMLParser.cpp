@@ -506,8 +506,6 @@ XMLParser::XMLParser() {
 					while(primitive) {
 						char* value = (char*) primitive->Value();
 						Primitive *primitiveTemp = new Primitive(value);
-						Patch* patchTemp;
-						Plane* planeTemp;
 
 						cout << "specific primitive found:" << primitive->Value() << endl;
 						if(strcmp(primitive->Value(),"rectangle")==0) {
@@ -563,7 +561,7 @@ XMLParser::XMLParser() {
 						} else if(strcmp(primitive->Value(),"plane")==0){
 							char* parts = (char*) primitive->Attribute("parts");
 							cout << "Parts: " << parts << endl;
-							planeTemp = new Plane(atoi(parts),(char*)primitive->Value());
+							primitiveTemp = new Plane(atoi(parts),(char*)primitive->Value());
 						} else if(strcmp(primitive->Value(),"patch")==0){
 							char* order = (char*) primitive->Attribute("order");
 							char* partsU = (char*) primitive->Attribute("partsU");
@@ -589,17 +587,13 @@ XMLParser::XMLParser() {
 								ctrlPoint = ctrlPoint->NextSiblingElement();
 							}
 
-							patchTemp = new Patch(atoi(order),atoi(partsU),atoi(partsV),compute,(char*)primitive->Value(), points);
+							primitiveTemp = new Patch(atoi(order),atoi(partsU),atoi(partsV),compute,(char*)primitive->Value(), points);
+						} else if(strcmp(primitive->Value(),"vehicle")==0){
+							primitiveTemp = new Vehicle((char*)primitive->Value());
 						}
 
-						if(strcmp(primitive->Value(),"patch")==0){
-							currentNode->addPrimitive(patchTemp);
-						} else if(strcmp(primitive->Value(),"plane")==0){
-							currentNode->addPrimitive(planeTemp);
-						}
-						else {
-							currentNode->addPrimitive(primitiveTemp);
-						}
+						currentNode->addPrimitive(primitiveTemp);
+
 						primitive = primitive->NextSiblingElement();
 					}
 				}

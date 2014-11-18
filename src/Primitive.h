@@ -122,6 +122,41 @@ public:
 	vector<vector<GLfloat> > getPoints() {
 		return points;
 	}
+
+};
+
+class Vehicle: public Primitive {
+private:
+
+public:
+	Vehicle(char* value): Primitive(value) {};
+	void draw() {
+		GLfloat ctrlpoints[16][3] = {
+										{  0.0, 0.0, 0.0 },
+										{  0.0, 2.0, 0.0 },
+										{  2.0, 0.0, 4.0 },
+										{  2.0, 2.0, 6.0 },
+										{  0.0, 4.0, 2.0 },
+										{  2.0, 4.0, 6.0 },
+										{  0.0, 6.0, 0.0 },
+										{  2.0, 6.0, 4.0 },
+										{  4.0, 0.0, 4.0 },
+										{  4.0, 2.0, 6.0 },
+										{  6.0, 0.0, 0.0 },
+										{  6.0, 2.0, 2.0 },
+										{  4.0, 4.0, 6.0 },
+										{  6.0, 4.0, 2.0 },
+										{  4.0, 6.0, 0.0 },
+										{  6.0, 6.0, 0.0 }};
+
+
+		Evaluator* eval = new Evaluator(NULL, 10, 10,3, "fill", &ctrlpoints[0][0]);
+		eval->draw();
+	}
+};
+
+class Flag: public Primitive {
+
 };
 
 #endif /* defined(__CGFExample__Primitive__) */

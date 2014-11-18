@@ -276,11 +276,11 @@ public:
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-								/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+										/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-								/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+										/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-								/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
+										/ (distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] * 33.333);
 
 				cout << "sim "<< distances[i]*linear->getTime()/distances[linear->getControlPoints().size()-1] << endl;
 				this->deltaX.push_back(deltaX);
@@ -401,12 +401,6 @@ public:
 			} else if(strcmp(primitives[i]->getValue(),"patch")==0) {
 				Patch* patch = (Patch*) primitives[i];
 				vector<vector<GLfloat> > points = patch->getPoints();
-/*
-				GLfloat ctrlpoints[4][3] = {	{  points[0][0], points[0][1], points[0][2]},
-												{  points[1][0], points[1][1], points[1][2]},
-												{  points[2][0], points[2][1], points[2][2]},
-												{  points[3][0], points[3][1], points[3][2]} };
-*/
 				GLfloat ctrlpoints[points.size()][3];
 				for(int i = 0; i<points.size();i++){
 					for(int j = 0; j<3;j++){
@@ -417,6 +411,9 @@ public:
 
 				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),patch->getOrder(),patch->getCompute(),&ctrlpoints[0][0]);
 				eval->draw();
+			}else if(strcmp(primitives[i]->getValue(),"vehicle")==0) {
+				Vehicle* v = (Vehicle*) primitives[i];
+				v->draw();
 			}
 		}
 	}
@@ -469,7 +466,7 @@ public:
 				// circular
 				CircularAnimation *circ = (CircularAnimation*) this->animation;
 				glMultMatrixf(&animationMatrix[0][0]);
-				glRotated(currentAngle,0,0,1);
+				glRotated(currentAngle,0,1,0);
 				glTranslated(circ->getRadious(),0,0); // incrementa o raio da animacao
 			} else {
 				// linear

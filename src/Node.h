@@ -243,6 +243,7 @@ public:
 			circ->setCurrentAngle(0); // sets the initial angle to 0
 			circ->setDeltaAngle(circ->getRotationAngle() / (33.3 * circ->getTime()));  // TODO tirar o hardcoded 33.3(update period time)
 			this->animations[currentAnimation] = circ;
+
 		}else {
 			LinearAnimation *linear = (LinearAnimation*) this->animations[currentAnimation];
 			linear->setCurrentX(linear->getControlPoints()[0][0]);
@@ -261,20 +262,19 @@ public:
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-																/ (linear->getDistances()[i]*linear->getTime()/
-																		linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																		/ (linear->getDistances()[i]*linear->getTime()/
+																				linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-																/ (linear->getDistances()[i]*linear->getTime()/
-																		linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																		/ (linear->getDistances()[i]*linear->getTime()/
+																				linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-																/ (linear->getDistances()[i]*linear->getTime()/
-																		linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																		/ (linear->getDistances()[i]*linear->getTime()/
+																				linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 
 				linear->addDeltaX(deltaX);
 				linear->addDeltaY(deltaY);
 				linear->addDeltaZ(deltaZ);
 			}
-			linear->addDistance(fullDistance);
 
 			linear->setCurrentAnimState(0);
 			this->animations[currentAnimation] = linear;
@@ -293,7 +293,6 @@ public:
 
 		}else {
 			LinearAnimation *linear = (LinearAnimation*) this->animations[currentAnimation];
-			glTranslated(linear->getCurrentX(),linear->getCurrentY(),linear->getCurrentZ());
 		}
 		glGetFloatv(GL_MODELVIEW_MATRIX, &animationMatrix[0][0]);
 		glPopMatrix();
@@ -431,21 +430,28 @@ public:
 				}
 				this->animations[currentAnimation] = circ;
 			}else {
-				cout << "enter linear transformation update with the #" << currentAnimation << endl;
+
 				LinearAnimation *linear = (LinearAnimation*) this->animations[currentAnimation];
 				//linear animation
 				linear->setCurrentX(linear->getCurrentX()+linear->getDeltaX()[linear->getCurrentAnimState()]);
 				linear->setCurrentY(linear->getCurrentY()+linear->getDeltaY()[linear->getCurrentAnimState()]);
 				linear->setCurrentZ(linear->getCurrentZ()+linear->getDeltaZ()[linear->getCurrentAnimState()]);
 
-				cout << "x#" << linear->getCurrentX() << " y#" << linear->getCurrentY() << " z#" << linear->getCurrentZ() << endl;
+				cout << "current x#" << cout << linear->getCurrentX() << endl;
+				cout << "current y#" << cout << linear->getCurrentY() << endl;
+				cout << "current z#" << cout << linear->getCurrentZ() << endl;
+				cout << "expected x#" << cout << linear->getControlPoints()[linear->getCurrentAnimState()+1][0] << endl;
+				cout << "expected y#" << cout << linear->getControlPoints()[linear->getCurrentAnimState()+1][1] << endl;
+				cout << "expected z#" << cout << linear->getControlPoints()[linear->getCurrentAnimState()+1][2] << endl;
 
-				if(linear->getCurrentX()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
+				if((linear->getCurrentX()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
 						linear->getCurrentX()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
 						linear->getCurrentY()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
 						linear->getCurrentY()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
 						linear->getCurrentZ()-0.05 < linear->getControlPoints()[linear->getCurrentAnimState()+1][2] &&
-						linear->getCurrentZ()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][2]){
+						linear->getCurrentZ()+0.05 > linear->getControlPoints()[linear->getCurrentAnimState()+1][2])
+
+				){
 
 					linear->setCurrentAnimState(linear->getCurrentAnimState()+1);
 					if(linear->getCurrentAnimState() == linear->getControlPoints().size()-1 ){

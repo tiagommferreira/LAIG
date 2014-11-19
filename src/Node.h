@@ -265,14 +265,14 @@ public:
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-																										/ (linear->getDistances()[i]*linear->getTime()/
-																												linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																								/ (linear->getDistances()[i]*linear->getTime()/
+																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-																										/ (linear->getDistances()[i]*linear->getTime()/
-																												linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																								/ (linear->getDistances()[i]*linear->getTime()/
+																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-																										/ (linear->getDistances()[i]*linear->getTime()/
-																												linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																								/ (linear->getDistances()[i]*linear->getTime()/
+																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 
 				linear->addDeltaX(deltaX);
 				linear->addDeltaY(deltaY);
@@ -477,22 +477,17 @@ public:
 			}
 
 		}
-		/*
-		                for(int i = 0; i < this->primitives.size(); i++) {
-		                        if(strcmp(this->primitives[i]->getValue(),"flag") == 0){
-		                                Flag* flag = (Flag*) primitives[i];
-		                                flag->update();
-		                        }
-		                }
-		 */
 	}
 
 	void draw(){
-		appearance->apply();
+		if(strcmp(appearenceRef,"inherit")==0 || strcmp(appearenceRef,"")==0){
+			parentAppearance->apply();
+		} else {
+			appearance->apply();
+		}
+
 		glPushMatrix();
-
-		if(this->isAnimated()){//se for animado
-
+		if(this->isAnimated() && !this->isDisplayList()){//se for animado e nao for uma display lista
 			if(this->animations[currentAnimation]->getType()==0){
 				// circular
 				CircularAnimation *circ = (CircularAnimation*) this->animations[currentAnimation];

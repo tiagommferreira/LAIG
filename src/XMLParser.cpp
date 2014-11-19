@@ -443,10 +443,10 @@ XMLParser::XMLParser() {
 
 			char * displayList = (char *)node->Attribute("displaylist");
 			if(displayList == NULL){
-				cout << "current node isn't a display list" << endl;
+				cout << "current node isn't a display list # " << currentNode->getId() << endl;
 				currentNode->setDisplayList(false);
 			}else{
-				cout << "current node is a display list" << endl;
+				cout << "current node is a display list # " << currentNode->getId() << endl;
 				currentNode->setDisplayList(true);
 			}
 
@@ -668,9 +668,11 @@ XMLParser::XMLParser() {
 		setEmptyNodes();
 		cout << "Empty nodes filled" << endl;
 		map<char*,Node*>::iterator it = graph.begin();
+
 		for(;it!=graph.end();it++){
 			setChildrenDisplayLists();
 		}
+
 	}
 }
 
@@ -700,6 +702,7 @@ void XMLParser::setEmptyNodes(){
 
 void XMLParser::setChildrenDisplayLists(){
 	map<char*,Node*>::iterator it=graph.begin();
+	map<char*,Node*>::iterator it2=graph.begin();
 	map<char*,Node*>::iterator ite = graph.end();
 	vector<Node*> currentChildren;
 	for(;it!=ite;it++){

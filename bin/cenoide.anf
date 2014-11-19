@@ -47,6 +47,9 @@
             <controlpoint xx="8" yy="2" zz="8" />
       </animation>
        <animation id="rotatingItself" span="2" type="circular" center="8 2 8" radius="0" startang="0" rotang="100" />
+        <animation id="rotatingFrontTire" span="7" type="circular" center="0.2 -0.2 1.8" radius="0" startang="0" rotang="5000" />
+        <animation id="rotatingLeftTire" span="7" type="circular" center="3.1 -1.3 1.8" radius="0" startang="0" rotang="5000" />
+        <animation id="rotatingRightTire" span="7" type="circular" center="3 -0.8 0" radius="0" startang="0" rotang="5000" />
 	</animations>		
 	
     <appearances>
@@ -185,6 +188,8 @@
             <transforms>
            	 <transform type="translate" to="0.2 -0.2 1.8"/>
             </transforms> 
+            
+            <animationref id="rotatingFrontTire"/>
             <appearanceref id="inherit" /> 
             <descendants>
             </descendants>
@@ -197,6 +202,7 @@
             <transforms>
             <transform type="translate" to="3 -0.8 0"/>
             </transforms>  
+            <animationref id="rotatingRightTire"/>
             <appearanceref id="inherit" />
             <descendants>
             </descendants>
@@ -209,6 +215,7 @@
             <transforms>
             	<transform type="translate" to="3.1 -1.3 1.8"/>
             </transforms>  
+            <animationref id="rotatingLeftTire"/>
             <appearanceref id="inherit" /> 
             <descendants>
             </descendants>

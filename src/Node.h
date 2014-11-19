@@ -398,12 +398,12 @@ public:
 				Plane* plane = (Plane*) primitives[i];
 
 				GLfloat ctrlpoints[4][3] = {	{  -0.5, 0.0, 0.5},
-						{  -0.5, 0.0, -0.5},
-						{ 0.5, 0.0, 0.5},
-						{ 0.5, 0.0, -0.5} };
+												{  -0.5, 0.0, -0.5},
+												{ 0.5, 0.0, 0.5},
+												{ 0.5, 0.0, -0.5} };
 
 				Evaluator* eval = new Evaluator(NULL, plane->getParts(),plane->getParts(),2,"fill", &ctrlpoints[0][0]);
-				eval->draw();
+				eval->drawPlane();
 			} else if(strcmp(primitives[i]->getValue(),"patch")==0) {
 				Patch* patch = (Patch*) primitives[i];
 				vector<vector<GLfloat> > points = patch->getPoints();
@@ -415,7 +415,7 @@ public:
 				}
 				Evaluator* eval = new Evaluator(NULL, patch->getPartsU(),patch->getPartsV(),
 						patch->getOrder(),patch->getCompute(),&ctrlpoints[0][0]);
-				eval->draw();
+				eval->drawPatch();
 			}else if(strcmp(primitives[i]->getValue(),"vehicle")==0) {
 				Vehicle* v = (Vehicle*) primitives[i];
 				v->draw();
@@ -445,8 +445,6 @@ public:
 				float newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
 						pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
 						pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
-
-				cout << "New distance: " << newDistance << endl << "LastDistance: " << linear->getLastDistance() << endl;
 
 				if(newDistance - linear->getLastDistance() > 0){
 

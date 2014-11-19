@@ -6,7 +6,8 @@
 
 class Evaluator{
 public:
-		void draw();
+		void drawPatch();
+		void drawPlane();
 		Evaluator(CGFtexture*,int,int,int,char*,GLfloat*);
 		~Evaluator();
 	private:

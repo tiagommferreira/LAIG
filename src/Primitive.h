@@ -151,7 +151,7 @@ public:
 				{3.0,0.0,0.0}};
 
 		Evaluator* eval = new Evaluator(NULL, 30, 30,2, "fill", &ctrlpoints[0][0]);
-		eval->draw();
+		eval->drawPatch();
 	}
 };
 

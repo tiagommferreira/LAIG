@@ -265,14 +265,14 @@ public:
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-																						/ (linear->getDistances()[i]*linear->getTime()/
-																								linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																								/ (linear->getDistances()[i]*linear->getTime()/
+																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-																						/ (linear->getDistances()[i]*linear->getTime()/
-																								linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																								/ (linear->getDistances()[i]*linear->getTime()/
+																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-																						/ (linear->getDistances()[i]*linear->getTime()/
-																								linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																								/ (linear->getDistances()[i]*linear->getTime()/
+																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 
 				linear->addDeltaX(deltaX);
 				linear->addDeltaY(deltaY);
@@ -398,9 +398,9 @@ public:
 				Plane* plane = (Plane*) primitives[i];
 
 				GLfloat ctrlpoints[4][3] = {	{  -0.5, 0.0, 0.5},
-												{  -0.5, 0.0, -0.5},
-												{ 0.5, 0.0, 0.5},
-												{ 0.5, 0.0, -0.5} };
+						{  -0.5, 0.0, -0.5},
+						{ 0.5, 0.0, 0.5},
+						{ 0.5, 0.0, -0.5} };
 
 				Evaluator* eval = new Evaluator(NULL, plane->getParts(),plane->getParts(),2,"fill", &ctrlpoints[0][0]);
 				eval->drawPlane();
@@ -445,8 +445,12 @@ public:
 				float newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
 						pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
 						pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
-
-				if(newDistance - linear->getLastDistance() > 0){
+				if(linear->getCurrentX()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
+						linear->getCurrentX()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
+						linear->getCurrentY()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
+						linear->getCurrentY()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
+						linear->getCurrentZ()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][2] &&
+						linear->getCurrentZ()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][2]){
 
 					linear->setCurrentAnimState(linear->getCurrentAnimState()+1);
 

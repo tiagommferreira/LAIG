@@ -160,11 +160,32 @@ public:
 	}
 };
 
-class Flag: public Primitive {
+/*
+class Flag: public Plane, CGFshader {
 private:
+        int elapsedTime;
+        GLint baseImageLoc;
+        float time;
 public:
+        Flag(): Plane(100,"flag") {
 
+                elapsedTime=0;
+
+                init("flag.vert", "flag.frag");
+                CGFshader::bind();
+
+                time = glGetUniformLocation(id(), "timer");
+                baseImageLoc = glGetUniformLocation(id(), "baseImage");
+                glUniform1i(baseImageLoc, 0);
+
+        }
+        void update() {
+
+        }
 
 };
+*/
+
+
 
 #endif /* defined(__CGFExample__Primitive__) */

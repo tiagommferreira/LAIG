@@ -248,6 +248,7 @@ void XMLScene::setNodesAppearances() {
 		for(unsigned int i=0; i<parser->getAppearances().size();i++) {
 			if(strcmp(it->second->getAppearenceRef(),parser->getAppearances()[i]->getId())==0){
 				it->second->setAppearance(appearances[i]);
+				cout << "here" << endl;
 				setNodeChildApp(it->second);
 			}
 		}
@@ -258,7 +259,9 @@ void XMLScene::setNodesAppearances() {
 void XMLScene::setNodeChildApp(Node* parent) {
 	for(unsigned int i = 0; i < parent->getDescendents().size(); i++) {
 		if(strcmp(parent->getDescendents()[i]->getAppearenceRef(), "inherit") == 0 || strcmp(parent->getDescendents()[i]->getAppearenceRef(),"")==0) {
-			parent->getDescendents()[i]->setParentAppearance(parent->getAppearance());
+			cout << "inherit" << endl;
+			parent->getDescendents()[i]->setAppearance(parent->getAppearance());
+			setNodeChildApp(parent->getDescendents()[i]);
 		}
 	}
 }

@@ -1,0 +1,86 @@
+<anf>
+    <globals>
+        <drawing mode="fill" shading="gouraud" background="0 0 0 0" />
+        <culling face="back" order="ccw" />
+        <lighting doublesided="false" local="true" enabled="true" ambient="0 0 0 0" />
+    </globals>
+    
+    <cameras initial="mesaCam" >
+        <perspective id="mesaCam" near="0.1" far="500" angle="35" pos="30 20 30" target="0 0 0" />
+        <ortho id="ortho" direction="y" near="-100" far="100" left="-2" right="10" top="10" bottom="-2" />
+    </cameras>
+  
+    <lights>
+    		 <light id="omni" type="omni" enabled="true" marker="false" pos="5 5 5" >
+               <component type="ambient" value="1 1 1 1" />
+               <component type="diffuse" value="1 1 1 1" />
+               <component type="specular" value="1 1 1 1" />
+            </light>
+    
+             <light id="spot" type="spot" enabled="true" marker="true" pos="5 5 5" target="5 0 5"  
+                angle="45" exponent="10" >
+
+               <component type="ambient" value="1 1 1 1" />
+               <component type="diffuse" value="1 1 1 1" />
+               <component type="specular" value="1 1 1 1" />
+            </light>
+    </lights>
+
+    <textures>       
+		<texture id="madeira" file="madeira.png" texlength_s="1" texlength_t="1" />
+    </textures>
+
+ <animations>
+      <animation id="soAnimated" span="10" type="circular" center="5 2 5" radius="0" startang="0" rotang="500" />
+      <animation id="veryAnimated" span="5" type="linear">
+            <controlpoint xx="2" yy="2" zz="2" />
+            <controlpoint xx="4" yy="2" zz="4" />
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="5" yy="0" zz="5" />
+      </animation>
+       <animation id="soAnimated2" span="1" type="circular" center="5 0 5" radius="0" startang="0" rotang="60" />
+	</animations>		
+	
+    <appearances>
+		<appearance id="madeiraAp" shininess="128" textureref="madeira" >
+               <component type="ambient" value="1 1 1 1" />
+               <component type="diffuse" value="0.2 0.2 0.2 1" />
+               <component type="specular" value="0.2 0.2 0.2 1" />
+        </appearance>
+    </appearances>
+		
+    
+    <graph rootid="cena">        
+        <node id="cena">
+            <transforms>
+            </transforms>         
+            <descendants>
+            	<noderef id="chao"/>
+            	<noderef id="veiculo"/>
+            </descendants>
+		</node>
+		
+		 <node id="chao">
+            <transforms>
+            	<transform type="translate" to="7.5 0 7.5"/>
+            	<transform type="scale" factor="15 1 15"/>
+            </transforms>
+            <appearanceref id="madeiraAp" />         
+            <descendants>
+            </descendants>
+            <primitives>
+            	<plane parts="50"/>
+            </primitives>
+		</node>
+	
+	 	<node id="veiculo">
+            <transforms>
+            </transforms>
+            <appearanceref id="madeiraAp" />         
+            <descendants>
+            	<noderef id="faceCurva" />
+            	<noderef id="corpo" />
+            </descendants>
+		</node>
+    </graph>
+</anf>

@@ -489,13 +489,6 @@ public:
 
 	void draw(){
 		appearance->apply();
-		/*
-		if(strcmp(appearenceRef,"inherit")==0 || strcmp(appearenceRef,"")==0){
-			parentAppearance->apply();
-		} else {
-			appearance->apply();
-		}
-		 */
 		glPushMatrix();
 
 		if(this->isAnimated()){//se for animado

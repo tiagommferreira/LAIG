@@ -480,11 +480,7 @@ public:
 	}
 
 	void draw(){
-		if(strcmp(appearenceRef,"inherit")==0 || strcmp(appearenceRef,"")==0){
-			parentAppearance->apply();
-		} else {
-			appearance->apply();
-		}
+		appearance->apply();
 
 		glPushMatrix();
 		if(this->isAnimated() && !this->isDisplayList()){//se for animado e nao for uma display lista

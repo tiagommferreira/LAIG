@@ -21,9 +21,9 @@ public:
         text = new CGFappearance(amb,dif,spec,20);
 
         if(this->player==1) {
-            temp = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images-600x331.jpg");
+            temp = new CGFtexture("images-600x331.jpg");
         } else {
-            temp = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images.jpg");
+            temp = new CGFtexture("images.jpg");
         }
         text->setTexture(temp);
     }

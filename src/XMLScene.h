@@ -10,6 +10,7 @@
 #include "CGFapplication.h"
 
 #include <vector>
+#include "Board.h"
 
 class XMLScene : public CGFscene
 {
@@ -39,6 +40,7 @@ public:
 
 
 protected:
+    Board * board;
     char * camera;
     vector<CGFlight*>lights;
     vector<CGFappearance*>appearances;

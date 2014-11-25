@@ -94,6 +94,7 @@ void XMLScene::init() {
 
 	setUpdatePeriod(30);
 
+	this->board= new Board();
 	cout << "start updating" << endl;
 }
 
@@ -122,36 +123,13 @@ void XMLScene::display() {
 
 	// Apply transformations corresponding to the camera position relative to the origin
 
-	addCameras(camera);
+	CGFscene::activeCamera->applyView();
+
 	drawLights();
 	// Draw axis
 	axis.draw();
 
-	if(wire) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else if(point) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	}
-	else if(fill) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-
-	//GRAPH
-
-	map<char*,Node*> temp = parser->getGraph();
-	map<char*,Node*>::iterator it=temp.begin();
-
-	for(unsigned int i=0;i<temp.size();i++,it++){
-		if(strcmp(parser->getRootid(),it->second->getId())==0){
-			glPushMatrix();
-			glLoadIdentity();
-			it->second->draw();
-			glPopMatrix();
-			break;
-		}
-	}
-
+	this->board->draw();
 
 	glutSwapBuffers();
 }

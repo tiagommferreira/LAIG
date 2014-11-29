@@ -445,7 +445,7 @@ XMLParser::XMLParser() {
 			if(displayList == NULL){
 				cout << "current node isn't a display list # " << currentNode->getId() << endl;
 				currentNode->setDisplayList(false);
-			}else{
+			}else if(strcmp(displayList,"true")==0){
 				cout << "current node is a display list # " << currentNode->getId() << endl;
 				currentNode->setDisplayList(true);
 			}

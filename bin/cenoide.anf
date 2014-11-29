@@ -250,7 +250,7 @@
             </primitives>
 		</node>
 	
-			<node id="displayTester">
+			<node id="displayTester" displaylist="true">
             <transforms>
             	<transform type="translate" to="5 0 5"/>
             	<transform type="rotate" axis="x" angle="-90"/>

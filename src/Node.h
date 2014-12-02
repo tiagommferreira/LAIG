@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Animation.h"
 #include "Evaluator.h"
+#include "Board.h"
 #include <cmath>
 
 using namespace std;
@@ -363,7 +364,7 @@ public:
 
 	void drawPrimitives() {
 		for(unsigned int i = 0; i < primitives.size(); i++) {
-			if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
+            if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
 				drawRectangle(
 						primitives[i]->getXY1(),
 						primitives[i]->getXY2());
@@ -397,10 +398,12 @@ public:
 			} else if(strcmp(primitives[i]->getValue(),"plane")==0) {
 				Plane* plane = (Plane*) primitives[i];
 
-				GLfloat ctrlpoints[4][3] = {	{  -0.5, 0.0, 0.5},
-						{  -0.5, 0.0, -0.5},
-						{ 0.5, 0.0, 0.5},
-						{ 0.5, 0.0, -0.5} };
+				GLfloat ctrlpoints[4][3] = {
+                    {  0, 0, 0},
+                    { 0, 1, 0},
+                    {  1, 0.0, 0},
+                    { 1, 1, 0}
+						 };
 
 				Evaluator* eval = new Evaluator(NULL, plane->getParts(),plane->getParts(),2,"fill", &ctrlpoints[0][0]);
 				eval->drawPlane();
@@ -419,7 +422,10 @@ public:
 			}else if(strcmp(primitives[i]->getValue(),"vehicle")==0) {
 				Vehicle* v = (Vehicle*) primitives[i];
 				v->draw();
-			}
+            }else if(strcmp(primitives[i]->getValue(),"board")==0) {
+                Board * board = (Board*) primitives[i];
+                board->draw();
+            }
 		}
 	}
 

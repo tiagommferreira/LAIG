@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "cenoide.anf";
+	const char *p = "/Users/ricardo/Desktop/CGFlib/CGFexample/data/cenoide.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -511,7 +511,7 @@ XMLParser::XMLParser() {
 						if(strcmp(primitive->Value(),"rectangle")==0) {
 							char* xy1 = (char*) primitive->Attribute("xy1");
 							char* xy2 = (char*) primitive->Attribute("xy2");
-
+                            cout << endl <<"penis "<< xy1 << xy2 << endl;
 							primitiveTemp->setXY1(xy1);
 							primitiveTemp->setXY2(xy2);
 
@@ -590,7 +590,9 @@ XMLParser::XMLParser() {
 							primitiveTemp = new Patch(atoi(order),atoi(partsU),atoi(partsV),compute,(char*)primitive->Value(), points);
 						} else if(strcmp(primitive->Value(),"vehicle")==0){
 							primitiveTemp = new Vehicle((char*)primitive->Value());
-						}
+                        } else if(strcmp(primitive->Value(),"board")==0) {
+                            primitiveTemp = new Board();
+                        }
 
 						currentNode->addPrimitive(primitiveTemp);
 

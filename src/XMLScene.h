@@ -6,6 +6,7 @@
 #include "XMLParser.h"
 #include "CGFshader.h"
 #include "UserInterface.h"
+#include "PickInterface.h"
 #include "CGFappearance.h"
 #include "CGFapplication.h"
 
@@ -40,6 +41,7 @@ public:
 
 
 protected:
+    CGFlight * light0;
     Board * board;
     char * camera;
     vector<CGFlight*>lights;

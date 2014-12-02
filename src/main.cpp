@@ -1,7 +1,3 @@
-/* 
- * G0_Base: projeto inicial de CGra
- * 
- */
 
 #include <iostream>
 #include <exception>
@@ -21,7 +17,7 @@ int main(int argc, char* argv[]) {
     try {
 		app.init(&argc, argv);
 		app.setScene(scene = new XMLScene());
-        app.setInterface(new UserInterface());
+        app.setInterface(new PickInterface());
 		app.run();
 	}
 	catch(GLexception& ex) {

@@ -19,119 +19,116 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * a
 }
 
 void XMLScene::init() {
-	/** Parses the information from xml to c++ **/
-
-	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
-	parser = new XMLParser();
-	camera = parser->getCameras()[0]->getInitial();
-
-	cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
-
-	cout << "lighting properties" << endl;
-	//LIGHTING PROPERTIES
-	glEnable(GL_LIGHTING);
-	if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
-		glEnable(GL_LIGHTING);
-	}
-	if((strcmp (parser->getGlobals()->getLocal(),"true")==0)){
-		glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-	}
-	if((strcmp (parser->getGlobals()->getDoublesided(),"true")==0)){
-		glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	}
-
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
-
-	addLights();
-	glEnable(GL_NORMALIZE);
-
-
-	cout << "__globals__" << endl << endl;
-	/* GLOBALS */
-	cout << "culling properties" << endl;
-	// CULLING PROPERTIES
-	if((strcmp (parser->getGlobals()->getOrder(),(char*)"cw")==0)){
-		glFrontFace(GL_CW);
-	}else {
-		glFrontFace(GL_CCW);
-	}
-
-	// also has the possibility to be none
-	if((strcmp(parser->getGlobals()->getFace(),"front")==0)){
-		glCullFace(GL_FRONT);
-	}else if((strcmp (parser->getGlobals()->getFace(),"back")==0)){
-		glCullFace(GL_BACK);
-	}
-
-	cout << "drawing properties" << endl;
-	//DRAWING PROPERTIES
-	/**
-	 * TODO verificar se isto é aqui ou no update
-	 */
-	if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
-		glShadeModel(GL_FLAT);
-	}else {
-		glShadeModel(GL_SMOOTH);
-	}
-
-	if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
-		fill = true;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
-		point = true;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	}else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
-		wire = true;
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	cout << "set background "<< endl;
-	//background color
-	float* backColor = parser->getGlobals()->getBackgroundColor();
-	glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
-
-	// initialize appearances;
-	setNodesAppearances();
-
-	setUpdatePeriod(30);
-
-	this->board= new Board();
-	cout << "start updating" << endl;
+    /** Parses the information from xml to c++ **/
+    shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
+    parser = new XMLParser();
+    camera = parser->getCameras()[0]->getInitial();
+    
+    cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
+    
+    cout << "lighting properties" << endl;
+    //LIGHTING PROPERTIES
+    glEnable(GL_LIGHTING);
+    if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
+        glEnable(GL_LIGHTING);
+    }
+    if((strcmp (parser->getGlobals()->getLocal(),"true")==0)){
+        glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+    }
+    if((strcmp (parser->getGlobals()->getDoublesided(),"true")==0)){
+        glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    }
+    
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
+    
+    addLights();
+    glEnable(GL_NORMALIZE);
+    
+    
+    cout << "__globals__" << endl << endl;
+    /* GLOBALS */
+    cout << "culling properties" << endl;
+    // CULLING PROPERTIES
+    if((strcmp (parser->getGlobals()->getOrder(),(char*)"cw")==0)){
+        glFrontFace(GL_CW);
+    }else {
+        glFrontFace(GL_CCW);
+    }
+    
+    // also has the possibility to be none
+    if((strcmp(parser->getGlobals()->getFace(),"front")==0)){
+        glCullFace(GL_FRONT);
+    }else if((strcmp (parser->getGlobals()->getFace(),"back")==0)){
+        glCullFace(GL_BACK);
+    }
+    
+    cout << "drawing properties" << endl;
+    //DRAWING PROPERTIES
+    /**
+     * TODO verificar se isto é aqui ou no update
+     */
+    if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
+        glShadeModel(GL_FLAT);
+    }else {
+        glShadeModel(GL_SMOOTH);
+    }
+    
+    if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
+        fill = true;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
+        point = true;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    }else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
+        wire = true;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    cout << "set background "<< endl;
+    //background color
+    float* backColor = parser->getGlobals()->getBackgroundColor();
+    glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
+    
+    // initialize appearences;
+    setNodesAppearances();
+    
+    setUpdatePeriod(30);
+    cout << "start updating" << endl;
 }
 
 void XMLScene::update(unsigned long t) {
-	shader->bind();
-	shader->update(t/400.0);
-	map<char*,Node*> temp = parser->getGraph();
-	map<char*,Node*>::iterator it=temp.begin();
-	for(;it!=temp.end();it++){
-		if(it->second->isAnimated()){
-			it->second->update();
-		}
-	}
 
-	shader->unbind();
 }
 
 void XMLScene::display() {
-	sceneVar=0;
-	// Clear image and depth buffer every time we update the scene
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
-	// Initialize Model-View matrix as identity (no transformation
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	// Apply transformations corresponding to the camera position relative to the origin
-
-	CGFscene::activeCamera->applyView();
-
-	drawLights();
-	// Draw axis
-	axis.draw();
-
-	this->board->draw();
-
-	glutSwapBuffers();
+    sceneVar=0;
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    
+    // Initialize Model-View matrix as identity (no transformation
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    // Apply transformations corresponding to the camera position relative to the origin
+    CGFscene::activeCamera->applyView();
+    // Draw (and update) light
+    drawLights();
+    
+    // Draw axis
+    axis.draw();
+    
+    glPushMatrix();
+    glPushName(-1);
+    map<char*,Node*> temp = parser->getGraph();
+    map<char*,Node*>::iterator it=temp.begin();
+    
+    for(unsigned int i=0;i<temp.size();i++,it++){
+        if(strcmp(parser->getRootid(),it->second->getId())==0){
+            it->second->draw();
+            break;
+        }
+    }
+    glPopMatrix();
+    
+    glutSwapBuffers();
 }
 
 XMLScene::~XMLScene() {

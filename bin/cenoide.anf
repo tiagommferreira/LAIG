@@ -3,110 +3,28 @@
         <drawing mode="fill" shading="gouraud" background="0 0 0 0" />
         <culling face="back" order="ccw" />
         <lighting doublesided="false" local="true" enabled="true" ambient="0 0 0 0" />
-    </globals>
-    
+    </globals>    
+
     <cameras initial="overViewCam" >
-        <perspective id="overViewCam" near="0.1" far="500" angle="35" pos="30 20 30" target="0 0 0" />
-        <perspective id="closerCam" near="0.1" far="500" angle="35" pos="15 10 15" target="0 0 0" />
-        <perspective id="opositeCam" near="0.1" far="500" angle="35" pos="-15 10 -15" target="0 0 0" />
-        <perspective id="perspectiveCam" near="0.1" far="500" angle="35" pos="20 30 20" target="0 0 0" />
+        <perspective id="overViewCam" near="0.1" far="500" angle="35" pos="5 5 5" target="0 0 0" />
         <ortho id="ortho" direction="y" near="-100" far="100" left="-2" right="10" top="10" bottom="-2" />
     </cameras>
   
     <lights>
-    		 <light id="omni" type="omni" enabled="true" marker="false" pos="15 15 15" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="1 1 1 1" />
-               <component type="specular" value="1 1 1 1" />
-            </light>
-    
-             <light id="spot" type="spot" enabled="false" marker="true" pos="10 5 10" target="10 0 10"  
-                angle="45" exponent="10" >
-
+    		 <light id="omni" type="omni" enabled="true" marker="false" pos="0 5 0" >
                <component type="ambient" value="1 1 1 1" />
                <component type="diffuse" value="1 1 1 1" />
                <component type="specular" value="1 1 1 1" />
             </light>
     </lights>
 
-    <textures>       
-		<texture id="madeira" file="madeira.png" texlength_s="1" texlength_t="1" />
-		<texture id="veiculo" file="veiculo.jpg" texlength_s="1" texlength_t="1" />
-		<texture id="preto" file="image.jpg" texlength_s="1" texlength_t="1" />
-		<texture id="tijolo" file="wall.jpg" texlength_s="1" texlength_t="1" />
-		<texture id="asfalto" file="asfalto.jpg" texlength_s="1" texlength_t="1" />
-		<texture id="tires" file="tires.jpg" texlength_s="1" texlength_t="1" />
-		<texture id="laranja" file="laranja.jpg" texlength_s="1" texlength_t="1" />
-		<texture id="lamp" file="lamp.jpeg" texlength_s="1" texlength_t="1" />
+    <textures>
     </textures>
 
- <animations>
-      <animation id="soAnimated" span="10" type="circular" center="5 2 5" radius="0" startang="0" rotang="350" />
-      <animation id="veryAnimated" span="5" type="linear">
-            <controlpoint xx="0" yy="2" zz="0" />
-            <controlpoint xx="0" yy="2" zz="8" />
-            <controlpoint xx="8" yy="2" zz="8" />
-      </animation>
-      <animation id="lampAnimation1" span="1" type="linear">
-            <controlpoint xx="0" yy="11" zz="0" />
-            <controlpoint xx="0" yy="11" zz="1" />
-      </animation>
-      <animation id="lampAnimation2" span="1.5" type="linear">
-            <controlpoint xx="0" yy="11" zz="1" />
-            <controlpoint xx="0" yy="1" zz="4" />
-      </animation>
-      <animation id="lampAnimation3" span="1" type="linear">
-            <controlpoint xx="0" yy="1" zz="4" />
-            <controlpoint xx="0" yy="3" zz="5" />
-            <controlpoint xx="0" yy="1" zz="6" />
-      </animation>
-      <animation id="lampAnimation4" span="1.5" type="linear">
-            <controlpoint xx="0" yy="1" zz="6" />
-            <controlpoint xx="0" yy="2" zz="6.5" />
-            <controlpoint xx="0" yy="1" zz="7" />
-      </animation>
-       <animation id="rotatingItself" span="2" type="circular" center="8 2 8" radius="0" startang="0" rotang="100" />
-        <animation id="rotatingFrontTire" span="7" type="circular" center="0.2 -0.2 1.8" radius="0" startang="0" rotang="5000" />
-        <animation id="rotatingLeftTire" span="7" type="circular" center="3.1 -1.3 1.8" radius="0" startang="0" rotang="5000" />
-        <animation id="rotatingRightTire" span="7" type="circular" center="3 -0.8 0" radius="0" startang="0" rotang="5000" />
+    <animations>
 	</animations>		
 	
     <appearances>
-		<appearance id="madeiraAp" shininess="50" textureref="madeira" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="0.2 0.2 0.2 1" />
-               <component type="specular" value="0.2 0.2 0.2 1" />
-        </appearance>
-        <appearance id="lampAp" shininess="50" textureref="lamp" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="0.2 0.2 0.2 1" />
-               <component type="specular" value="0.2 0.2 0.2 1" />
-        </appearance>
-        <appearance id="veiculoAp" shininess="50" textureref="veiculo" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="0.2 0.2 0.2 1" />
-               <component type="specular" value="0.2 0.2 0.2 1" />
-        </appearance>
-         <appearance id="laranjaAp" shininess="50" textureref="laranja" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="0.2 0.2 0.2 1" />
-               <component type="specular" value="0.8 0.8 0.8 1" />
-        </appearance>
-         <appearance id="wallAp" shininess="50" textureref="tijolo" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="0.2 0.2 0.2 1" />
-               <component type="specular" value="0.8 0.8 0.8 1" />
-        </appearance>
-         <appearance id="chaoAp" shininess="50" textureref="asfalto" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="0.2 0.2 0.2 1" />
-               <component type="specular" value="0.8 0.8 0.8 1" />
-        </appearance>
-         <appearance id="tiresAp" shininess="50" textureref="tires" >
-               <component type="ambient" value="1 1 1 1" />
-               <component type="diffuse" value="0.2 0.2 0.2 1" />
-               <component type="specular" value="1 1 1 1" />
-        </appearance>
     </appearances>
 		
     
@@ -115,294 +33,168 @@
             <transforms>
             </transforms>         
             <descendants>
-            	<noderef id="chao"/>
-            	<noderef id="paredeDir"/>
-            	<noderef id="paredeEsq"/>
-            	<noderef id="veiculoAnimated"/>
-            	<noderef id="displayTester" />
-            	<noderef id="brokenLamp" />
+                <noderef id="tabuleiro"/>
+                <noderef id="mesa"/>
             </descendants>
-		</node>
-		
-		 <node id="chao">
-            <transforms>
-            	<transform type="translate" to="7.5 0 7.5"/>
-            	<transform type="scale" factor="15 1 15"/>
-            </transforms>
-            <appearanceref id="chaoAp" />         
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="100"/>
-            </primitives>
-		</node>
-		
-		 <node id="paredeDir">
-            <transforms>
-            	<transform type="translate" to="7.5 5 0"/>
-            	<transform type="rotate" axis="x" angle="90"/>
-            	<transform type="scale" factor="15 1 10"/>
-            </transforms>
-            <appearanceref id="wallAp" />         
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="100"/>
-            </primitives>
-		</node>
-		
-		 <node id="paredeEsq">
-            <transforms>
-            <transform type="translate" to="0 5 7.5"/>
-            	<transform type="rotate" axis="y" angle="90"/>
-            	<transform type="rotate" axis="x" angle="90"/>
-            	<transform type="scale" factor="15 1 10"/>
-            </transforms>
-            <appearanceref id="wallAp" />         
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="100"/>
-            </primitives>
-		</node>
-		
-		<node id="veiculoAnimated">
-			<animationref id="veryAnimated"/>
-			<animationref id="rotatingItself"/>
-			<appearanceref id="veiculoAp" />    
-			<descendants>
-				<noderef id="veiculo"/>
-			</descendants>
-		</node>
-	
-	 	<node id="veiculo">
-            <transforms>
-            </transforms>
-            <appearanceref id="inherit" />        
-            <descendants>
-            	<noderef id="faceCurva"/>
-            	<noderef id="corpo"/>
-            </descendants>
-		</node>
-		
-		
-		<node id="faceCurva">
-            <transforms>
-            </transforms>
-            <appearanceref id="inherit" />
-            <descendants>
-            </descendants>
-            <primitives>
-            	<vehicle />
-            </primitives>
-		</node>
-		
-		<node id="corpo">
-            <transforms>
-            </transforms>
-            <appearanceref id="tiresAp" />      
-            <descendants>
-            	<noderef id="rodaFrente"/>
-            	<noderef id="rodaDirTras"/>
-            	<noderef id="rodaEsqTras"/>
-            </descendants>
-            <primitives>
-            </primitives>
-		</node>
-		
-		<node id="rodaFrente">
-            <transforms>
-           	 <transform type="translate" to="0.2 -0.2 1.8"/>
-            </transforms> 
-            
-            <animationref id="rotatingFrontTire"/>
-            <appearanceref id="inherit" /> 
-            <descendants>
-            </descendants>
-            <primitives>
-            	<sphere radius="1" slices="10" stacks="10"/>
-            </primitives>
-		</node>
-		
-		<node id="rodaDirTras">
-            <transforms>
-            <transform type="translate" to="3 -0.8 0"/>
-            </transforms>  
-            <animationref id="rotatingRightTire"/>
-            <appearanceref id="inherit" />
-            <descendants>
-            </descendants>
-            <primitives>
-            <sphere radius="0.8" slices="10" stacks="10"/>
-            </primitives>
-		</node>
-		
-		<node id="rodaEsqTras">
-            <transforms>
-            	<transform type="translate" to="3.1 -1.3 1.8"/>
-            </transforms>  
-            <animationref id="rotatingLeftTire"/>
-            <appearanceref id="inherit" /> 
-            <descendants>
-            </descendants>
-            <primitives>
-            	<sphere radius="0.3" slices="10" stacks="10"/>
-            </primitives>
-		</node>
-	
-			<node id="displayTester" displaylist="true">
-            <transforms>
-            	<transform type="translate" to="5 0 5"/>
-            	<transform type="rotate" axis="x" angle="-90"/>
-            </transforms>
-            <appearanceref id="laranjaAp"/>      
-            <descendants>
-            	<noderef id="torusNode"/>
-            	<noderef id="cylinderNode"/>
-            </descendants>
-            <primitives>
-            </primitives>
 		</node>
 
-		<node id="torusNode">
+        <node id="cubo" >
             <transforms>
-            </transforms>
-            <appearanceref id="inherit"/>   
+                <transform type="translate" to="0 0 1"/>
+            </transforms>         
+            <descendants>
+                <noderef id="face1"/>
+                <noderef id="face2"/>
+                <noderef id="face3"/>
+                <noderef id="face4"/>
+                <noderef id="face5"/>
+                <noderef id="face6"/>
+            </descendants>
+        </node>
+
+        <node id="face1" >
+            <transforms>
+
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face2" >
+            <transforms>
+                <transform type="translate" to="1 0 0"/>
+                <transform type="rotate" axis="y" angle="90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face3" >
+            <transforms>
+                <transform type="translate" to="0 0 -1"/>
+                <transform type="rotate" axis="y" angle="-90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face4" >
+            <transforms>
+                <transform type="translate" to="0 1 0"/>
+                <transform type="rotate" axis="x" angle="-90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face5" >
+            <transforms>
+                 <transform type="translate" to="0 0 -1"/>
+                <transform type="rotate" axis="x" angle="90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face6" >
+            <transforms>
+                <transform type="translate" to="1 0 -1"/>
+                <transform type="rotate" axis="y" angle="-180"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+
+        <node id="quadrado" >
+            <transforms>
+            </transforms>      
+            <primitives>
+                <plane parts="20"/>
+            </primitives>   
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="mesa" >
+            <transforms>
+            </transforms>         
+            <descendants>
+                <noderef id="perna1"/>
+                <noderef id="perna2"/>
+                <noderef id="perna3"/>
+                <noderef id="perna4"/>
+                <noderef id="tampo"/>
+            </descendants>
+        </node>
+
+          <node id="perna1" >
+            <transforms>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="perna2" >
+            <transforms>
+                <transform type="translate" to="5 0 0"/>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="perna3" >
+            <transforms>
+                <transform type="translate" to="5 0 5"/>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="perna4" >
+            <transforms>
+                <transform type="translate" to="0 0 5"/>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="tampo" >
+            <transforms>
+                <transform type="translate" to="0 2 0"/>
+                <transform type="scale" factor="6 0.5 6"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+        <node id="tabuleiro" >
+            <transforms>
+                <transform type="translate" to="1 2.55 5.5"/>
+                <transform type="rotate" axis="x" angle="-90"/>
+                <transform type="scale" factor="0.6 1 0.6"/>
+            </transforms>         
             <descendants>
             </descendants>
             <primitives>
-            	<torus inner="0.5" outer="1" slices="5" loops="5" />
+                <board/>
             </primitives>
-		</node>
-	
-		<node id="cylinderNode">
-            <transforms>
-            </transforms>  
-            <appearanceref id="inherit"/> 
-            <descendants>
-            	<noderef id="cylinderSon"/>
-            </descendants>
-            <primitives>
-            	
-            </primitives>
-		</node>		
-		
-		<node id="cylinderSon">
-            <transforms>
-            	
-            </transforms>   
-            <appearanceref id="inherit"/>
-            <descendants>
-            </descendants>
-            <primitives>
-            	<cylinder base="0.5" top="0" height="3" slices="10" stacks="10" /> 
-            </primitives>
-		</node>
-		
-		<node id="brokenLamp">
-            <transforms>
-            	<transform type="translate" to="13 0 2"/>
-            </transforms>   
-            <appearanceref id="madeiraAp"/>
-            <descendants>
-            	<noderef id="top1"/>
-            	<noderef id="face1"/>
-            	<noderef id="face2"/>
-            	<noderef id="face3"/>
-            	<noderef id="face4"/>
-            	<noderef id="lampTop" />
-            </descendants>
-            <primitives>
-            </primitives>
-		</node>
-		
-		<node id="top1">
-            <transforms>
-            	<transform type="translate" to="0 10 0"/>
-            </transforms>   
-            <appearanceref id="inherit"/>
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="50"/>
-            </primitives>
-		</node>
-		
-		<node id="face1">
-            <transforms>
-            	<transform type="translate" to="0 5 0"/>
-            	<transform type="scale" factor="1 10 1"/>
-            	<transform type="translate" to="0 0 0.5"/>
-            	<transform type="rotate" axis="x" angle="90"/>
-            </transforms>   
-            <appearanceref id="inherit"/>
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="50"/>
-            </primitives>
-		</node>
-		<node id="face2">
-            <transforms>
-            	<transform type="rotate" axis="y" angle="90"/>
-            	<transform type="translate" to="0 5 0"/>
-            	<transform type="scale" factor="1 10 1"/>
-            	<transform type="translate" to="0 0 0.5"/>
-            	<transform type="rotate" axis="x" angle="90"/>
-            </transforms>   
-            <appearanceref id="inherit"/>
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="50"/>
-            </primitives>
-		</node>
-		<node id="face3">
-            <transforms>
-            	<transform type="rotate" axis="y" angle="180"/>
-            	<transform type="translate" to="0 5 0"/>
-            	<transform type="scale" factor="1 10 1"/>
-            	<transform type="translate" to="0 0 0.5"/>
-            	<transform type="rotate" axis="x" angle="90"/>
-            </transforms>   
-            <appearanceref id="inherit"/>
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="50"/>
-            </primitives>
-		</node>	
-		<node id="face4">
-            <transforms>
-            	<transform type="rotate" axis="y" angle="270"/>
-            	<transform type="translate" to="0 1 0"/>
-            	<transform type="scale" factor="1 10 1"/>
-            	<transform type="translate" to="0 0 0.5"/>
-            	<transform type="rotate" axis="x" angle="90"/>
-            </transforms>   
-            <appearanceref id="inherit"/>
-            <descendants>
-            </descendants>
-            <primitives>
-            	<plane parts="50"/>
-            </primitives>
-		</node>
-		<node id="lampTop">
-			<animationref id="lampAnimation1"/>
-			<animationref id="lampAnimation2"/>
-			<animationref id="lampAnimation3"/>
-			<animationref id="lampAnimation4"/>
-            <transforms>
-            	<transform type="translate" to="0 11 0"/>
-            </transforms>   
-            <appearanceref id="lampAp"/>
-            <descendants>
-            </descendants>
-            <primitives>
-            	<sphere radius="1" slices="10" stacks="10"/>
-            </primitives>
-		</node>	
-			
+        </node>
     </graph>
 </anf>
 

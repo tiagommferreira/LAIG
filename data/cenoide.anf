@@ -1,0 +1,199 @@
+<anf>
+    <globals>
+        <drawing mode="fill" shading="gouraud" background="0 0 0 0" />
+        <culling face="back" order="ccw" />
+        <lighting doublesided="false" local="true" enabled="true" ambient="0 0 0 0" />
+    </globals>    
+
+    <cameras initial="overViewCam" >
+        <perspective id="overViewCam" near="0.1" far="500" angle="35" pos="5 5 5" target="0 0 0" />
+        <ortho id="ortho" direction="y" near="-100" far="100" left="-2" right="10" top="10" bottom="-2" />
+    </cameras>
+  
+    <lights>
+    		 <light id="omni" type="omni" enabled="true" marker="false" pos="0 5 0" >
+               <component type="ambient" value="1 1 1 1" />
+               <component type="diffuse" value="1 1 1 1" />
+               <component type="specular" value="1 1 1 1" />
+            </light>
+    </lights>
+
+    <textures>
+    </textures>
+
+    <animations>
+	</animations>		
+	
+    <appearances>
+    </appearances>
+		
+    
+    <graph rootid="cena">        
+        <node id="cena" >
+            <transforms>
+            </transforms>         
+            <descendants>
+                <noderef id="tabuleiro"/>
+            </descendants>
+		</node>
+
+        <node id="cubo" >
+            <transforms>
+                <transform type="translate" to="0 0 1"/>
+            </transforms>         
+            <descendants>
+                <noderef id="face1"/>
+                <noderef id="face2"/>
+                <noderef id="face3"/>
+                <noderef id="face4"/>
+                <noderef id="face5"/>
+                <noderef id="face6"/>
+            </descendants>
+        </node>
+
+        <node id="face1" >
+            <transforms>
+
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face2" >
+            <transforms>
+                <transform type="translate" to="1 0 0"/>
+                <transform type="rotate" axis="y" angle="90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face3" >
+            <transforms>
+                <transform type="translate" to="0 0 -1"/>
+                <transform type="rotate" axis="y" angle="-90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face4" >
+            <transforms>
+                <transform type="translate" to="0 1 0"/>
+                <transform type="rotate" axis="x" angle="-90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face5" >
+            <transforms>
+                 <transform type="translate" to="0 0 -1"/>
+                <transform type="rotate" axis="x" angle="90"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="face6" >
+            <transforms>
+                <transform type="translate" to="1 0 -1"/>
+                <transform type="rotate" axis="y" angle="-180"/>
+            </transforms>         
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+
+        <node id="quadrado" >
+            <transforms>
+            </transforms>      
+            <primitives>
+                <plane parts="20"/>
+            </primitives>   
+            <descendants>
+            </descendants>
+        </node>
+
+        <node id="mesa" >
+            <transforms>
+            </transforms>         
+            <descendants>
+                <noderef id="perna1"/>
+                <noderef id="perna2"/>
+                <noderef id="perna3"/>
+                <noderef id="perna4"/>
+                <noderef id="tampo"/>
+            </descendants>
+        </node>
+
+          <node id="perna1" >
+            <transforms>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="perna2" >
+            <transforms>
+                <transform type="translate" to="5 0 0"/>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="perna3" >
+            <transforms>
+                <transform type="translate" to="5 0 5"/>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="perna4" >
+            <transforms>
+                <transform type="translate" to="0 0 5"/>
+                <transform type="scale" factor="1 2 1"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+          <node id="tampo" >
+            <transforms>
+                <transform type="translate" to="0 2 0"/>
+                <transform type="scale" factor="6 0.5 6"/>
+            </transforms>         
+            <descendants>
+                 <noderef id="cubo"/>
+            </descendants>
+        </node>
+
+        <node id="tabuleiro" >
+            <transforms>
+                <transform type="translate" to="1 2.55 5.5"/>
+                <transform type="rotate" axis="x" angle="-90"/>
+                <transform type="scale" factor="0.6 1 0.6"/>
+            </transforms>         
+            <descendants>
+            </descendants>
+            <primitives>
+                <board/>
+            </primitives>
+        </node>
+    </graph>
+</anf>
+

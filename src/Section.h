@@ -7,13 +7,11 @@ using namespace std;
 
 class Section :public CGFobject{
 private:
-	int x;
-	int y;
+
 public:
-	Section(int,int);
-	void draw();
+	Section();
+	void draw();    
 	virtual ~Section();
 };
-
 
 #endif /* SRC_SECTION_H_ */

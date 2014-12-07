@@ -2,9 +2,7 @@
 #include "Section.h"
 using namespace std;
 
-Section::Section(int x,int y) {
-	this->x=x;
-	this->y=y;
+Section::Section(){
 }
 
 Section::~Section() {

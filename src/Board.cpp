@@ -15,13 +15,40 @@ Board::Board():Primitive((char*)"board") {
     app1->setTexture(currentTexture);
     app2->setTexture(currentTexture2);
     
-	for(int i=0;i<5;i++){
-		vector<Section *> sectionRow;
-		for(int j=0;j<7;j++){
-			sectionRow.push_back(new Section(i,j));
-		}
-		this->board.push_back(sectionRow);
-	}
+    this->section = new Section();
+    
+    /**
+     * Initiliazing the board game
+     */
+    vector<Stack * > row;
+    row.push_back(new Stack(0,0));row.push_back(new Stack(0,0));row.push_back(new Stack(0,0));row.push_back(new Stack(0,0));
+    row.push_back(new Stack(0,0));row.push_back(new Stack(0,0));row.push_back(new Stack(0,0));
+    vector<Stack * > scdRow;
+    scdRow.push_back(new Stack(0,0));scdRow.push_back(new Stack(3,1));scdRow.push_back(new Stack(3,2));scdRow.push_back(new Stack(3,1));
+    scdRow.push_back(new Stack(3,2));scdRow.push_back(new Stack(3,1)); scdRow.push_back(new Stack(0,0));
+    vector<Stack * > trdRow;
+    trdRow.push_back(new Stack(0,0));trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(0,0));
+    trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(0,0));
+    vector<Stack * > fourthRow;
+    fourthRow.push_back(new Stack(0,0));fourthRow.push_back(new Stack(3,2));fourthRow.push_back(new Stack(3,1));
+    fourthRow.push_back(new Stack(3,2));
+    fourthRow.push_back(new Stack(3,1));fourthRow.push_back(new Stack(3,2));fourthRow.push_back(new Stack(0,0));
+    vector<Stack * > fifthRow;
+    fifthRow.push_back(new Stack(0,0));fifthRow.push_back(new Stack(0,0));fifthRow.push_back(new Stack(0,0));fifthRow.push_back(new Stack(0,0));
+    fifthRow.push_back(new Stack(0,0));fifthRow.push_back(new Stack(0,0));fifthRow.push_back(new Stack(0,0));
+    
+    this->currentState.push_back(row);
+    this->currentState.push_back(scdRow);
+    this->currentState.push_back(trdRow);
+    this->currentState.push_back(fourthRow);
+    this->currentState.push_back(fifthRow);
+    
+    for(int i=0;i<currentState.size();i++){
+        for(int j=0;j<currentState[i].size();j++){
+            cout << currentState[i][j]->getNumberOfPieces() << "," << currentState[i][j]->getPlayerNumber() << " | ";
+        }
+        cout << endl;
+    }
 }
 
 Board::~Board() {
@@ -30,8 +57,8 @@ Board::~Board() {
 void Board::draw(){
     int rows=0;
     int cols=0;
-	for(unsigned int i=0;i<board.size();i++){
-		for(unsigned int j=0;j<board[i].size();j++){
+	for(unsigned int i=0;i<5;i++){
+		for(unsigned int j=0;j<7;j++){
             if(j==0 || i==0 || i==4 || j==6){
                 app1->apply();
             }else{
@@ -39,7 +66,8 @@ void Board::draw(){
             }
             glLoadName(rows);
             glPushName(cols);
-			board[i][j]->draw();
+			this->section->draw();
+            currentState[i][j]->draw();
             glPopName();
 			glTranslated(1,0,0);
             rows++;

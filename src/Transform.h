@@ -21,7 +21,7 @@ public:
     void setFactor(char * factor){sscanf(factor, "%f %f %f",&this->factor[0],&this->factor[1],&this->factor[2]);}
 
 	float getAngle() const {
-		return angle;
+		return angle;   
 	}
 
 	char getAxis() const {

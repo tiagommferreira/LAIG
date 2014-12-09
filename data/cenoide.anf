@@ -19,12 +19,18 @@
     </lights>
 
     <textures>
+        <texture id="madeira" file="/Users/ricardo/Desktop/CGFlib/CGFexample/data/madeira.png" texlength_s="1" texlength_t="1" />
     </textures>
 
     <animations>
 	</animations>		
 	
     <appearances>
+        <appearance id="madeiraAp" shininess="0" textureref="madeira" >
+               <component type="ambient" value="0.4 0.4 0.4 1" />
+               <component type="diffuse" value="0.5 0.5 0.5 1" />
+               <component type="specular" value=".5 .5 0.5 1" />
+        </appearance>
     </appearances>
 		
     
@@ -34,6 +40,7 @@
             </transforms>         
             <descendants>
                 <noderef id="tabuleiro"/>
+                <noderef id="mesa"/>
             </descendants>
 		</node>
 
@@ -123,7 +130,8 @@
 
         <node id="mesa" >
             <transforms>
-            </transforms>         
+            </transforms>  
+            <appearanceref id="madeiraAp" />             
             <descendants>
                 <noderef id="perna1"/>
                 <noderef id="perna2"/>

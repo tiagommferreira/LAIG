@@ -14,10 +14,14 @@ private:
     Section* section;
     vector<vector< Stack *> > currentState;
 public:
+    vector<vector< Stack * > > getCurrentState();
 	Board();
 	void draw();
     CGFappearance * app1;
     CGFappearance * app2;
+    CGFappearance * temp1;
+    CGFappearance * temp2;
+    void showBoard();
 	virtual ~Board();
 };
 

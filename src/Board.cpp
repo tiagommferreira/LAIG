@@ -27,7 +27,7 @@ Board::Board():Primitive((char*)"board") {
     scdRow.push_back(new Stack(0,0));scdRow.push_back(new Stack(3,1));scdRow.push_back(new Stack(3,2));scdRow.push_back(new Stack(3,1));
     scdRow.push_back(new Stack(3,2));scdRow.push_back(new Stack(3,1)); scdRow.push_back(new Stack(0,0));
     vector<Stack * > trdRow;
-    trdRow.push_back(new Stack(0,0));trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(0,0));
+    trdRow.push_back(new Stack(0,0));trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(0,0));
     trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(0,0));
     vector<Stack * > fourthRow;
     fourthRow.push_back(new Stack(0,0));fourthRow.push_back(new Stack(3,2));fourthRow.push_back(new Stack(3,1));
@@ -49,14 +49,20 @@ Board::Board():Primitive((char*)"board") {
         }
         cout << endl;
     }
+    temp1 = new CGFappearance(amb,dif,spec,20);
+    temp2 = new CGFappearance(amb,dif,spec,20);
+
+    CGFtexture * txt1 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images-600x331.jpg");
+    CGFtexture * txt2 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images.jpg");
+    
+    temp1->setTexture(txt1);
+    temp2->setTexture(txt2);
 }
 
 Board::~Board() {
 }
 
 void Board::draw(){
-    int rows=0;
-    int cols=0;
 	for(unsigned int i=0;i<5;i++){
 		for(unsigned int j=0;j<7;j++){
             if(j==0 || i==0 || i==4 || j==6){
@@ -64,17 +70,32 @@ void Board::draw(){
             }else{
                 app2->apply();
             }
-            glLoadName(rows);
-            glPushName(cols);
+            glLoadName(i);
+            glPushName(j);
 			this->section->draw();
+            if(currentState[i][j]->getPlayerNumber()==1){
+                temp1->apply();
+            }else {
+                temp2->apply();
+            }
             currentState[i][j]->draw();
             glPopName();
 			glTranslated(1,0,0);
-            rows++;
 		}
-        rows=0;
-        cols++;
 		glTranslated(-7,1,0);
 	}
+}
+
+void Board::showBoard() {
+    for(unsigned int i=0;i<5;i++){
+        for(unsigned int j=0;j<7;j++) {
+            cout << currentState[i][j]->getNumberOfPieces() << "," << currentState[i][j]->getPlayerNumber() << " |";
+         }
+        cout << endl;
+    }
+}
+
+vector<vector< Stack * > > Board::getCurrentState() {
+    return this->currentState;
 }
 

@@ -92,11 +92,11 @@ void PickInterface::processHits (GLint hits, GLuint buffer[])
     {
         // this should be replaced by code handling the picked object's ID's (stored in "selected"),
         // possibly invoking a method on the scene class and passing "selected" and "nselected"
-        printf("Picked ID's: ");
-        for (int i=0; i<nselected; i++)
-            printf("%d ",selected[i]);
-        printf("\n");
+        for (int i=0; i<nselected; i++){
+            if(nselected==2)
+                ((XMLScene *)scene)->addPoint(selected[i]);
+        }
     }
     else
-        printf("Nothing selected while picking \n");	
+        printf("Please select a piece\n");
 }

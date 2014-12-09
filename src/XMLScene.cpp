@@ -92,6 +92,18 @@ void XMLScene::init() {
     setNodesAppearances();
     
     setUpdatePeriod(30);
+    
+    
+    map<char*,Node*> temp = parser->getGraph();
+    map<char*,Node*>::iterator it=temp.begin();
+    for(unsigned int i=0;i<temp.size();i++,it++){
+        if(strcmp(it->first,"tabuleiro")==0){
+            this->board = (Board*)it->second->getPrimitives()[0];
+            break;
+        }
+    }
+    
+    
     cout << "start updating" << endl;
 }
 
@@ -127,7 +139,7 @@ void XMLScene::display() {
         }
     }
     glPopMatrix();
-    
+    swapPosition();
     glutSwapBuffers();
 }
 
@@ -316,3 +328,38 @@ void XMLScene::setDrawingType(char* drawingType){
 	}
 }
 
+void XMLScene::addPoint(int coordinate) {
+    if(pointsClicked.size()==4) // 2 pontos preenchidos
+    {
+        pointsClicked.clear();
+    }
+    
+    if(pointsClicked.size()==2) // um ponto
+    {
+        if(this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces()==0){
+            pointsClicked.clear();
+        }
+    }
+    
+    this->pointsClicked.push_back(coordinate);
+}
+
+void XMLScene::swapPosition() {
+    if(pointsClicked.size()==4 &&
+       !(pointsClicked[0] == pointsClicked[2] && pointsClicked[1] == pointsClicked[3]) // nao ser a mesma peça
+       ){
+        this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setNumberOfPieces
+            (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces());
+        this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setPlayer
+            (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber());
+        
+        this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->setNumberOfPieces
+        (0);
+        this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->setPlayer
+        (0);
+        
+        cout << "There was a change from #" << pointsClicked[0] << pointsClicked[1] << " to #" << pointsClicked[2] << pointsClicked[3] << endl;
+        pointsClicked.clear();
+        
+    }
+}

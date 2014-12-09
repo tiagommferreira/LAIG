@@ -37,7 +37,6 @@ public:
     }
     
     void draw(){
-        text->apply();
         glPushMatrix();
         glTranslated(0.5,+0.5,0);
         for(int i=0;i<this->numberOfPieces;i++){
@@ -49,6 +48,12 @@ public:
         glPopMatrix();
     }
     
+    void setNumberOfPieces(int pieces){
+        this->numberOfPieces=pieces;
+    }
+    void setPlayer( int player) {
+        this->player = player;
+    }
 };
 
 #endif /* defined(__CGFExample__Stack__) */

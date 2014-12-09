@@ -42,8 +42,7 @@ public:
     Plane * getPlane(){
     	return this->plane;
     }
-    
-protected:
+    protected:
     
     TiXmlDocument* doc;
     TiXmlElement* anfElement;

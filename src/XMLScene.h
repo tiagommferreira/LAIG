@@ -38,10 +38,12 @@ public:
     void setCamera(char* camera){this->camera=camera;}
     void setDrawingType(char*);
     void setNodeChildApp(Node*);
-
+    void clickPiece(int);
+    void addPoint(int);
+    void swapPosition();
 
 protected:
-    CGFlight * light0;
+    vector<int> pointsClicked;
     Board * board;
     char * camera;
     vector<CGFlight*>lights;

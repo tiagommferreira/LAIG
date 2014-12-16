@@ -4,7 +4,8 @@
 #include <iostream>
 #include <math.h>
 
-//-------------------------------------------------------
+#define BUFSIZE 256
+GLuint selectBuf[BUFSIZE];
 
 TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val) {
 	TiXmlElement *child=parent->FirstChildElement();
@@ -23,6 +24,7 @@ void XMLScene::init() {
     shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
     parser = new XMLParser();
     camera = parser->getCameras()[0]->getInitial();
+    socket = new PlogSocket();
     
     cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
     
@@ -103,6 +105,7 @@ void XMLScene::init() {
         }
     }
     
+    socket->connectSocket();
     
     cout << "start updating" << endl;
 }
@@ -348,6 +351,15 @@ void XMLScene::swapPosition() {
     if(pointsClicked.size()==4 &&
        !(pointsClicked[0] == pointsClicked[2] && pointsClicked[1] == pointsClicked[3]) // nao ser a mesma peça
        ){
+   
+        cout << "connect" << endl;
+        socket->sendMessage("cicloJogo1V1([[99,99,99,99,99,99,99],[99,21,22,99,99,99,99],[99,11,11,99,99,99,99],[99,99,99,99,99,99,99],[99,99,99,99,99,99,99]],1,1,2,2,0,0,sA)");
+        cout << "send" << endl;
+        char *answer;
+        answer = socket->receiveMessage();
+        cout << answer << endl;
+        //atualizar otabulerio
+        
         this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setNumberOfPieces
             (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces());
         this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setPlayer

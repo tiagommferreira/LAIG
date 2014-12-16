@@ -6,6 +6,7 @@
 #define BUFSIZE 256
 GLuint selectBuf[BUFSIZE];
 
+
 void PickInterface::processMouse(int button, int state, int x, int y)
 {
     CGFinterface::processMouse(button,state, x, y);

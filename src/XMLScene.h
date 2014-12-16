@@ -8,6 +8,7 @@
 #include "UserInterface.h"
 #include "PickInterface.h"
 #include "CGFappearance.h"
+#include "PlogSocket.h"
 #include "CGFapplication.h"
 
 #include <vector>
@@ -42,7 +43,9 @@ public:
     void addPoint(int);
     void swapPosition();
 
+
 protected:
+    PlogSocket *socket;
     vector<int> pointsClicked;
     Board * board;
     char * camera;

@@ -99,3 +99,47 @@ vector<vector< Stack * > > Board::getCurrentState() {
     return this->currentState;
 }
 
+void Board::updateBoard(char * board) {
+    string updatedBoard(board);
+    
+    string delimiter = "]";
+    string delimiter2= ",";
+    vector<string> rows;
+    size_t pos=0;
+    while((pos = updatedBoard.find(delimiter)) != string::npos) {
+        rows.push_back(updatedBoard.substr(0,pos));
+        updatedBoard.erase(0,pos+delimiter.length());
+    }
+    for(int i=0;i<rows.size();i++){
+        rows[i].erase(0,2);
+        cout << rows[i] << endl;
+    }
+    
+    vector<vector<string> > separatedBoard;
+    for(int i=0;i<rows.size()-1;i++){
+        pos = 0;
+        vector<string> currentRow;
+        while((pos = rows[i].find(delimiter2)) != string::npos) {
+            currentRow.push_back(rows[i].substr(0,pos));
+            rows[i].erase(0,pos+delimiter2.length());
+        }
+        currentRow.push_back(rows[i]);
+        separatedBoard.push_back(currentRow);
+        currentRow.clear();
+    }
+    
+    for(int i = 0; i<separatedBoard.size(); i++) {
+        for(int j = 0; j<separatedBoard[i].size();j++) {
+            int playerNumber = stoi(separatedBoard[i][j]) /10;
+            int pieceNumber = stoi(separatedBoard[i][j])%10;
+            if(pieceNumber==9){
+                currentState[i][j]->setNumberOfPieces(0);
+            }
+            else {
+                currentState[i][j]->setNumberOfPieces(pieceNumber);
+                currentState[i][j]->setPlayer(playerNumber);
+            }
+        }
+        cout << endl;
+    }
+}

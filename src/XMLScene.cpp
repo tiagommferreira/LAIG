@@ -350,11 +350,11 @@ void XMLScene::swapPosition() {
        ){
    
         cout << "connect" << endl;
-        socket->sendMessage("comando([[99,99,99,99,99,99,99],[99,21,22,99,99,99,99],[99,11,11,99,99,99,99],[99,99,99,99,99,99,99],[99,99,99,99,99,99,99]],1,1,2,0,2,0,Tabuleiro).");
-        cout << "send" << endl;
+        socket->sendMessage("comando([[99,99,99,99,99,99,99],[99,21,22,99,99,99,99],[99,11,11,99,99,99,99],[99,99,99,99,99,99,99],[99,99,99,99,99,99,99]],1,1,2,5,2,0,Tabuleiro).");
+
         char *answer;
         answer = socket->receiveMessage();
-        cout << answer << endl;
+
         //atualizar o tabuleiro
         
         this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setNumberOfPieces
@@ -369,6 +369,8 @@ void XMLScene::swapPosition() {
         
         cout << "There was a change from #" << pointsClicked[0] << pointsClicked[1] << " to #" << pointsClicked[2] << pointsClicked[3] << endl;
         pointsClicked.clear();
+        
+        board->updateBoard(answer);
         
     }
 }

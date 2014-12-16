@@ -41,7 +41,7 @@ void PlogSocket::sendMessage(char *buf) {
 char* PlogSocket::receiveMessage() {
     //int bytesRecv = SOCKET_ERROR;
     int pos = 0;
-    char * answer;
+    char * answer =(char*) malloc(256);
     while (true) {
         recv(sock, &answer[pos], 1, 0);
         if (answer[pos] == '\n')

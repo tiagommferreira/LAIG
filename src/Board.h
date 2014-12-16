@@ -14,6 +14,7 @@ private:
     Section* section;
     vector<vector< Stack *> > currentState;
 public:
+    void updateBoard(char* board);
     vector<vector< Stack * > > getCurrentState();
 	Board();
 	void draw();

@@ -4,9 +4,6 @@
 #include <iostream>
 #include <math.h>
 
-#define BUFSIZE 256
-GLuint selectBuf[BUFSIZE];
-
 TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val) {
 	TiXmlElement *child=parent->FirstChildElement();
 	int found=0;
@@ -353,12 +350,12 @@ void XMLScene::swapPosition() {
        ){
    
         cout << "connect" << endl;
-        socket->sendMessage("cicloJogo1V1([[99,99,99,99,99,99,99],[99,21,22,99,99,99,99],[99,11,11,99,99,99,99],[99,99,99,99,99,99,99],[99,99,99,99,99,99,99]],1,1,2,2,0,0,sA)");
+        socket->sendMessage("comando([[99,99,99,99,99,99,99],[99,21,22,99,99,99,99],[99,11,11,99,99,99,99],[99,99,99,99,99,99,99],[99,99,99,99,99,99,99]],1,1,2,0,2,0,Tabuleiro).");
         cout << "send" << endl;
         char *answer;
         answer = socket->receiveMessage();
         cout << answer << endl;
-        //atualizar otabulerio
+        //atualizar o tabuleiro
         
         this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setNumberOfPieces
             (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces());

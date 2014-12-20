@@ -63,15 +63,18 @@ Board::~Board() {
 }
 
 void Board::draw(){
-	for(unsigned int i=0;i<5;i++){
+    int row=0;
+    int col=0;
+    
+    for(unsigned int i=0;i<5;i++){
 		for(unsigned int j=0;j<7;j++){
             if(j==0 || i==0 || i==4 || j==6){
                 app1->apply();
             }else{
                 app2->apply();
             }
-            glLoadName(i);
-            glPushName(j);
+            glLoadName(row);
+            glPushName(col);
 			this->section->draw();
             if(currentState[i][j]->getPlayerNumber()==1){
                 temp1->apply();
@@ -81,8 +84,11 @@ void Board::draw(){
             currentState[i][j]->draw();
             glPopName();
 			glTranslated(1,0,0);
+            col++;
 		}
-		glTranslated(-7,1,0);
+        col=0;
+        row++;
+		glTranslated(-7,-1,0);
 	}
 }
 
@@ -112,7 +118,6 @@ void Board::updateBoard(char * board) {
     }
     for(int i=0;i<rows.size();i++){
         rows[i].erase(0,2);
-        cout << rows[i] << endl;
     }
     
     vector<vector<string> > separatedBoard;
@@ -134,6 +139,7 @@ void Board::updateBoard(char * board) {
             int pieceNumber = stoi(separatedBoard[i][j])%10;
             if(pieceNumber==9){
                 currentState[i][j]->setNumberOfPieces(0);
+                currentState[i][j]->setPlayer(0);
             }
             else {
                 currentState[i][j]->setNumberOfPieces(pieceNumber);
@@ -143,3 +149,31 @@ void Board::updateBoard(char * board) {
         cout << endl;
     }
 }
+
+string Board::boardToString() {
+    stringstream board;
+    board << "[";
+    for(int i = 0; i<currentState.size(); i++) {
+        board << "[";
+        for(int j = 0; j<currentState[i].size();j++) {
+            if(currentState[i][j]->getNumberOfPieces()==0) {
+                board << "99";
+            }else {
+                board << currentState[i][j]->getPlayerNumber() << currentState[i][j]->getNumberOfPieces();
+            }
+            if(j<6){
+                board << ",";
+            }
+        }
+        
+        board << "]";
+        if(i<4){
+            board << ",";
+        }
+    }
+    board << "]";
+    
+    return board.str();
+}
+
+

@@ -6,6 +6,7 @@
 #include "CGFappearance.h"
 #include "Primitive.h"
 #include "Stack.h"
+#include <sstream>
 #include <iostream>
 using namespace std;
 
@@ -15,6 +16,8 @@ private:
     vector<vector< Stack *> > currentState;
 public:
     void updateBoard(char* board);
+    string boardToString();
+    
     vector<vector< Stack * > > getCurrentState();
 	Board();
 	void draw();

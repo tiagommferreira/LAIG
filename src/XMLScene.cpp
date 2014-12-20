@@ -22,6 +22,7 @@ void XMLScene::init() {
     parser = new XMLParser();
     camera = parser->getCameras()[0]->getInitial();
     socket = new PlogSocket();
+    gameState = new Game();
     
     cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
     
@@ -102,7 +103,7 @@ void XMLScene::init() {
         }
     }
     
-    socket->connectSocket();
+   socket->connectSocket();
     
     cout << "start updating" << endl;
 }
@@ -348,29 +349,56 @@ void XMLScene::swapPosition() {
     if(pointsClicked.size()==4 &&
        !(pointsClicked[0] == pointsClicked[2] && pointsClicked[1] == pointsClicked[3]) // nao ser a mesma peça
        ){
-   
-        cout << "connect" << endl;
-        socket->sendMessage("comando([[99,99,99,99,99,99,99],[99,21,22,99,99,99,99],[99,11,11,99,99,99,99],[99,99,99,99,99,99,99],[99,99,99,99,99,99,99]],1,1,2,5,2,0,Tabuleiro).");
+        
+        socket->sendMessage((char*)createPlayCommand().c_str());
 
         char *answer;
         answer = socket->receiveMessage();
-
-        //atualizar o tabuleiro
         
-        this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setNumberOfPieces
-            (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces());
-        this->board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->setPlayer
-            (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber());
-        
-        this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->setNumberOfPieces
-        (0);
-        this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->setPlayer
-        (0);
-        
-        cout << "There was a change from #" << pointsClicked[0] << pointsClicked[1] << " to #" << pointsClicked[2] << pointsClicked[3] << endl;
-        pointsClicked.clear();
+        checkBoardChanges(answer);
         
         board->updateBoard(answer);
         
+        pointsClicked.clear();
+        
     }
+}
+
+void XMLScene::checkBoardChanges(char * answer) {
+    stringstream comparingValue;
+    comparingValue  << board->boardToString() << ".";
+    
+    if(strcmp(comparingValue.str().c_str(),answer)==0){
+        
+    } else {
+        gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
+    }
+    
+}
+
+string XMLScene::createPieceCommand(){
+    stringstream command;
+    return command.str();
+}
+
+string XMLScene::createPlayCommand() {
+    stringstream command;
+    
+    command << "comando(";
+    command << board->boardToString() << ",";
+    command << gameState->getCurrentPlayer() << ",";
+    
+    if( (board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber() == board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->getPlayerNumber())
+       && pointsClicked[0]<4 && pointsClicked[0]>0 && pointsClicked[2]<4 && pointsClicked[2]>0
+       && pointsClicked[1]<6 && pointsClicked[1]>0 && pointsClicked[3]<6 && pointsClicked[3]>0) {
+        command << "2" << ",";
+    }
+    else {
+        command << "1" << ",";
+    }
+    
+    command << pointsClicked[1] << "," << pointsClicked[3] << "," << pointsClicked[0] << "," << pointsClicked[2] << ",";
+    command << "Tabuleiro).";
+    
+    return command.str();
 }

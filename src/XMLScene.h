@@ -9,9 +9,11 @@
 #include "PickInterface.h"
 #include "CGFappearance.h"
 #include "PlogSocket.h"
+#include "Game.h"
 #include "CGFapplication.h"
 
 #include <vector>
+#include <string.h>
 #include "Board.h"
 
 class XMLScene : public CGFscene
@@ -42,10 +44,16 @@ public:
     void clickPiece(int);
     void addPoint(int);
     void swapPosition();
+    void checkBoardChanges(char*);
+    string createPlayCommand();
+    string createPieceCommand();
+    
 
 
 protected:
+    int currentPlayer;
     PlogSocket *socket;
+    Game* gameState;
     vector<int> pointsClicked;
     Board * board;
     char * camera;

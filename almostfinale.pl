@@ -25,14 +25,21 @@ serverLoop(Stream) :-
 
 parse_input(comando(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo), Answer) :-
 	comando(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo, Answer).
+
+parse_input(verificarPeca(Jogador, Tabuleiro, PosX, PosY, CounterX, CounterY, Lista, PieceMoves), Answer) :-
+	verificarPeca(Jogador, Tabuleiro, PosX, PosY, CounterX, CounterY, Lista, PieceMoves, Answer).
 	
 parse_input(quit, ok-bye) :- !.
 		
 comando(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo,Answer) :-
 	cicloJogo1vs1(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo),
-	Answer = TabuleiroNovo.
+	!,
+	append([],TabuleiroNovo,Answer).
 
-
+verificarPeca(Jogador, Tabuleiro, PosX, PosY, CounterX, CounterY, Lista, PieceMoves, Answer):-
+	checkPiece(Jogador,Tabuleiro,PosX,PosY,CounterX,CounterY,Lista,PieceMoves),
+	!,
+	Answer is PieceMoves.
 
 showBoard([ROW|REST]):-
 write('____________________________________'), write('\n'),
@@ -87,7 +94,8 @@ not(X).
 cicloJogo1vs1(Tabuleiro,Jogador,1,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo):-
 	aplica(mover,[[Xinicial, Yinicial],[Xfinal,Yfinal], Jogador ,Tabuleiro, TabuleiroNovo]).
 
-cicloJogo1vs1(Tabuleiro,Jogador,2,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo).
+cicloJogo1vs1(Tabuleiro,Jogador,2,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo) :-
+	aplica(fusao,[[Xinicial, Yinicial],[Xfinal,Yfinal], Jogador ,Tabuleiro, TabuleiroNovo]).
 
 %start game
 
@@ -331,7 +339,6 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal2 is NumPeca2+1,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
 	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
-	showBoard(TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	Xinit > 0, Xinit < 6,
@@ -362,8 +369,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal1 is 99,
 	PecaFinal2 is NumPeca2+1,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	Xinit > 0, Xinit < 6,
@@ -394,8 +400,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal1 is NumPeca-1,  
 	PecaFinal2 is Jogador*10+1,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	Xinit > 0, Xinit < 6,
@@ -426,8 +431,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal1 is 99,  
 	PecaFinal2 is NumPeca,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
 
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
@@ -459,8 +463,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal1 is NumPeca-1, 
 	PecaFinal2 is NumPeca2+1,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	Xinit > 0, Xinit < 6,
@@ -491,8 +494,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal1 is 99,
 	PecaFinal2 is NumPeca2+1,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	Xinit > 0, Xinit < 6,
@@ -523,8 +525,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal1 is NumPeca-1,  
 	PecaFinal2 is Jogador*10+1,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	Xinit > 0, Xinit < 6,
@@ -555,9 +556,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	PecaFinal1 is 99,  
 	PecaFinal2 is NumPeca,
 	replace2d(TabuleiroActual, Xinit, Yinit, PecaFinal1, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
-
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal2, TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	Xinit > 0, Xinit < 6,
@@ -573,8 +572,7 @@ mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	elementAt(Rowtemp, TabuleiroActual, Yinit+1),
 	elementAt(NumPeca, Rowtemp, Xinit+1),
 	replace2d(TabuleiroActual, Xinit, Yinit, 99, Novo),
-	replace2d(Novo, Xfinal, Yfinal, NumPeca, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
+	replace2d(Novo, Xfinal, Yfinal, NumPeca, TabuleiroNovo).
 
 mover([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	showBoard(TabuleiroActual),
@@ -601,9 +599,8 @@ fusao([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, Tabuleir
 	Peca1+Peca2 < 4,
 	PecaFinal is Jogador*10+Peca1+Peca2,
 	replace2d(TabuleiroActual, Xinit, Yinit, 99, Novo),
-	replace2d(Novo, Xfinal, Yfinal, PecaFinal, TabuleiroNovo),
-	showBoard(TabuleiroNovo).
-
+	replace2d(Novo, Xfinal, Yfinal, PecaFinal, TabuleiroNovo).
+	
 fusao([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, TabuleiroNovo) :-
 	showBoard(TabuleiroActual),
 	write('\n Jogada pretendida nao e permitida\n'),

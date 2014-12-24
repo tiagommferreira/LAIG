@@ -337,12 +337,22 @@ void XMLScene::addPoint(int coordinate) {
     
     if(pointsClicked.size()==2) // um ponto
     {
+        //verificar isto
         if(this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces()==0){
             pointsClicked.clear();
         }
     }
-    
+
     this->pointsClicked.push_back(coordinate);
+    //request prolog availability for hte current piece
+    if(pointsClicked.size()==2)
+    {
+        cout << "answer requested to prolog\n";
+        socket->sendMessage((char*)createPieceCommand().c_str());
+        char *answer;
+        answer = socket->receiveMessage();
+        cout << answer << endl;
+    }
 }
 
 void XMLScene::swapPosition() {
@@ -378,6 +388,9 @@ void XMLScene::checkBoardChanges(char * answer) {
 
 string XMLScene::createPieceCommand(){
     stringstream command;
+    command << "verificarPeca(1," << board->boardToString() << "," << pointsClicked[1] << ","
+    << pointsClicked[0] << "," << 0 << ","<< 0 << ",[], NovaLista).";
+
     return command.str();
 }
 

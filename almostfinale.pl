@@ -2,7 +2,7 @@
 :-use_module(library(sockets)).
 
 port(60070).
-% consult('/Users/ricardo/Downloads/almostfinale.pl').
+% consult('/Users/ricardo/Documents/laig/LAIG/almostfinale.pl').
 % launch me in sockets mode
 server:-
 	port(Port),
@@ -37,9 +37,9 @@ comando(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo,A
 	append([],TabuleiroNovo,Answer).
 
 verificarPeca(Jogador, Tabuleiro, PosX, PosY, CounterX, CounterY, Lista, PieceMoves, Answer):-
-	checkPiece(Jogador,Tabuleiro,PosX,PosY,CounterX,CounterY,Lista,PieceMoves),
+	checkPiece(Jogador,Tabuleiro,PosX,PosY,0,0,[],PieceMoves),
 	!,
-	Answer is PieceMoves.
+	append([],PieceMoves,Answer).
 
 showBoard([ROW|REST]):-
 write('____________________________________'), write('\n'),
@@ -792,21 +792,6 @@ checkPiece(Jogador,Tabuleiro,PosX, PosY, CounterX, CounterY, Lista, NovaLista) :
 	canMove([PosX,PosY],[CounterX,CounterY],Jogador,Tabuleiro,Lista,Moves),
 	CounterXInc is CounterX+1,
 	checkPiece(Jogador,Tabuleiro,PosX,PosY,CounterXInc,CounterY,Moves,NovaLista).
-
-
-/*
-listAvailableMoves(Player, Board, Lista):-
-	canMove([2,2], [0,0],
-		Player, [[99,99,99,99,99,99,99],[99,13,23,13,23,13,99],[99,23,13,99,13,23,99],[99,23,13,23,13,23,99],[99,99,99,99,99,99,99]], 
-		Lista,NovaLista),
-	canMove([1,1], [0,0],
-		Player, [[99,99,99,99,99,99,99],[99,13,23,13,23,13,99],[99,23,13,99,13,23,99],[99,23,13,23,13,23,99],[99,99,99,99,99,99,99]], 
-		NovaLista,NovaLista2),
-	canMove([2,2], [0,0],
-		Player, [[99,99,99,99,99,99,99],[99,13,23,13,23,13,99],[99,23,13,99,13,23,99],[99,23,13,23,13,23,99],[99,99,99,99,99,99,99]], 
-		NovaLista2,NovaLista3),nl,
-		write(NovaLista3).*/
-
 
 canMove([Xinit|[Yinit|_]],[Xfinal|[Yfinal|_]], Jogador,  TabuleiroActual, PossivelJogada,NovasPoss) :-
 	Xinit > 0, Xinit < 6,

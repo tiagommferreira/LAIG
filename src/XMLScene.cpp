@@ -99,6 +99,7 @@ void XMLScene::init() {
     for(unsigned int i=0;i<temp.size();i++,it++){
         if(strcmp(it->first,"tabuleiro")==0){
             this->board = (Board*)it->second->getPrimitives()[0];
+            this->boards.push_back(board);
             break;
         }
     }
@@ -341,6 +342,11 @@ void XMLScene::addPoint(int coordinate) {
         if(this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces()==0){
             pointsClicked.clear();
         }
+        //se clicar numa peca do adversário
+        else if (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber() !=
+                   gameState->getCurrentPlayer()){
+            pointsClicked.clear()	;
+        }
     }
 
     this->pointsClicked.push_back(coordinate);
@@ -382,15 +388,17 @@ void XMLScene::checkBoardChanges(char * answer) {
         
     } else {
         gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
+        this->boards.push_back(board);
+        cout << "different board #" << this->boards.size() << endl;
     }
-    
+
 }
 
 string XMLScene::createPieceCommand(){
     stringstream command;
-    command << "verificarPeca(1," << board->boardToString() << "," << pointsClicked[1] << ","
+    command << "verificarPeca(";
+    command << gameState->getCurrentPlayer() << "," << board->boardToString() << "," << pointsClicked[1] << ","
     << pointsClicked[0] << "," << 0 << ","<< 0 << ",[], NovaLista).";
-
     return command.str();
 }
 

@@ -1,10 +1,3 @@
-//
-//  Game.cpp
-//  CGFExample
-//
-//  Created by Ricardo Loureiro on 16/12/14.
-//  Copyright (c) 2014 me. All rights reserved.
-//
 
 #include "Game.h"
 

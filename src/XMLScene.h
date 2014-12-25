@@ -32,9 +32,7 @@ public:
     }
     
     void toggleLight(int lightId);
-    
     void addCameras(char*);
-    
     void addLights();
     void drawLights();
     void setNodesAppearances();
@@ -47,15 +45,15 @@ public:
     void checkBoardChanges(char*);
     string createPlayCommand();
     string createPieceCommand();
-    
-
 
 protected:
-    int currentPlayer;
+    
     PlogSocket *socket;
     Game* gameState;
     vector<int> pointsClicked;
     Board * board;
+    vector<Board*> boards;
+    
     char * camera;
     vector<CGFlight*>lights;
     vector<CGFappearance*>appearances;

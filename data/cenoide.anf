@@ -192,7 +192,7 @@
 
         <node id="tabuleiro" >
             <transforms>
-                <transform type="translate" to="1 2.55 5.5"/>
+                <transform type="translate" to="1 2.55 1.55"/>
                 <transform type="rotate" axis="x" angle="-90"/>
                 <transform type="scale" factor="0.6 1 0.6"/>
             </transforms>         

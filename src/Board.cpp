@@ -28,7 +28,7 @@ Board::Board():Primitive((char*)"board") {
     scdRow.push_back(new Stack(3,2));scdRow.push_back(new Stack(3,1)); scdRow.push_back(new Stack(0,0));
     vector<Stack * > trdRow;
     trdRow.push_back(new Stack(0,0));trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(0,0));
-    trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(0,0));
+    trdRow.push_back(new Stack(3,2));trdRow.push_back(new Stack(3,1));trdRow.push_back(new Stack(0,0));
     vector<Stack * > fourthRow;
     fourthRow.push_back(new Stack(0,0));fourthRow.push_back(new Stack(3,2));fourthRow.push_back(new Stack(3,1));
     fourthRow.push_back(new Stack(3,2));
@@ -146,7 +146,6 @@ void Board::updateBoard(char * board) {
                 currentState[i][j]->setPlayer(playerNumber);
             }
         }
-        cout << endl;
     }
 }
 

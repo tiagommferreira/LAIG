@@ -17,132 +17,135 @@ TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * a
 }
 
 void XMLScene::init() {
-    /** Parses the information from xml to c++ **/
-    shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
-    parser = new XMLParser();
-    camera = parser->getCameras()[0]->getInitial();
-    socket = new PlogSocket();
-    gameState = new Game();
-    
-    cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
-    
-    cout << "lighting properties" << endl;
-    //LIGHTING PROPERTIES
-    glEnable(GL_LIGHTING);
-    if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
-        glEnable(GL_LIGHTING);
-    }
-    if((strcmp (parser->getGlobals()->getLocal(),"true")==0)){
-        glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    }
-    if((strcmp (parser->getGlobals()->getDoublesided(),"true")==0)){
-        glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-    }
-    
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
-    
-    addLights();
-    glEnable(GL_NORMALIZE);
-    
-    
-    cout << "__globals__" << endl << endl;
-    /* GLOBALS */
-    cout << "culling properties" << endl;
-    // CULLING PROPERTIES
-    if((strcmp (parser->getGlobals()->getOrder(),(char*)"cw")==0)){
-        glFrontFace(GL_CW);
-    }else {
-        glFrontFace(GL_CCW);
-    }
-    
-    // also has the possibility to be none
-    if((strcmp(parser->getGlobals()->getFace(),"front")==0)){
-        glCullFace(GL_FRONT);
-    }else if((strcmp (parser->getGlobals()->getFace(),"back")==0)){
-        glCullFace(GL_BACK);
-    }
-    
-    cout << "drawing properties" << endl;
-    //DRAWING PROPERTIES
-    /**
-     * TODO verificar se isto é aqui ou no update
-     */
-    if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
-        glShadeModel(GL_FLAT);
-    }else {
-        glShadeModel(GL_SMOOTH);
-    }
-    
-    if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
-        fill = true;
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
-        point = true;
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-    }else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
-        wire = true;
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
-    cout << "set background "<< endl;
-    //background color
-    float* backColor = parser->getGlobals()->getBackgroundColor();
-    glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
-    
-    // initialize appearences;
-    setNodesAppearances();
-    
-    setUpdatePeriod(30);
-    
-    
-    map<char*,Node*> temp = parser->getGraph();
-    map<char*,Node*>::iterator it=temp.begin();
-    for(unsigned int i=0;i<temp.size();i++,it++){
-        if(strcmp(it->first,"tabuleiro")==0){
-            this->board = (Board*)it->second->getPrimitives()[0];
-            this->boards.push_back(board);
-            break;
-        }
-    }
-    
-   socket->connectSocket();
-    
-    cout << "start updating" << endl;
+	/** Parses the information from xml to c++ **/
+	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
+	parser = new XMLParser();
+	camera = parser->getCameras()[0]->getInitial();
+	socket = new PlogSocket();
+	gameState = new Game();
+
+	cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
+
+	cout << "lighting properties" << endl;
+	//LIGHTING PROPERTIES
+	glEnable(GL_LIGHTING);
+	if((strcmp (parser->getGlobals()->getEnabled(),"true")==0)){
+		glEnable(GL_LIGHTING);
+	}
+	if((strcmp (parser->getGlobals()->getLocal(),"true")==0)){
+		glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	}
+	if((strcmp (parser->getGlobals()->getDoublesided(),"true")==0)){
+		glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	}
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT,parser->getGlobals()->getAmbientLight());
+
+	addLights();
+	glEnable(GL_NORMALIZE);
+
+
+	cout << "__globals__" << endl << endl;
+	/* GLOBALS */
+	cout << "culling properties" << endl;
+	// CULLING PROPERTIES
+	if((strcmp (parser->getGlobals()->getOrder(),(char*)"cw")==0)){
+		glFrontFace(GL_CW);
+	}else {
+		glFrontFace(GL_CCW);
+	}
+
+	// also has the possibility to be none
+	if((strcmp(parser->getGlobals()->getFace(),"front")==0)){
+		glCullFace(GL_FRONT);
+	}else if((strcmp (parser->getGlobals()->getFace(),"back")==0)){
+		glCullFace(GL_BACK);
+	}
+
+	cout << "drawing properties" << endl;
+	//DRAWING PROPERTIES
+	/**
+	 * TODO verificar se isto é aqui ou no update
+	 */
+	if((strcmp (parser->getGlobals()->getShading(),"flat")==0)){
+		glShadeModel(GL_FLAT);
+	}else {
+		glShadeModel(GL_SMOOTH);
+	}
+
+	if((strcmp (parser->getGlobals()->getDrawingMode(),"fill")==0)){
+		fill = true;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}else if(strcmp(parser->getGlobals()->getDrawingMode(),"point")==0){
+		point = true;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	}else if(strcmp (parser->getGlobals()->getDrawingMode(),"line")==0){
+		wire = true;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	cout << "set background "<< endl;
+	//background color
+	float* backColor = parser->getGlobals()->getBackgroundColor();
+	glClearColor(backColor[0],backColor[1],backColor[2],backColor[3]);
+
+	// initialize appearences;
+	setNodesAppearances();
+
+	setUpdatePeriod(30);
+
+	map<char*,Node*> temp = parser->getGraph();
+	map<char*,Node*>::iterator it=temp.begin();
+	for(unsigned int i=0;i<temp.size();i++,it++){
+		if(strcmp(it->first,"tabuleiro")==0){
+			this->board = (Board*)it->second->getPrimitives()[0];
+			this->boards.push_back(board);
+			break;
+		}
+	}
+
+	socket->connectSocket();
+
+	cout << "start updating" << endl;
 }
 
 void XMLScene::update(unsigned long t) {
-
+	map<char*,Node*> temp = parser->getGraph();
+	map<char*,Node*>::iterator it=temp.begin();
+	for(;it!=temp.end();it++){
+		it->second->update();
+	}
 }
 
 void XMLScene::display() {
-    sceneVar=0;
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
-    // Initialize Model-View matrix as identity (no transformation
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    // Apply transformations corresponding to the camera position relative to the origin
-    CGFscene::activeCamera->applyView();
-    // Draw (and update) light
-    drawLights();
-    
-    // Draw axis
-    axis.draw();
-    
-    glPushMatrix();
-    glPushName(-1);
-    map<char*,Node*> temp = parser->getGraph();
-    map<char*,Node*>::iterator it=temp.begin();
-    
-    for(unsigned int i=0;i<temp.size();i++,it++){
-        if(strcmp(parser->getRootid(),it->second->getId())==0){
-            it->second->draw();
-            break;
-        }
-    }
-    glPopMatrix();
-    swapPosition();
-    glutSwapBuffers();
+	sceneVar=0;
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	// Initialize Model-View matrix as identity (no transformation
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	// Apply transformations corresponding to the camera position relative to the origin
+	CGFscene::activeCamera->applyView();
+	// Draw (and update) light
+	drawLights();
+
+	// Draw axis
+	axis.draw();
+
+	glPushMatrix();
+	glPushName(-1);
+	map<char*,Node*> temp = parser->getGraph();
+	map<char*,Node*>::iterator it=temp.begin();
+
+	for(unsigned int i=0;i<temp.size();i++,it++){
+		if(strcmp(parser->getRootid(),it->second->getId())==0){
+			it->second->draw();
+			break;
+		}
+	}
+	glPopMatrix();
+	swapPosition();
+	glutSwapBuffers();
 }
 
 XMLScene::~XMLScene() {
@@ -331,95 +334,95 @@ void XMLScene::setDrawingType(char* drawingType){
 }
 
 void XMLScene::addPoint(int coordinate) {
-    if(pointsClicked.size()==4) // 2 pontos preenchidos
-    {
-        pointsClicked.clear();
-    }
-    
-    if(pointsClicked.size()==2) // um ponto
-    {
-        //verificar isto
-        if(this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces()==0){
-            pointsClicked.clear();
-        }
-        //se clicar numa peca do adversário
-        else if (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber() !=
-                   gameState->getCurrentPlayer()){
-            pointsClicked.clear()	;
-        }
-    }
+	if(pointsClicked.size()==4) // 2 pontos preenchidos
+	{
+		pointsClicked.clear();
+	}
 
-    this->pointsClicked.push_back(coordinate);
-    //request prolog availability for hte current piece
-    if(pointsClicked.size()==2)
-    {
-        cout << "answer requested to prolog\n";
-        socket->sendMessage((char*)createPieceCommand().c_str());
-        char *answer;
-        answer = socket->receiveMessage();
-        cout << answer << endl;
-    }
+	if(pointsClicked.size()==2) // um ponto
+	{
+		//verificar isto
+		if(this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getNumberOfPieces()==0){
+			pointsClicked.clear();
+		}
+		//se clicar numa peca do adversário
+		else if (this->board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber() !=
+				gameState->getCurrentPlayer()){
+			pointsClicked.clear()	;
+		}
+	}
+
+	this->pointsClicked.push_back(coordinate);
+	//request prolog availability for hte current piece
+	if(pointsClicked.size()==2)
+	{
+		cout << "answer requested to prolog\n";
+		socket->sendMessage((char*)createPieceCommand().c_str());
+		char *answer;
+		answer = socket->receiveMessage();
+		cout << answer << endl;
+	}
 }
 
 void XMLScene::swapPosition() {
-    if(pointsClicked.size()==4 &&
-       !(pointsClicked[0] == pointsClicked[2] && pointsClicked[1] == pointsClicked[3]) // nao ser a mesma peça
-       ){
-        
-        socket->sendMessage((char*)createPlayCommand().c_str());
+	if(pointsClicked.size()==4 &&
+			!(pointsClicked[0] == pointsClicked[2] && pointsClicked[1] == pointsClicked[3]) // nao ser a mesma peça
+	){
 
-        char *answer;
-        answer = socket->receiveMessage();
-        
-        if(checkBoardChanges(answer)) //se houver alteracoes, faz update
-        	board->updateBoard(answer, pointsClicked);
-        
-        pointsClicked.clear();
-        
-    }
+		socket->sendMessage((char*)createPlayCommand().c_str());
+
+		char *answer;
+		answer = socket->receiveMessage();
+
+		if(checkBoardChanges(answer)) //se houver alteracoes, faz update
+			board->updateBoard(answer, pointsClicked);
+
+		pointsClicked.clear();
+
+	}
 }
 
 bool XMLScene::checkBoardChanges(char * answer) {
-    stringstream comparingValue;
-    comparingValue  << board->boardToString() << ".";
-    
-    if(strcmp(comparingValue.str().c_str(),answer)==0){
-        return false;
-    } else {
-        gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
-        this->boards.push_back(board);
-        cout << "different board #" << this->boards.size() << endl;
-        return true;
-    }
+	stringstream comparingValue;
+	comparingValue  << board->boardToString() << ".";
+
+	if(strcmp(comparingValue.str().c_str(),answer)==0){
+		return false;
+	} else {
+		gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
+		this->boards.push_back(board);
+		cout << "different board #" << this->boards.size() << endl;
+		return true;
+	}
 
 }
 
 string XMLScene::createPieceCommand(){
-    stringstream command;
-    command << "verificarPeca(";
-    command << gameState->getCurrentPlayer() << "," << board->boardToString() << "," << pointsClicked[1] << ","
-    << pointsClicked[0] << "," << 0 << ","<< 0 << ",[], NovaLista).";
-    return command.str();
+	stringstream command;
+	command << "verificarPeca(";
+	command << gameState->getCurrentPlayer() << "," << board->boardToString() << "," << pointsClicked[1] << ","
+			<< pointsClicked[0] << "," << 0 << ","<< 0 << ",[], NovaLista).";
+	return command.str();
 }
 
 string XMLScene::createPlayCommand() {
-    stringstream command;
-    
-    command << "comando(";
-    command << board->boardToString() << ",";
-    command << gameState->getCurrentPlayer() << ",";
-    
-    if( (board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber() == board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->getPlayerNumber())
-       && pointsClicked[0]<4 && pointsClicked[0]>0 && pointsClicked[2]<4 && pointsClicked[2]>0
-       && pointsClicked[1]<6 && pointsClicked[1]>0 && pointsClicked[3]<6 && pointsClicked[3]>0) {
-        command << "2" << ",";
-    }
-    else {
-        command << "1" << ",";
-    }
-    
-    command << pointsClicked[1] << "," << pointsClicked[3] << "," << pointsClicked[0] << "," << pointsClicked[2] << ",";
-    command << "Tabuleiro).";
-    
-    return command.str();
+	stringstream command;
+
+	command << "comando(";
+	command << board->boardToString() << ",";
+	command << gameState->getCurrentPlayer() << ",";
+
+	if( (board->getCurrentState()[pointsClicked[0]][pointsClicked[1]]->getPlayerNumber() == board->getCurrentState()[pointsClicked[2]][pointsClicked[3]]->getPlayerNumber())
+			&& pointsClicked[0]<4 && pointsClicked[0]>0 && pointsClicked[2]<4 && pointsClicked[2]>0
+			&& pointsClicked[1]<6 && pointsClicked[1]>0 && pointsClicked[3]<6 && pointsClicked[3]>0) {
+		command << "2" << ",";
+	}
+	else {
+		command << "1" << ",";
+	}
+
+	command << pointsClicked[1] << "," << pointsClicked[3] << "," << pointsClicked[0] << "," << pointsClicked[2] << ",";
+	command << "Tabuleiro).";
+
+	return command.str();
 }

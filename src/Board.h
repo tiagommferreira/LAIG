@@ -19,7 +19,10 @@ public:
     void updateBoard(char* board, vector<int> pointsClicked);
     string boardToString();
     void setPosition(int x, int y, int player, int pieces);
+    void finishMovePiece(vector<int> pointsClicked);
+    void startAnimation(vector<int> pointsClicked);
     vector<vector< Stack * > > getCurrentState();
+    void update();
 	Board();
 	void draw();
     CGFappearance * app1;

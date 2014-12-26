@@ -10,6 +10,7 @@
 #include "Evaluator.h"
 #include "Board.h"
 #include <cmath>
+#include <typeinfo>
 
 using namespace std;
 class Node {
@@ -266,14 +267,14 @@ public:
 			for(unsigned int i=0;i<linear->getControlPoints().size()-1;i++){
 				float deltaX,deltaY,deltaZ;
 				deltaX = (linear->getControlPoints()[i+1][0]-linear->getControlPoints()[i][0])
-																								/ (linear->getDistances()[i]*linear->getTime()/
-																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																										/ (linear->getDistances()[i]*linear->getTime()/
+																												linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaY = (linear->getControlPoints()[i+1][1]-linear->getControlPoints()[i][1])
-																								/ (linear->getDistances()[i]*linear->getTime()/
-																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																										/ (linear->getDistances()[i]*linear->getTime()/
+																												linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 				deltaZ = (linear->getControlPoints()[i+1][2]-linear->getControlPoints()[i][2])
-																								/ (linear->getDistances()[i]*linear->getTime()/
-																										linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
+																										/ (linear->getDistances()[i]*linear->getTime()/
+																												linear->getDistances()[linear->getControlPoints().size()-1] * 33.333);
 
 				linear->addDeltaX(deltaX);
 				linear->addDeltaY(deltaY);
@@ -364,7 +365,7 @@ public:
 
 	void drawPrimitives() {
 		for(unsigned int i = 0; i < primitives.size(); i++) {
-            if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
+			if(strcmp(primitives[i]->getValue(), "rectangle") == 0) {
 				drawRectangle(
 						primitives[i]->getXY1(),
 						primitives[i]->getXY2());
@@ -399,11 +400,11 @@ public:
 				Plane* plane = (Plane*) primitives[i];
 
 				GLfloat ctrlpoints[4][3] = {
-                    {  0, 0, 0},
-                    { 0, 1, 0},
-                    {  1, 0.0, 0},
-                    { 1, 1, 0}
-						 };
+						{  0, 0, 0},
+						{ 0, 1, 0},
+						{  1, 0.0, 0},
+						{ 1, 1, 0}
+				};
 
 				Evaluator* eval = new Evaluator(NULL, plane->getParts(),plane->getParts(),2,"fill", &ctrlpoints[0][0]);
 				eval->drawPlane();
@@ -422,67 +423,74 @@ public:
 			}else if(strcmp(primitives[i]->getValue(),"vehicle")==0) {
 				Vehicle* v = (Vehicle*) primitives[i];
 				v->draw();
-            }else if(strcmp(primitives[i]->getValue(),"board")==0) {
-                Board * board = (Board*) primitives[i];
-                board->draw();
-            }
+			}else if(strcmp(primitives[i]->getValue(),"board")==0) {
+				Board * board = (Board*) primitives[i];
+				board->draw();
+			}
 		}
 	}
 
 	void update(){
-		if(!animations[currentAnimation]->isOver()){
-			if(animations[currentAnimation]->getType()==0){
-				//circular animation
-				CircularAnimation *circ = (CircularAnimation*) this->animations[currentAnimation];
-				if(circ->getRotationAngle() > circ->getCurrentAngle()){
-					circ->setCurrentAngle(circ->getCurrentAngle() + circ->getDeltaAngle());
-				} else{
-					circ->setOver(true);
-				}
-				this->animations[currentAnimation] = circ;
-			}else {
-
-				LinearAnimation *linear = (LinearAnimation*) this->animations[currentAnimation];
-				//linear animation
-				linear->setCurrentX(linear->getCurrentX()+linear->getDeltaX()[linear->getCurrentAnimState()]);
-				linear->setCurrentY(linear->getCurrentY()+linear->getDeltaY()[linear->getCurrentAnimState()]);
-				linear->setCurrentZ(linear->getCurrentZ()+linear->getDeltaZ()[linear->getCurrentAnimState()]);
-
-				float newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
-						pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
-						pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
-				if(linear->getCurrentX()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
-						linear->getCurrentX()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
-						linear->getCurrentY()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
-						linear->getCurrentY()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
-						linear->getCurrentZ()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][2] &&
-						linear->getCurrentZ()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][2]){
-
-					linear->setCurrentAnimState(linear->getCurrentAnimState()+1);
-
-					if(linear->getCurrentAnimState() == linear->getControlPoints().size()-1 ){
-						linear->setOver(true);
-					} else {
-						newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
-								pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
-								pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
-						linear->setLastDistance(newDistance);
-					}
-				}
-
-
-				linear->setLastDistance(newDistance);
-				this->animations[currentAnimation] = linear;
-			}
-
-		} else {
-			if(currentAnimation < animations.size()-1){
-				currentAnimation++;
-				calculateAnimations();
-				setAnimationMatrix();
-			}
+		for(int i = 0; i<primitives.size(); i++) {
+			primitives[i]->update();
 
 		}
+		if(animated) {
+			if(!animations[currentAnimation]->isOver()){
+				if(animations[currentAnimation]->getType()==0){
+					//circular animation
+					CircularAnimation *circ = (CircularAnimation*) this->animations[currentAnimation];
+					if(circ->getRotationAngle() > circ->getCurrentAngle()){
+						circ->setCurrentAngle(circ->getCurrentAngle() + circ->getDeltaAngle());
+					} else{
+						circ->setOver(true);
+					}
+					this->animations[currentAnimation] = circ;
+				}else {
+
+					LinearAnimation *linear = (LinearAnimation*) this->animations[currentAnimation];
+					//linear animation
+					linear->setCurrentX(linear->getCurrentX()+linear->getDeltaX()[linear->getCurrentAnimState()]);
+					linear->setCurrentY(linear->getCurrentY()+linear->getDeltaY()[linear->getCurrentAnimState()]);
+					linear->setCurrentZ(linear->getCurrentZ()+linear->getDeltaZ()[linear->getCurrentAnimState()]);
+
+					float newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
+							pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
+							pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
+					if(linear->getCurrentX()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
+							linear->getCurrentX()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][0] &&
+							linear->getCurrentY()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
+							linear->getCurrentY()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][1] &&
+							linear->getCurrentZ()-0.1 < linear->getControlPoints()[linear->getCurrentAnimState()+1][2] &&
+							linear->getCurrentZ()+0.1 > linear->getControlPoints()[linear->getCurrentAnimState()+1][2]){
+
+						linear->setCurrentAnimState(linear->getCurrentAnimState()+1);
+
+						if(linear->getCurrentAnimState() == linear->getControlPoints().size()-1 ){
+							linear->setOver(true);
+						} else {
+							newDistance =sqrt(pow((linear->getCurrentX()-linear->getControlPoints()[linear->getCurrentAnimState()+1][0]),2)+
+									pow((linear->getCurrentY()-linear->getControlPoints()[linear->getCurrentAnimState()+1][1]),2) +
+									pow((linear->getCurrentZ()-linear->getControlPoints()[linear->getCurrentAnimState()+1][2]),2));
+							linear->setLastDistance(newDistance);
+						}
+					}
+
+
+					linear->setLastDistance(newDistance);
+					this->animations[currentAnimation] = linear;
+				}
+
+			} else {
+				if(currentAnimation < animations.size()-1){
+					currentAnimation++;
+					calculateAnimations();
+					setAnimationMatrix();
+				}
+
+			}
+		}
+
 	}
 
 	void draw(){

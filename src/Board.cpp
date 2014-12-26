@@ -150,7 +150,30 @@ void Board::updateBoard(char * board, vector<int> pointsClicked) {
         }
     }
 	 */
+	startAnimation(pointsClicked);
+	finishMovePiece(pointsClicked);
 
+}
+
+void Board::startAnimation(vector<int> pointsClicked) {
+	int xFinal = pointsClicked[3];
+	int yFinal = pointsClicked[2];
+	int xInit = pointsClicked[1];
+	int yInit = pointsClicked[0];
+	int numPiecesInit = currentState[yInit][xInit]->getNumberOfPieces();
+	vector<int> startPoints;
+	startPoints.push_back(xFinal);
+	startPoints.push_back(yFinal);
+	startPoints.push_back(xInit);
+	startPoints.push_back(yInit);
+	startPoints.push_back(numPiecesInit);
+
+	Stack* stackToAnimate = currentState[yFinal][xFinal];
+	stackToAnimate->setAnimated(true);
+	stackToAnimate->setAnimStartPoint(startPoints);
+}
+
+void Board::finishMovePiece(vector<int>pointsClicked) {
 	int xInit, yInit, xFinal, yFinal, numPiecesInit, numPlayerInit, numPiecesFinal, numPiecesPosFinal;
 
 	xInit = pointsClicked[1];
@@ -163,6 +186,11 @@ void Board::updateBoard(char * board, vector<int> pointsClicked) {
 	numPiecesFinal = numPiecesInit - 1;
 
 	numPiecesPosFinal = currentState[yFinal][xFinal]->getNumberOfPieces();
+
+	cout << "xInit = " << xInit << endl;
+	cout << "yInit = " << yInit << endl;
+	cout << "xInit = " << xFinal << endl;
+	cout << "yFinal = " << yFinal << endl;
 
 	(numPiecesInit == 1) ? (setPosition(xInit,yInit,0,0)) : (setPosition(xInit,yInit,numPlayerInit,numPiecesFinal));
 	setPosition(xFinal,yFinal,numPlayerInit, numPiecesPosFinal+1);
@@ -199,4 +227,11 @@ string Board::boardToString() {
 	return board.str();
 }
 
-
+void Board::update() {
+	for(int i = 0; i < currentState.size(); i++) {
+		for(int j = 0; j<currentState[i].size(); j++) {
+			if(currentState[i][j]->getAnimated())
+				currentState[i][j]->update();
+		}
+	}
+}

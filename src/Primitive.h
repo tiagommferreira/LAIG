@@ -20,6 +20,10 @@ private:
 public:
 	Primitive(char* value) {this->value = value;}
 
+	virtual void update() {
+
+	}
+
 	void setXY1(char* xy1) {
 		sscanf(xy1, "%f %f",&this->xy1[0],&this->xy1[1]);
 	}
@@ -90,6 +94,9 @@ public:
 	int getParts() {
 		return parts;
 	}
+	void update() {
+
+	}
 };
 
 class Patch: public Primitive {
@@ -122,6 +129,9 @@ public:
 	vector<vector<GLfloat> > getPoints() {
 		return points;
 	}
+	void update() {
+
+		}
 
 };
 
@@ -158,33 +168,10 @@ public:
 		eval->drawPatch();
 		glPopMatrix();
 	}
+	void update() {
+
+		}
 };
-
-/*
-class Flag: public Plane, CGFshader {
-private:
-        int elapsedTime;
-        GLint baseImageLoc;
-        float time;
-public:
-        Flag(): Plane(100,"flag") {
-
-                elapsedTime=0;
-
-                init("flag.vert", "flag.frag");
-                CGFshader::bind();
-
-                time = glGetUniformLocation(id(), "timer");
-                baseImageLoc = glGetUniformLocation(id(), "baseImage");
-                glUniform1i(baseImageLoc, 0);
-
-        }
-        void update() {
-
-        }
-
-};
-*/
 
 
 

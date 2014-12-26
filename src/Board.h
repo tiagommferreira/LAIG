@@ -8,6 +8,7 @@
 #include "Stack.h"
 #include <sstream>
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Board: public Primitive {
@@ -15,9 +16,9 @@ private:
     Section* section;
     vector<vector< Stack *> > currentState;
 public:
-    void updateBoard(char* board);
+    void updateBoard(char* board, vector<int> pointsClicked);
     string boardToString();
-    
+    void setPosition(int x, int y, int player, int pieces);
     vector<vector< Stack * > > getCurrentState();
 	Board();
 	void draw();

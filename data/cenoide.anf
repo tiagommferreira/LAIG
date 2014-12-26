@@ -19,7 +19,7 @@
     </lights>
 
     <textures>
-        <texture id="madeira" file="/Users/ricardo/Desktop/CGFlib/CGFexample/data/madeira.png" texlength_s="1" texlength_t="1" />
+        <texture id="madeira" file="madeira.png" texlength_s="1" texlength_t="1" />
     </textures>
 
     <animations>

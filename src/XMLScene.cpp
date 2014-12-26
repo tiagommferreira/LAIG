@@ -371,25 +371,25 @@ void XMLScene::swapPosition() {
         char *answer;
         answer = socket->receiveMessage();
         
-        checkBoardChanges(answer);
-        
-        board->updateBoard(answer);
+        if(checkBoardChanges(answer)) //se houver alteracoes, faz update
+        	board->updateBoard(answer, pointsClicked);
         
         pointsClicked.clear();
         
     }
 }
 
-void XMLScene::checkBoardChanges(char * answer) {
+bool XMLScene::checkBoardChanges(char * answer) {
     stringstream comparingValue;
     comparingValue  << board->boardToString() << ".";
     
     if(strcmp(comparingValue.str().c_str(),answer)==0){
-        
+        return false;
     } else {
         gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
         this->boards.push_back(board);
         cout << "different board #" << this->boards.size() << endl;
+        return true;
     }
 
 }

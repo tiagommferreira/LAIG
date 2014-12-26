@@ -42,7 +42,7 @@ public:
     void clickPiece(int);
     void addPoint(int);
     void swapPosition();
-    void checkBoardChanges(char*);
+    bool checkBoardChanges(char*);
     string createPlayCommand();
     string createPieceCommand();
 

@@ -74,11 +74,11 @@ public:
 						glTranslated(deltaX+xAnim, -(deltaY+yAnim), 0);
 				}
 				else if(animType == "fusion") {
-					//glTranslated(deltaX+xAnim, -(deltaY+yAnim), 0);
+					if(i == abs(this->numberOfPieces-numPecasInit))
+						glTranslated(deltaX+xAnim, -(deltaY+yAnim), zAnim);
 				}
 
 			}
-
 
 			GLUquadric *quadratic = gluNewQuadric();
 			gluQuadricTexture(quadratic, true);
@@ -141,71 +141,54 @@ public:
 		xInit = animStartPoint[2];
 		yInit = animStartPoint[3];
 
-		float distance = sqrt(pow(xFinal-xInit,2)+pow(yFinal-yInit,2));
-		float speed = distance/2.0;
-		float toCover = speed/(1000.0/30.0);
 
-		float slope = ((float)yInit-(yFinal+yAnim))/((float)xInit-(xFinal+xAnim));
-		cout << "xAnim: " << xAnim << endl;
-		cout << "yAnim: " << yAnim << endl;
-		cout << slope << endl;
+		float xTemp = xInit + xAnim;
+		float yTemp = yInit + yAnim;
 
-		if(slope < 1) {
-			float toCoverY = toCover/2.0;
-			float toCoverX = toCover*((sqrt(pow(toCover,2))-pow(toCoverY,2))/toCover);
-			if(xFinal > xInit) {
-				xAnim += toCoverX;
+		if(xInit == xFinal) {
+			if(yInit > yFinal) {
+				yAnim -= (0.8/(1000.0/30.0))*2.0;
 			}
-			else if(xFinal < xInit) {
-				xAnim -= toCoverX;
+			else {
+				yAnim += (0.8/(1000.0/30.0))*2.0;
 			}
-
-			if(yFinal > yInit) {
-				yAnim += toCoverY;
+		} else if(yInit == yFinal) {
+			if(xInit > xFinal) {
+				xAnim -= (0.8/(1000.0/30.0))*2.0;
 			}
-			else if(yFinal < yInit) {
-				yAnim -= toCoverY;
+			else {
+				xAnim += (0.8/(1000.0/30.0))*2.0;
 			}
-		} else if(slope > 1) {
-			float toCoverX = toCover/2.0;
-			float toCoverY = toCover*((sqrt(pow(toCover,2))-pow(toCoverX,2))/toCover);
-			if(xFinal > xInit) {
-				xAnim += toCoverX;
+		}
+		else if(xInit > xFinal) {
+			float toMoveTotal = sqrt(pow(0.8,2)*2);
+			if(yInit > yFinal) {
+				yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
 			}
-			else if(xFinal < xInit) {
-				xAnim -= toCoverX;
+			else {
+				yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
 			}
-
-			if(yFinal > yInit) {
-				yAnim += toCoverY;
+		}
+		else if(xInit < xFinal) {
+			float toMoveTotal = sqrt(pow(0.8,2)*2);
+			if(yInit > yFinal) {
+				yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
 			}
-			else if(yFinal < yInit) {
-				yAnim -= toCoverY;
-			}
-		} else {
-			float toCoverBoth = sqrt(pow(toCover,2)/2.0);
-
-			if(xFinal > xInit) {
-				xAnim += toCoverBoth;
-			}
-			else if(xFinal < xInit) {
-				xAnim -= toCoverBoth;
-			}
-
-			if(yFinal > yInit) {
-				yAnim += toCoverBoth;
-			}
-			else if(yFinal < yInit) {
-				yAnim -= toCoverBoth;
+			else {
+				yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
 			}
 		}
 
-		if((zAnim < 0-(0.3*(3-numberOfPieces))) && zAscending == false ) {
+		if( abs(xTemp - xFinal) < 0.05 && abs(yTemp - yFinal) < 0.05 ) {
 			animated = false;
 			zAscending = true;
-			zAnim = 0;
 			xAnim = 0;
 			yAnim = 0;
+			zAnim = 0;
 		}
 	}
 
@@ -216,7 +199,6 @@ public:
 		xInit = animStartPoint[2];
 		yInit = animStartPoint[3];
 
-		float slope = ((float)yInit-(yFinal+yAnim))/((float)xInit-(xFinal+xAnim));
 
 		float xTemp = xInit + xAnim;
 		float yTemp = yInit + yAnim;
@@ -261,6 +243,7 @@ public:
 
 		if( abs(xTemp - xFinal) < 0.05 && abs(yTemp - yFinal) < 0.05 ) {
 			animated = false;
+			zAscending = true;
 			xAnim = 0;
 			yAnim = 0;
 			zAnim = 0;
@@ -268,7 +251,8 @@ public:
 	}
 
 	void doFusionAnimation() {
-
+		zAnim += (0.3*numberOfPieces)/(1000.0/30.0);
+		doMoveAnimation();
 	}
 
 	const string& getAnimType() const {
@@ -278,6 +262,7 @@ public:
 	void setAnimType(const string& animType) {
 		this->animType = animType;
 	}
+
 };
 
 #endif /* defined(__CGFExample__Stack__) */

@@ -201,7 +201,7 @@ string Board::finishMovePiece(vector<int>pointsClicked) {
 		return "exit";
 	}
 	else { //moveu ou fundiu
-		if(numPiecesInit == 3 && numPiecesPosFinal == 0) { //moveu
+		if(numPiecesInit != 0 && numPiecesPosFinal == 0) { //moveu
 			cout << "moveu" << endl;
 			setPosition(xInit,yInit,0,0);
 			setPosition(xFinal,yFinal,numPlayerInit, numPiecesInit);

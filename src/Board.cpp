@@ -150,12 +150,13 @@ void Board::updateBoard(char * board, vector<int> pointsClicked) {
         }
     }
 	 */
-	startAnimation(pointsClicked);
-	finishMovePiece(pointsClicked);
+
+	string type = finishMovePiece(pointsClicked);
+	startAnimation(pointsClicked, type);
 
 }
 
-void Board::startAnimation(vector<int> pointsClicked) {
+void Board::startAnimation(vector<int> pointsClicked, string type) {
 	int xFinal = pointsClicked[3];
 	int yFinal = pointsClicked[2];
 	int xInit = pointsClicked[1];
@@ -171,9 +172,10 @@ void Board::startAnimation(vector<int> pointsClicked) {
 	Stack* stackToAnimate = currentState[yFinal][xFinal];
 	stackToAnimate->setAnimated(true);
 	stackToAnimate->setAnimStartPoint(startPoints);
+	stackToAnimate->setAnimType(type);
 }
 
-void Board::finishMovePiece(vector<int>pointsClicked) {
+string Board::finishMovePiece(vector<int>pointsClicked) {
 	int xInit, yInit, xFinal, yFinal, numPiecesInit, numPlayerInit, numPiecesFinal, numPiecesPosFinal;
 
 	xInit = pointsClicked[1];
@@ -192,8 +194,40 @@ void Board::finishMovePiece(vector<int>pointsClicked) {
 	cout << "xInit = " << xFinal << endl;
 	cout << "yFinal = " << yFinal << endl;
 
-	(numPiecesInit == 1) ? (setPosition(xInit,yInit,0,0)) : (setPosition(xInit,yInit,numPlayerInit,numPiecesFinal));
-	setPosition(xFinal,yFinal,numPlayerInit, numPiecesPosFinal+1);
+	if(posIsOutter(xFinal,yFinal)) { //saiu
+		(numPiecesInit == 1) ? (setPosition(xInit,yInit,0,0)) : (setPosition(xInit,yInit,numPlayerInit,numPiecesFinal));
+		setPosition(xFinal,yFinal,numPlayerInit, numPiecesPosFinal+1);
+		cout << "saiu" << endl;
+		return "exit";
+	}
+	else { //moveu ou fundiu
+		if(numPiecesInit == 3 && numPiecesPosFinal == 0) { //moveu
+			cout << "moveu" << endl;
+			setPosition(xInit,yInit,0,0);
+			setPosition(xFinal,yFinal,numPlayerInit, numPiecesInit);
+			return "move";
+		}
+		else { //fundiu
+			cout << "fundiu" << endl;
+			setPosition(xInit,yInit,0,0);
+			setPosition(xFinal,yFinal,numPlayerInit, numPiecesInit+numPiecesPosFinal);
+			return "fusion";
+		}
+	}
+
+}
+
+bool Board::posIsOutter(int xFinal, int yFinal) {
+	if(yFinal == 0 || yFinal == 4) {
+		return true;
+	}
+	else {
+		if(xFinal == 0 || xFinal == 6) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Board::setPosition(int x, int y, int player, int pieces) {

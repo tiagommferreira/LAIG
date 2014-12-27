@@ -19,8 +19,9 @@ public:
     void updateBoard(char* board, vector<int> pointsClicked);
     string boardToString();
     void setPosition(int x, int y, int player, int pieces);
-    void finishMovePiece(vector<int> pointsClicked);
-    void startAnimation(vector<int> pointsClicked);
+    string finishMovePiece(vector<int> pointsClicked);
+    void startAnimation(vector<int> pointsClicked, string type);
+    bool posIsOutter(int xFinal, int yFinal);
     vector<vector< Stack * > > getCurrentState();
     void update();
 	Board();

@@ -16,6 +16,7 @@ private:
 	bool animated, zAscending;
 	vector<int> animStartPoint;
 	float xAnim, yAnim, zAnim;
+	string animType;
 public:
 	Stack(int numberOfPieces, int player){
 		this->numberOfPieces=numberOfPieces;
@@ -52,7 +53,7 @@ public:
 		glTranslated(0.5,+0.5,0);
 		for(int i=0;i<this->numberOfPieces;i++){
 
-			if( (i == this->numberOfPieces-1) && animated) {
+			if(animated) {
 				int xFinal, xInit, yInit, yFinal, numPecasInit;
 				xFinal = animStartPoint[0];
 				yFinal = animStartPoint[1];
@@ -62,9 +63,22 @@ public:
 
 				int deltaX = xInit - xFinal;
 				int deltaY = yInit - yFinal;
-				glTranslated(deltaX+xAnim, -(deltaY+yAnim), (0.3*numPecasInit)-0.3+zAnim);
+
+				if(animType == "exit") {
+					if(i == this->numberOfPieces-1) {
+						glTranslated(deltaX+xAnim, -(deltaY+yAnim), (0.3*numPecasInit)-0.3+zAnim);
+					}
+				}
+				else if(animType == "move") {
+					if(i==0)
+						glTranslated(deltaX+xAnim, -(deltaY+yAnim), 0);
+				}
+				else if(animType == "fusion") {
+					//glTranslated(deltaX+xAnim, -(deltaY+yAnim), 0);
+				}
 
 			}
+
 
 			GLUquadric *quadratic = gluNewQuadric();
 			gluQuadricTexture(quadratic, true);
@@ -100,7 +114,19 @@ public:
 	}
 
 	void update() {
+		if(animType == "exit") {
+			doExitAnimation();
+		}
+		else if(animType == "move") {
+			doMoveAnimation();
+		}
+		else if(animType == "fusion") {
+			doFusionAnimation();
+		}
 
+	}
+
+	void doExitAnimation() {
 		if(zAscending) {
 			zAnim += (1+(0.3*(3-animStartPoint[4])))/(1000.0/30.0);
 			(zAnim >= 1) ? (zAscending = false) : (zAscending = true);
@@ -181,6 +207,57 @@ public:
 			xAnim = 0;
 			yAnim = 0;
 		}
+	}
+
+	void doMoveAnimation() {
+		int xFinal, xInit, yInit, yFinal, numPecasInit;
+		xFinal = animStartPoint[0];
+		yFinal = animStartPoint[1];
+		xInit = animStartPoint[2];
+		yInit = animStartPoint[3];
+
+		float slope = ((float)yInit-(yFinal+yAnim))/((float)xInit-(xFinal+xAnim));
+
+		float xTemp = xInit + xAnim;
+		float yTemp = yInit + yAnim;
+
+		if(xInit == xFinal) {
+			if(yInit > yFinal) {
+				yAnim -= (0.8/(1000.0/30.0));
+			}
+			else {
+				yAnim += (0.8/(1000.0/30.0));
+			}
+		} else if(yInit == yFinal) {
+			if(xInit > xFinal) {
+				xAnim -= (0.8/(1000.0/30.0));
+			}
+			else {
+				xAnim += (0.8/(1000.0/30.0));
+			}
+		}
+		cout << "xTEMP" << xTemp << endl;
+		cout << "xFinal" << xFinal << endl;
+		cout << "yTEMP" << yTemp << endl;
+		cout << "yFinal" << yFinal << endl;
+		if( abs(xTemp - xFinal) < 0.05 && abs(yTemp - yFinal) < 0.05 ) {
+			animated = false;
+			xAnim = 0;
+			yAnim = 0;
+			zAnim = 0;
+		}
+	}
+
+	void doFusionAnimation() {
+
+	}
+
+	const string& getAnimType() const {
+		return animType;
+	}
+
+	void setAnimType(const string& animType) {
+		this->animType = animType;
 	}
 };
 

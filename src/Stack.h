@@ -236,10 +236,29 @@ public:
 				xAnim += (0.8/(1000.0/30.0));
 			}
 		}
-		cout << "xTEMP" << xTemp << endl;
-		cout << "xFinal" << xFinal << endl;
-		cout << "yTEMP" << yTemp << endl;
-		cout << "yFinal" << yFinal << endl;
+		else if(xInit > xFinal) {
+			float toMoveTotal = sqrt(pow(0.8,2)*2);
+			if(yInit > yFinal) {
+				yAnim -= (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+				xAnim -= (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+			}
+			else {
+				yAnim += (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+				xAnim -= (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+			}
+		}
+		else if(xInit < xFinal) {
+			float toMoveTotal = sqrt(pow(0.8,2)*2);
+			if(yInit > yFinal) {
+				yAnim -= (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+				xAnim += (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+			}
+			else {
+				yAnim += (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+				xAnim += (sqrt((pow(toMoveTotal,2)/2.0))/(1000.0/30.0));
+			}
+		}
+
 		if( abs(xTemp - xFinal) < 0.05 && abs(yTemp - yFinal) < 0.05 ) {
 			animated = false;
 			xAnim = 0;

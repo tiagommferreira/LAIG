@@ -17,6 +17,7 @@ private:
 	vector<int> animStartPoint;
 	float xAnim, yAnim, zAnim;
 	string animType;
+	int numPiecesToFuse;
 public:
 	Stack(int numberOfPieces, int player){
 		this->numberOfPieces=numberOfPieces;
@@ -27,6 +28,7 @@ public:
 		this->yAnim = 0;
 		this->zAnim = 0;
 		this->zAscending = true;
+		this->numPiecesToFuse = 0;
 		float amb[4] = {0.4,0.4,0.4,1};
 		float dif[4] = {0.5,0.5,0.5,1};
 		float spec[4] = {1,1,1,1};
@@ -66,7 +68,7 @@ public:
 
 				if(animType == "exit") {
 					if(i == this->numberOfPieces-1) {
-						glTranslated(deltaX+xAnim, -(deltaY+yAnim), (0.3*numPecasInit)-0.3+zAnim);
+						glTranslated(deltaX+xAnim, -(deltaY+yAnim), (0.3*numPecasInit)-0.3+0);
 					}
 				}
 				else if(animType == "move") {
@@ -74,8 +76,13 @@ public:
 						glTranslated(deltaX+xAnim, -(deltaY+yAnim), 0);
 				}
 				else if(animType == "fusion") {
-					if(i == abs(this->numberOfPieces-numPecasInit))
-						glTranslated(deltaX+xAnim, -(deltaY+yAnim), zAnim);
+					if(i == abs(this->numberOfPieces-this->numPiecesToFuse)) {
+						if(numPiecesToFuse == 1)
+							glTranslated(deltaX+xAnim, -(deltaY+yAnim), -0.3-(0.3*this->numPiecesToFuse)+zAnim);
+						else
+							glTranslated(deltaX+xAnim, -(deltaY+yAnim), -0.3+zAnim);
+					}
+
 				}
 
 			}
@@ -93,6 +100,7 @@ public:
 	void setNumberOfPieces(int pieces){
 		this->numberOfPieces=pieces;
 	}
+
 	void setPlayer( int player) {
 		this->player = player;
 	}
@@ -193,7 +201,7 @@ public:
 	}
 
 	void doMoveAnimation() {
-		int xFinal, xInit, yInit, yFinal, numPecasInit;
+		int xFinal, xInit, yInit, yFinal;
 		xFinal = animStartPoint[0];
 		yFinal = animStartPoint[1];
 		xInit = animStartPoint[2];
@@ -251,7 +259,10 @@ public:
 	}
 
 	void doFusionAnimation() {
-		zAnim += (0.3*numberOfPieces)/(1000.0/30.0);
+		if(numPiecesToFuse == 1)
+			zAnim += ((0.3*numberOfPieces)-0.3)/(1000.0/30.0);
+		else
+			zAnim += 0.3/(1000.0/30.0);
 		doMoveAnimation();
 	}
 
@@ -263,6 +274,13 @@ public:
 		this->animType = animType;
 	}
 
+	int getNumPiecesToFuse() const {
+		return numPiecesToFuse;
+	}
+
+	void setNumPiecesToFuse(int numPiecesToFuse) {
+		this->numPiecesToFuse = numPiecesToFuse;
+	}
 };
 
 #endif /* defined(__CGFExample__Stack__) */

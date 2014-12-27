@@ -211,6 +211,7 @@ string Board::finishMovePiece(vector<int>pointsClicked) {
 			cout << "fundiu" << endl;
 			setPosition(xInit,yInit,0,0);
 			setPosition(xFinal,yFinal,numPlayerInit, numPiecesInit+numPiecesPosFinal);
+			currentState[yFinal][xFinal]->setNumPiecesToFuse(numPiecesInit);
 			return "fusion";
 		}
 	}

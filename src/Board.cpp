@@ -161,13 +161,13 @@ void Board::startAnimation(vector<int> pointsClicked, string type) {
 	int yFinal = pointsClicked[2];
 	int xInit = pointsClicked[1];
 	int yInit = pointsClicked[0];
-	int numPiecesInit = currentState[yInit][xInit]->getNumberOfPieces();
+	int numPiecesFinal = currentState[yFinal][xFinal]->getNumberOfPieces();
 	vector<int> startPoints;
 	startPoints.push_back(xFinal);
 	startPoints.push_back(yFinal);
 	startPoints.push_back(xInit);
 	startPoints.push_back(yInit);
-	startPoints.push_back(numPiecesInit);
+	startPoints.push_back(numPiecesFinal);
 
 	Stack* stackToAnimate = currentState[yFinal][xFinal];
 	stackToAnimate->setAnimated(true);

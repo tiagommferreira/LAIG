@@ -18,6 +18,7 @@ private:
 	float xAnim, yAnim, zAnim;
 	string animType;
 	int numPiecesToFuse;
+	float dist;
 public:
 	Stack(int numberOfPieces, int player){
 		this->numberOfPieces=numberOfPieces;
@@ -29,6 +30,7 @@ public:
 		this->zAnim = 0;
 		this->zAscending = true;
 		this->numPiecesToFuse = 0;
+		this->dist = 0;
 		float amb[4] = {0.4,0.4,0.4,1};
 		float dif[4] = {0.5,0.5,0.5,1};
 		float spec[4] = {1,1,1,1};
@@ -68,7 +70,7 @@ public:
 
 				if(animType == "exit") {
 					if(i == this->numberOfPieces-1) {
-						glTranslated(deltaX+xAnim, -(deltaY+yAnim), (0.3*numPecasInit)-0.3+0);
+						glTranslated(deltaX+xAnim, -(deltaY+yAnim), (0.3*numPecasInit)+zAnim);
 					}
 				}
 				else if(animType == "move") {
@@ -171,23 +173,91 @@ public:
 		else if(xInit > xFinal) {
 			float toMoveTotal = sqrt(pow(0.8,2)*2);
 			if(yInit > yFinal) {
-				yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-				xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				if(abs(xInit-xFinal) < 2) { //toda de lado
+					float toCoverX = (3.2/(1000.0/30.0))/4.0;
+					float toCoverY = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverX,2))/(3.2/(1000.0/30.0)))/2.0);
+
+					yAnim -= toCoverY;
+					xAnim -= toCoverX;
+				}
+				else if(abs(yInit-yFinal) < 2) { //toda de lado
+					float toCoverY = (3.2/(1000.0/30.0))/4.0;
+					float toCoverX = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverY,2))/(3.2/(1000.0/30.0)))/2.0);
+
+					yAnim -= toCoverY;
+					xAnim -= toCoverX;
+				}
+				else {
+					yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				}
+
 			}
 			else {
-				yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-				xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				if(abs(xInit-xFinal) < 2) { //toda de lado
+					float toCoverX = (3.2/(1000.0/30.0))/4.0;
+					float toCoverY = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverX,2))/(3.2/(1000.0/30.0)))/2.0);
+
+					yAnim += toCoverY;
+					xAnim -= toCoverX;
+				}
+				else if(abs(yInit-yFinal) < 2) { //toda de lado
+					float toCoverY = (3.2/(1000.0/30.0))/4.0;
+					float toCoverX = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverY,2))/(3.2/(1000.0/30.0)))/2.0);
+
+					yAnim += toCoverY;
+					xAnim -= toCoverX;
+				}
+				else {
+					yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				}
+
 			}
 		}
 		else if(xInit < xFinal) {
 			float toMoveTotal = sqrt(pow(0.8,2)*2);
 			if(yInit > yFinal) {
-				yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-				xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				if(abs(xInit-xFinal) < 2) { //toda de lado
+					cout << "aqui" << endl;
+					float toCoverX = (3.2/(1000.0/30.0))/4.0;
+					float toCoverY = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverX,2))/(3.2/(1000.0/30.0)))/2.0);
+
+					yAnim -= toCoverY;
+					xAnim += toCoverX;
+				}
+				else if(abs(yInit-yFinal) < 2) { //toda de lado
+					float toCoverY = (3.2/(1000.0/30.0))/4.0;
+					float toCoverX = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverY,2))/(3.2/(1000.0/30.0)))/2.0);
+
+					yAnim -= toCoverY;
+					xAnim += toCoverX;
+				}
+				else {
+					yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				}
+
 			}
 			else {
-				yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-				xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				if(abs(xInit-xFinal) < 2) { //toda de lado
+					float toCoverX = (3.2/(1000.0/30.0))/4.0;
+					float toCoverY = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverX,2))/(3.2/(1000.0/30.0)))/2.0);
+					yAnim += toCoverY;
+					xAnim += toCoverX;
+				}
+				else if(abs(yInit-yFinal) < 2) { //toda de lado
+					float toCoverY = (3.2/(1000.0/30.0))/4.0;
+					float toCoverX = ((3.2/(1000.0/30.0))*((sqrt(pow((3.2/(1000.0/30.0)),2))-pow(toCoverY,2))/(3.2/(1000.0/30.0)))/2.0);
+
+					yAnim += toCoverY;
+					xAnim += toCoverX;
+				}
+				else {
+					yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+				}
+
 			}
 		}
 
@@ -197,6 +267,7 @@ public:
 			xAnim = 0;
 			yAnim = 0;
 			zAnim = 0;
+			dist = 0;
 		}
 	}
 

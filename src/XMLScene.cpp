@@ -136,7 +136,7 @@ void XMLScene::display() {
         time(&now);
         double seconds = difftime(now,lastAnimationTime);
         cout << "seconds: " << seconds << endl;
-        if(seconds > 2) {
+        if(seconds > 1) {
             if(currentAnimationState+2 <= states.size()) {
                 board->updateBoard((char*) states[currentAnimationState+1].c_str(), pointsClickedOverTime[currentAnimationState]);
                 lastAnimationTime=now;
@@ -455,8 +455,10 @@ void XMLScene::undoMove() {
 }
 
 void XMLScene::gameView(){
-    currentAnimationState=0;
-    time(&lastAnimationTime);
-    isFilmActive=true;
-    board->updateBoard2((char*) states[0].c_str());
+    if(states.size()>1){
+        currentAnimationState=0;
+        time(&lastAnimationTime);
+        isFilmActive=true;
+        board->updateBoard2((char*) states[0].c_str());
+    }
 }

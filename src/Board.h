@@ -17,6 +17,7 @@ private:
     vector<vector< Stack *> > currentState;
 public:
     void updateBoard(char* board, vector<int> pointsClicked);
+    void updateBoard2(char* board);
     string boardToString();
     void setPosition(int x, int y, int player, int pieces);
     string finishMovePiece(vector<int> pointsClicked);

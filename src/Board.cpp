@@ -10,8 +10,8 @@ Board::Board():Primitive((char*)"board") {
 	float spec[4] = {1,1,1,1};
 	app1 = new CGFappearance(amb,dif,spec,20);
 	app2 = new CGFappearance(amb,dif,spec,20);
-	CGFtexture * currentTexture = new CGFtexture("azul.jpg");
-	CGFtexture * currentTexture2 = new CGFtexture("azul_claro.jpg");
+	CGFtexture * currentTexture = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul.jpg");
+	CGFtexture * currentTexture2 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul_claro.jpg");
 
 	app1->setTexture(currentTexture);
 	app2->setTexture(currentTexture2);
@@ -53,8 +53,8 @@ Board::Board():Primitive((char*)"board") {
 	temp1 = new CGFappearance(amb,dif,spec,20);
 	temp2 = new CGFappearance(amb,dif,spec,20);
 
-	CGFtexture * txt1 = new CGFtexture("images-600x331.jpg");
-	CGFtexture * txt2 = new CGFtexture("images.jpg");
+	CGFtexture * txt1 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images-600x331.jpg");
+	CGFtexture * txt2 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images.jpg");
 
 	temp1->setTexture(txt1);
 	temp2->setTexture(txt2);
@@ -107,53 +107,56 @@ vector<vector< Stack * > > Board::getCurrentState() {
 }
 
 void Board::updateBoard(char * board, vector<int> pointsClicked) {
-	/*
-    string updatedBoard(board);
 
-    string delimiter = "]";
-    string delimiter2= ",";
-    vector<string> rows;
-    size_t pos=0;
-    while((pos = updatedBoard.find(delimiter)) != string::npos) {
-        rows.push_back(updatedBoard.substr(0,pos));
-        updatedBoard.erase(0,pos+delimiter.length());
-    }
-    for(int i=0;i<rows.size();i++){
-        rows[i].erase(0,2);
-    }
-
-    vector<vector<string> > separatedBoard;
-    for(int i=0;i<rows.size()-1;i++){
-        pos = 0;
-        vector<string> currentRow;
-        while((pos = rows[i].find(delimiter2)) != string::npos) {
-            currentRow.push_back(rows[i].substr(0,pos));
-            rows[i].erase(0,pos+delimiter2.length());
-        }
-        currentRow.push_back(rows[i]);
-        separatedBoard.push_back(currentRow);
-        currentRow.clear();
-    }
-
-    for(int i = 0; i<separatedBoard.size(); i++) {
-        for(int j = 0; j<separatedBoard[i].size();j++) {
-            int playerNumber = stoi(separatedBoard[i][j]) /10;
-            int pieceNumber = stoi(separatedBoard[i][j])%10;
-            if(pieceNumber==9){
-                currentState[i][j]->setNumberOfPieces(0);
-                currentState[i][j]->setPlayer(0);
-            }
-            else {
-                currentState[i][j]->setNumberOfPieces(pieceNumber);
-                currentState[i][j]->setPlayer(playerNumber);
-            }
-        }
-    }
-	 */
 
 	string type = finishMovePiece(pointsClicked);
 	startAnimation(pointsClicked, type);
 
+}
+
+void Board::updateBoard2(char * board){
+
+     string updatedBoard(board);
+     
+     string delimiter = "]";
+     string delimiter2= ",";
+     vector<string> rows;
+     size_t pos=0;
+     while((pos = updatedBoard.find(delimiter)) != string::npos) {
+     rows.push_back(updatedBoard.substr(0,pos));
+     updatedBoard.erase(0,pos+delimiter.length());
+     }
+     for(int i=0;i<rows.size();i++){
+     rows[i].erase(0,2);
+     }
+     
+     vector<vector<string> > separatedBoard;
+     for(int i=0;i<rows.size()-1;i++){
+     pos = 0;
+     vector<string> currentRow;
+     while((pos = rows[i].find(delimiter2)) != string::npos) {
+     currentRow.push_back(rows[i].substr(0,pos));
+     rows[i].erase(0,pos+delimiter2.length());
+     }
+     currentRow.push_back(rows[i]);
+     separatedBoard.push_back(currentRow);
+     currentRow.clear();
+     }
+     
+     for(int i = 0; i<separatedBoard.size(); i++) {
+     for(int j = 0; j<separatedBoard[i].size();j++) {
+     int playerNumber = stoi(separatedBoard[i][j]) /10;
+     int pieceNumber = stoi(separatedBoard[i][j])%10;
+     if(pieceNumber==9){
+     currentState[i][j]->setNumberOfPieces(0);
+     currentState[i][j]->setPlayer(0);
+     }
+     else {
+     currentState[i][j]->setNumberOfPieces(pieceNumber);
+     currentState[i][j]->setPlayer(playerNumber);
+     }
+     }
+     }
 }
 
 void Board::startAnimation(vector<int> pointsClicked, string type) {

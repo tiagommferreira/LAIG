@@ -23,6 +23,7 @@ void XMLScene::init() {
 	camera = parser->getCameras()[0]->getInitial();
 	socket = new PlogSocket();
 	gameState = new Game();
+    
 
 	cout <<  endl << endl << endl <<"_____ OPEN GL ______" << endl << endl;
 
@@ -98,13 +99,13 @@ void XMLScene::init() {
 	for(unsigned int i=0;i<temp.size();i++,it++){
 		if(strcmp(it->first,"tabuleiro")==0){
 			this->board = (Board*)it->second->getPrimitives()[0];
-			this->boards.push_back(board);
+			states.push_back(board->boardToString());
 			break;
 		}
 	}
 
 	socket->connectSocket();
-
+    isFilmActive=false;
 	cout << "start updating" << endl;
 }
 
@@ -128,9 +129,23 @@ void XMLScene::display() {
 	CGFscene::activeCamera->applyView();
 	// Draw (and update) light
 	drawLights();
-
-	// Draw axis
-	axis.draw();
+    
+    
+    if(isFilmActive) {
+        time_t now;
+        time(&now);
+        double seconds = difftime(now,lastAnimationTime);
+        cout << "seconds: " << seconds << endl;
+        if(seconds > 2) {
+            if(currentAnimationState+2 <= states.size()) {
+                board->updateBoard((char*) states[currentAnimationState+1].c_str(), pointsClickedOverTime[currentAnimationState]);
+                lastAnimationTime=now;
+                currentAnimationState++;
+            }else {
+                isFilmActive=false;
+            }
+        }
+    }
 
 	glPushMatrix();
 	glPushName(-1);
@@ -375,7 +390,12 @@ void XMLScene::swapPosition() {
 		answer = socket->receiveMessage();
 
 		if(checkBoardChanges(answer)) //se houver alteracoes, faz update
-			board->updateBoard(answer, pointsClicked);
+        {
+            board->updateBoard(answer, pointsClicked);
+            gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
+            states.push_back(board->boardToString());
+            pointsClickedOverTime.push_back(pointsClicked);
+        }
 
 		pointsClicked.clear();
 
@@ -389,9 +409,7 @@ bool XMLScene::checkBoardChanges(char * answer) {
 	if(strcmp(comparingValue.str().c_str(),answer)==0){
 		return false;
 	} else {
-		gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
-		this->boards.push_back(board);
-		cout << "different board #" << this->boards.size() << endl;
+		
 		return true;
 	}
 
@@ -425,4 +443,20 @@ string XMLScene::createPlayCommand() {
 	command << "Tabuleiro).";
 
 	return command.str();
+}
+
+void XMLScene::undoMove() {
+    if(states.size()>1){
+        gameState->setCurrentPlayer((gameState->getCurrentPlayer()%2)+1);
+        states.erase(states.begin()+states.size()-1);
+        pointsClickedOverTime.erase(pointsClickedOverTime.begin()+pointsClickedOverTime.size()-1);
+        board->updateBoard2((char*) states[states.size()-1].c_str());
+    }
+}
+
+void XMLScene::gameView(){
+    currentAnimationState=0;
+    time(&lastAnimationTime);
+    isFilmActive=true;
+    board->updateBoard2((char*) states[0].c_str());
 }

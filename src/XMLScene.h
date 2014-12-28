@@ -11,7 +11,7 @@
 #include "PlogSocket.h"
 #include "Game.h"
 #include "CGFapplication.h"
-
+#include <time.h>
 #include <vector>
 #include <string.h>
 #include "Board.h"
@@ -30,7 +30,8 @@ public:
     XMLParser* getParser() {
         return this->parser;
     }
-    
+    void gameView();
+    void undoMove();
     void toggleLight(int lightId);
     void addCameras(char*);
     void addLights();
@@ -47,12 +48,16 @@ public:
     string createPieceCommand();
 
 protected:
+    int currentAnimationState;
+    time_t lastAnimationTime;
+    bool isFilmActive;
     
     PlogSocket *socket;
     Game* gameState;
     vector<int> pointsClicked;
     Board * board;
-    vector<Board*> boards;
+    vector<string> states;
+    vector<vector<int> > pointsClickedOverTime;
     
     char * camera;
     vector<CGFlight*>lights;

@@ -101,3 +101,32 @@ void PickInterface::processHits (GLint hits, GLuint buffer[])
     else
         printf("Please select a piece\n");
 }
+
+void PickInterface::initGUI() {
+    generalPanel = addPanel((char*)"Opções de Jogo");
+    
+    addButtonToPanel(generalPanel, (char*)"Filme de Jogo",1);
+    addButtonToPanel(generalPanel, (char*)"Voltar atras",2);
+}
+
+void PickInterface::processGUI(GLUI_Control *ctrl) {
+    switch (ctrl->user_id) {
+        case 1:
+        {
+            cout << "Filme de jogo\n";
+            ((XMLScene*)scene)->gameView();
+        }
+            break;
+        case 2:
+        {
+            ((XMLScene*)scene)->undoMove();
+            cout << "Voltar atrás\n";
+        }
+            break;
+            
+        default:
+            cout << "Unexpected option selected\n";
+            break;
+    }
+}
+

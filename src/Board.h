@@ -15,7 +15,10 @@ class Board: public Primitive {
 private:
     Section* section;
     vector<vector< Stack *> > currentState;
+    vector<vector<int> >selected;
 public:
+    void resetBoardColours();
+    void changeColours(char* points);
     void updateBoard(char* board, vector<int> pointsClicked);
     void updateBoard2(char* board);
     string boardToString();
@@ -29,7 +32,9 @@ public:
 	void draw();
     CGFappearance * app1;
     CGFappearance * app2;
+    CGFappearance * app3;
     CGFappearance * temp1;
+    CGFappearance * temp3;
     CGFappearance * temp2;
     void showBoard();
 	virtual ~Board();

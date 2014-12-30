@@ -6,12 +6,12 @@
     </globals>    
 
     <cameras initial="overViewCam" >
-        <perspective id="overViewCam" near="0.1" far="500" angle="35" pos="5 5 5" target="0 0 0" />
+        <perspective id="overViewCam" near="0.1" far="500" angle="35" pos="10 10 10" target="0 0 0" />
         <ortho id="ortho" direction="y" near="-100" far="100" left="-2" right="10" top="10" bottom="-2" />
     </cameras>
   
     <lights>
-    		 <light id="omni" type="omni" enabled="true" marker="false" pos="0 5 0" >
+    		 <light id="omni" type="omni" enabled="true" marker="false" pos="2 5 2" >
                <component type="ambient" value="1 1 1 1" />
                <component type="diffuse" value="1 1 1 1" />
                <component type="specular" value="1 1 1 1" />
@@ -19,7 +19,7 @@
     </lights>
 
     <textures>
-        <texture id="madeira" file="madeira.png" texlength_s="1" texlength_t="1" />
+        <texture id="madeira" file="/Users/ricardo/Desktop/CGFlib/CGFexample/data/madeira.png" texlength_s="1" texlength_t="1" />
     </textures>
 
     <animations>
@@ -130,6 +130,7 @@
 
         <node id="mesa" >
             <transforms>
+
             </transforms>  
             <appearanceref id="madeiraAp" />             
             <descendants>
@@ -192,9 +193,9 @@
 
         <node id="tabuleiro" >
             <transforms>
-                <transform type="translate" to="1 2.55 1.55"/>
+                <transform type="translate" to="0.1 2.55 1.85"/>
                 <transform type="rotate" axis="x" angle="-90"/>
-                <transform type="scale" factor="0.6 1 0.6"/>
+                <transform type="scale" factor="0.8 0.8 0.8"/>
             </transforms>         
             <descendants>
             </descendants>

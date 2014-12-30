@@ -12,6 +12,7 @@ class Stack {
 private:
 	int numberOfPieces;
 	int player;
+    bool selected;
 	CGFappearance * text;
 	bool animated, zAscending;
 	vector<int> animStartPoint;
@@ -22,6 +23,7 @@ private:
 public:
 	Stack(int numberOfPieces, int player){
 		this->numberOfPieces=numberOfPieces;
+        this->selected=false;
 		this->player=player;
 		CGFtexture * temp;
 		this->animated = false;
@@ -43,7 +45,14 @@ public:
 		}
 		text->setTexture(temp);
 	}
-
+    bool getSelected(){
+        return selected;
+    }
+    
+    void setSelected(bool value){
+        this->selected=value;
+    }
+    
 	int getNumberOfPieces() {
 		return numberOfPieces;
 	}

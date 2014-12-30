@@ -375,7 +375,7 @@ void XMLScene::addPoint(int coordinate) {
 		socket->sendMessage((char*)createPieceCommand().c_str());
 		char *answer;
 		answer = socket->receiveMessage();
-		cout << answer << endl;
+        board->changeColours(answer);
 	}
 }
 
@@ -395,8 +395,9 @@ void XMLScene::swapPosition() {
             gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
             states.push_back(board->boardToString());
             pointsClickedOverTime.push_back(pointsClicked);
+           
         }
-
+        board->resetBoardColours();
 		pointsClicked.clear();
 
 	}

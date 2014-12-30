@@ -26,8 +26,12 @@ serverLoop(Stream) :-
 parse_input(comando(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo), Answer) :-
 	comando(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo, Answer).
 
+parse_input(comandoPC(Tabuleiro,Points,TabuleiroNovo), Answer) :-
+	comandoPC(Tabuleiro, TabuleiroNovo, Points, Answer).
+
 parse_input(verificarPeca(Jogador, Tabuleiro, PosX, PosY, CounterX, CounterY, Lista, PieceMoves), Answer) :-
 	verificarPeca(Jogador, Tabuleiro, PosX, PosY, CounterX, CounterY, Lista, PieceMoves, Answer).
+
 	
 parse_input(quit, ok-bye) :- !.
 		
@@ -35,6 +39,11 @@ comando(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo,A
 	cicloJogo1vs1(Tabuleiro,Jogador,Jogada,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo),
 	!,
 	append([],TabuleiroNovo,Answer).
+
+comandoPC(Tabuleiro,TabuleiroNovo,Points,Answer) :-
+	cicloJogo1vsPC(Tabuleiro,TabuleiroNovo, Points),
+	!,
+	append([],Points,Answer).
 
 verificarPeca(Jogador, Tabuleiro, PosX, PosY, CounterX, CounterY, Lista, PieceMoves, Answer):-
 	checkPiece(Jogador,Tabuleiro,PosX,PosY,0,0,[],PieceMoves),
@@ -96,6 +105,23 @@ cicloJogo1vs1(Tabuleiro,Jogador,1,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo)
 
 cicloJogo1vs1(Tabuleiro,Jogador,2,Xinicial,Xfinal,Yinicial,Yfinal,TabuleiroNovo) :-
 	aplica(fusao,[[Xinicial, Yinicial],[Xfinal,Yfinal], Jogador ,Tabuleiro, TabuleiroNovo]).
+
+cicloJogo1vsPC(Tabuleiro,TabuleiroNovo,Points) :-
+	listAvailableMoves(2,Tabuleiro,1,1,[],Moves),
+	length(Moves,MovesLength),
+	random(0,MovesLength,RandomNumber),
+	RandomNumberSelect is RandomNumber+1,
+	elementAt(Move, Moves,RandomNumberSelect),
+	elementAt(InitCoords,Move,1),
+	elementAt(FinalCoords,Move,2),
+	elementAt(Xinit, InitCoords, 1),
+	elementAt(Yinit, InitCoords, 2),
+	elementAt(Xfinal, FinalCoords, 1),
+	elementAt(Yfinal, FinalCoords, 2),
+	!,
+	aplica(mover,[[Xinit, Yinit],[Xfinal,Yfinal], 2 ,Tabuleiro, TabuleiroNovo]),
+	append([],[Yinit,Xinit,Yfinal,Xfinal],Points).
+
 
 %start game
 

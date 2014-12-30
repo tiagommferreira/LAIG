@@ -138,7 +138,7 @@ void XMLScene::display() {
         cout << "seconds: " << seconds << endl;
         if(seconds > 1) {
             if(currentAnimationState+2 <= states.size()) {
-                board->updateBoard((char*) states[currentAnimationState+1].c_str(), pointsClickedOverTime[currentAnimationState]);
+                board->updateBoard(pointsClickedOverTime[currentAnimationState]);
                 lastAnimationTime=now;
                 currentAnimationState++;
             }else {
@@ -391,10 +391,13 @@ void XMLScene::swapPosition() {
 
 		if(checkBoardChanges(answer)) //se houver alteracoes, faz update
         {
-            board->updateBoard(answer, pointsClicked);
+            board->updateBoard(pointsClicked);
             gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
             states.push_back(board->boardToString());
             pointsClickedOverTime.push_back(pointsClicked);
+            if(vsPc) {
+				doPCMove();
+			}
            
         }
         board->resetBoardColours();
@@ -462,4 +465,48 @@ void XMLScene::gameView(){
         isFilmActive=true;
         board->updateBoard2((char*) states[0].c_str());
     }
+}
+
+void XMLScene::setvsPC(bool value) {
+	this->vsPc = value;
+	board->updateBoard2((char*)states[0].c_str());
+	pointsClicked.clear();
+	pointsClickedOverTime.clear();
+	gameState->setCurrentPlayer(1);
+}
+
+bool XMLScene::getvsPC() {
+	return this->getvsPC();
+}
+
+string XMLScene::createPCCommand() {
+	stringstream command;
+
+	command << "comandoPC(";
+	command << board->boardToString() << ",";
+	command << "Points" << ",";
+	command << "Tabuleiro).";
+
+	return command.str();
+}
+
+void XMLScene::doPCMove() {
+	socket->sendMessage((char*)createPCCommand().c_str());
+
+	char *answer;
+	answer = socket->receiveMessage();
+	updatePointsClicked(answer);
+	board->updateBoard(pointsClicked);
+	gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
+	states.push_back(board->boardToString());
+	pointsClickedOverTime.push_back(pointsClicked);
+}
+
+void XMLScene::updatePointsClicked(char* answer) {
+	string coords(answer);
+
+	pointsClicked[0] = coords[1] - '0';
+	pointsClicked[1] = coords[3] - '0';
+	pointsClicked[2] = coords[5] - '0';
+	pointsClicked[3] = coords[7] - '0';
 }

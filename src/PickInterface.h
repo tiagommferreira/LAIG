@@ -17,14 +17,16 @@ using namespace std;
 
 class PickInterface: public CGFinterface {
 private:
-    GLUI_Panel *generalPanel;
+	GLUI_Panel *generalPanel;
+	GLUI_Panel *gameTypePanel;
+	GLUI_RadioGroup* radio;
 public:
-    virtual void initGUI();
-    virtual void processGUI(GLUI_Control *ctrl);
-    virtual void processMouse(int button, int state, int x, int y);
-    void performPicking(int x, int y);
-    void processHits(GLint hits, GLuint buffer[]);
-    void connectToSocket();
+	virtual void initGUI();
+	virtual void processGUI(GLUI_Control *ctrl);
+	virtual void processMouse(int button, int state, int x, int y);
+	void performPicking(int x, int y);
+	void processHits(GLint hits, GLuint buffer[]);
+	void connectToSocket();
 
 };
 

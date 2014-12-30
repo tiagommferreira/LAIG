@@ -103,30 +103,49 @@ void PickInterface::processHits (GLint hits, GLuint buffer[])
 }
 
 void PickInterface::initGUI() {
-    generalPanel = addPanel((char*)"Opções de Jogo");
-    
-    addButtonToPanel(generalPanel, (char*)"Filme de Jogo",1);
-    addButtonToPanel(generalPanel, (char*)"Voltar atras",2);
+	generalPanel = addPanel((char*)"Opcoes de Jogo");
+	addButtonToPanel(generalPanel, (char*)"Filme de Jogo",1);
+	addButtonToPanel(generalPanel, (char*)"Voltar atras",2);
+
+	addColumn();
+
+	gameTypePanel = addPanel((char*)"Tipo de Jogo");
+	radio = addRadioGroupToPanel(gameTypePanel,0,3);
+	addRadioButtonToGroup(radio,(char*)"1vs1")->set_int_val(1);
+	addRadioButtonToGroup(radio,(char*)"1vsPC");
 }
 
 void PickInterface::processGUI(GLUI_Control *ctrl) {
-    switch (ctrl->user_id) {
-        case 1:
-        {
-            cout << "Filme de jogo\n";
-            ((XMLScene*)scene)->gameView();
-        }
-            break;
-        case 2:
-        {
-            ((XMLScene*)scene)->undoMove();
-            cout << "Voltar atrás\n";
-        }
-            break;
-            
-        default:
-            cout << "Unexpected option selected\n";
-            break;
-    }
+	switch (ctrl->user_id) {
+	case 1:
+	{
+		cout << "Filme de jogo\n";
+		((XMLScene*)scene)->gameView();
+	}
+	break;
+	case 2:
+	{
+		((XMLScene*)scene)->undoMove();
+		cout << "Voltar atrás\n";
+	}
+	break;
+	case 3:
+		switch (radio->get_int_val()) {
+		case 0:{
+			((XMLScene *) scene)->setvsPC(false);
+		}
+		break;
+		case 1:{
+			((XMLScene *) scene)->setvsPC(true);
+		}
+		break;
+		default:
+			break;
+		}
+		break;
+		default:
+			cout << "Unexpected option selected\n";
+			break;
+	}
 }
 

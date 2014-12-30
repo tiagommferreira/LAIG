@@ -39,9 +39,9 @@ public:
 		text = new CGFappearance(amb,dif,spec,20);
 
 		if(this->player==1) {
-			temp = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images-600x331.jpg");
+			temp = new CGFtexture("images-600x331.jpg");
 		} else {
-			temp = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images.jpg");
+			temp = new CGFtexture("images.jpg");
 		}
 		text->setTexture(temp);
 	}
@@ -147,11 +147,11 @@ public:
 
 	void doExitAnimation() {
 		if(zAscending) {
-			zAnim += (1+(0.3*(3-animStartPoint[4])))/(1000.0/30.0);
+			zAnim += (1)/((1000.0/30.0)/2.0);
 			(zAnim >= 1) ? (zAscending = false) : (zAscending = true);
 		}
 		else {
-			zAnim -= (1+(0.3*(3-numberOfPieces)))/(1000.0/30.0);
+			zAnim -= (1+(0.3*animStartPoint[4])-(0.3*numberOfPieces))/((1000.0/30.0)/2.0);
 		}
 
 		int xFinal, xInit, yInit, yFinal, numPecasInit;
@@ -197,8 +197,8 @@ public:
 					xAnim -= toCoverX;
 				}
 				else {
-					yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-					xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
+					xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
 				}
 
 			}
@@ -218,8 +218,8 @@ public:
 					xAnim -= toCoverX;
 				}
 				else {
-					yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-					xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
+					xAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
 				}
 
 			}
@@ -243,8 +243,8 @@ public:
 					xAnim += toCoverX;
 				}
 				else {
-					yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-					xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					yAnim -= (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
+					xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
 				}
 
 			}
@@ -263,8 +263,8 @@ public:
 					xAnim += toCoverX;
 				}
 				else {
-					yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
-					xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/(1000.0/30.0));
+					yAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
+					xAnim += (sqrt((pow(toMoveTotal,2)/2.0)*2.0)/((1000.0/30.0)/1.5));
 				}
 
 			}

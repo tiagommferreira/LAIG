@@ -11,7 +11,7 @@
     </cameras>
   
     <lights>
-    		 <light id="omni" type="omni" enabled="true" marker="false" pos="2 5 2" >
+    		 <light id="omni" type="omni" enabled="true" marker="false" pos="2 10 2" >
                <component type="ambient" value="1 1 1 1" />
                <component type="diffuse" value="1 1 1 1" />
                <component type="specular" value="1 1 1 1" />
@@ -40,7 +40,9 @@
             </transforms>         
             <descendants>
                 <noderef id="tabuleiro"/>
-                <noderef id="mesa"/>
+                <noderef id="madeira"/>
+                <noderef id="vidro"/>
+                <noderef id="rustico"/>
             </descendants>
 		</node>
 
@@ -128,7 +130,7 @@
             </descendants>
         </node>
 
-        <node id="mesa" >
+        <node id="madeira">
             <transforms>
 
             </transforms>  
@@ -138,6 +140,30 @@
                 <noderef id="perna2"/>
                 <noderef id="perna3"/>
                 <noderef id="perna4"/>
+                <noderef id="tampo"/>
+            </descendants>
+        </node>
+        <node id="rustico" active="false">
+            <transforms>
+
+            </transforms>  
+            <appearanceref id="madeiraAp" />             
+            <descendants>
+                <noderef id="perna1"/>
+                <noderef id="perna2"/>
+                <noderef id="perna3"/>
+                <noderef id="perna4"/>
+            </descendants>
+        </node>
+
+        <node id="vidro" active="false">
+            <transforms>
+
+            </transforms>  
+            <appearanceref id="madeiraAp" />             
+            <descendants>
+                <noderef id="perna1"/>
+                <noderef id="perna2"/>
                 <noderef id="tampo"/>
             </descendants>
         </node>
@@ -203,6 +229,7 @@
                 <board/>
             </primitives>
         </node>
+
     </graph>
 </anf>
 

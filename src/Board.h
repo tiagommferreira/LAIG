@@ -16,7 +16,16 @@ private:
 	Section* section;
 	vector<vector< Stack *> > currentState;
 	vector<vector<int> >selected;
+    CGFappearance * app1;
+    CGFappearance * app2;
+    CGFappearance * app3;
+    CGFappearance * app4;
+    CGFappearance * temp1;
+    CGFappearance * temp3;
+    CGFappearance * temp2;
+    CGFappearance * temp4;
 public:
+    bool isOver(int playerNumber);
 	void resetBoardColours();
 	void changeColours(char* points);
 	void updateBoard(vector<int> pointsClicked);
@@ -30,12 +39,6 @@ public:
 	void update();
 	Board();
 	void draw();
-	CGFappearance * app1;
-	CGFappearance * app2;
-	CGFappearance * app3;
-	CGFappearance * temp1;
-	CGFappearance * temp3;
-	CGFappearance * temp2;
 	void showBoard();
 	virtual ~Board();
 };

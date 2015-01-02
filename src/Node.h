@@ -25,7 +25,7 @@ private:
 	bool processed;
 	CGFappearance * appearance = new CGFappearance();
 	CGFappearance * parentAppearance = new CGFappearance();
-
+    bool active;
 	GLuint index;
 	//second project
 	float animationMatrix[4][4];
@@ -36,7 +36,15 @@ private:
 	vector<Animation*> animations;
 
 public:
-	Node(){processed = false;displayList=false;currentAnimation=0;}
+    void setActivate(bool activate){
+        this->active = activate;
+    }
+    
+    bool getActivity(){
+        return this->active;
+    }
+    
+    Node(){processed = false;displayList=false;currentAnimation=0;active=true;}
 
 	void setAppearance(CGFappearance * app){
 		this->appearance = app;
@@ -495,7 +503,9 @@ public:
 
 	void draw(){
 		appearance->apply();
-
+        if(this->active == false) {
+            return;
+        }
 		glPushMatrix();
 		if(this->isAnimated() && !this->isDisplayList()){//se for animado e nao for uma display lista
 			if(this->animations[currentAnimation]->getType()==0){

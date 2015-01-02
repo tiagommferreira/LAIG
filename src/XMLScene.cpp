@@ -106,6 +106,7 @@ void XMLScene::init() {
 
 	socket->connectSocket();
     isFilmActive=false;
+    finishAnimation=false;
 	cout << "start updating" << endl;
 }
 
@@ -144,6 +145,23 @@ void XMLScene::display() {
             }else {
                 isFilmActive=false;
             }
+        }
+    }
+    
+    if(finishAnimation) {
+        time_t now;
+        time(&now);
+        double seconds = difftime(now,lastAnimationTime);
+        cout << "seconds: " << seconds << endl;
+        if(seconds > 4) {
+            board->updateBoard2((char*) states[0].c_str());
+            states.clear();
+            states.push_back(board->boardToString());
+            pointsClickedOverTime.clear();
+            finishAnimation=false;
+            gameState->setCurrentPlayer(1);
+        } else {
+            printMessage();
         }
     }
 
@@ -349,6 +367,9 @@ void XMLScene::setDrawingType(char* drawingType){
 }
 
 void XMLScene::addPoint(int coordinate) {
+    if(isFilmActive || finishAnimation) {
+        return;
+    }
 	if(pointsClicked.size()==4) // 2 pontos preenchidos
 	{
 		pointsClicked.clear();
@@ -392,13 +413,18 @@ void XMLScene::swapPosition() {
 		if(checkBoardChanges(answer)) //se houver alteracoes, faz update
         {
             board->updateBoard(pointsClicked);
-            gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
+        
             states.push_back(board->boardToString());
             pointsClickedOverTime.push_back(pointsClicked);
             if(vsPc) {
 				doPCMove();
 			}
-           
+            bool isOver = board->isOver(gameState->getCurrentPlayer());
+            if(isOver) {
+                finishAnimation=true;
+                time(&lastAnimationTime);
+            }
+            gameState->setCurrentPlayer((gameState->getCurrentPlayer())%2+1);
         }
         board->resetBoardColours();
 		pointsClicked.clear();
@@ -509,4 +535,60 @@ void XMLScene::updatePointsClicked(char* answer) {
 	pointsClicked[1] = coords[3] - '0';
 	pointsClicked[2] = coords[5] - '0';
 	pointsClicked[3] = coords[7] - '0';
+}
+
+void XMLScene::setCurrentAmbient(int currentAmbient) {
+    
+    char* toMatch,*deactiveMatch,*deactiveMatch2;
+    switch(currentAmbient){
+        case 1:{
+            toMatch =(char*) "madeira";
+            deactiveMatch = (char*) "vidro";
+            deactiveMatch2 = (char*) "rustico";
+        }
+            break;
+        case 2:{
+            toMatch =(char*) "vidro";
+            deactiveMatch = (char*) "madeira";
+            deactiveMatch2 = (char*) "rustico";
+        }
+          
+            break;
+        case 3: {
+            toMatch =(char*) "rustico";
+            deactiveMatch = (char*) "vidro";
+            deactiveMatch2 = (char*) "madeira";
+        }
+            break;
+    }
+    map<char*,Node*> temp = parser->getGraph();
+    map<char*,Node*>::iterator it=temp.begin();
+    for(unsigned int i=0;i<temp.size();i++,it++){
+        if(strcmp(it->first,toMatch)==0){
+            it->second->setActivate(true);
+        }
+        if(strcmp(it->first,deactiveMatch)==0) {
+            it->second->setActivate(false);
+        }
+        if(strcmp(it->first,deactiveMatch2)==0) {
+            it->second->setActivate(false);
+        }
+    }
+}
+
+void XMLScene::printMessage() {
+    glPushMatrix();
+    glTranslatef(1,5,2);
+    glScalef(0.005, 0.005, 0.005);
+    glColor3f(1,1,1);
+    char * message;
+    if(gameState->getCurrentPlayer()==1) {
+        message = (char*) "Jogador 1 Venceu";
+    } else {
+        message = (char*) "Jogador 2 Venceu";
+    }
+    for(int i=0;i<16;i++) {
+        glutStrokeCharacter(GLUT_STROKE_ROMAN,message[i]);
+    }
+    glPopMatrix();
 }

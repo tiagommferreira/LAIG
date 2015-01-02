@@ -113,6 +113,13 @@ void PickInterface::initGUI() {
 	radio = addRadioGroupToPanel(gameTypePanel,0,3);
 	addRadioButtonToGroup(radio,(char*)"1vs1")->set_int_val(1);
 	addRadioButtonToGroup(radio,(char*)"1vsPC");
+    
+    addColumn();
+    
+    ambientList = addListboxToPanel(generalPanel,(char*)"Ambiente de Jogo",0,4);
+    ambientList->add_item(1, (char*)"Madeira");
+    ambientList->add_item(2, (char*)"Vidro");
+    ambientList->add_item(3, (char*)"Rustico");
 }
 
 void PickInterface::processGUI(GLUI_Control *ctrl) {
@@ -142,10 +149,15 @@ void PickInterface::processGUI(GLUI_Control *ctrl) {
 		default:
 			break;
 		}
-		break;
-		default:
-			cout << "Unexpected option selected\n";
-			break;
+    break;
+        case 4: {
+            cout << "Current Ambient #" << ambientList->get_int_val() << endl;
+            ((XMLScene *)scene)->setCurrentAmbient(ambientList->get_int_val());
+        }
+            break;
+        default:
+           
+        break;
 	}
 }
 

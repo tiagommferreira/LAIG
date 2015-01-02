@@ -42,20 +42,22 @@ public:
     void setNodeChildApp(Node*);
     void clickPiece(int);
     void addPoint(int);
+    void setCurrentAmbient(int);
     void swapPosition();
     bool checkBoardChanges(char*);
-void doPCMove();
+    void doPCMove();
     void updatePointsClicked(char*);
     string createPlayCommand();
-string createPCCommand();
+    string createPCCommand();
     string createPieceCommand();
-void setvsPC(bool);
+    void setvsPC(bool);
     bool getvsPC();
-
+    void printMessage();
 protected:
     int currentAnimationState;
     time_t lastAnimationTime;
     bool isFilmActive;
+    bool finishAnimation;
     bool vsPc = false;
     
     PlogSocket *socket;

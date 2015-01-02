@@ -19,7 +19,9 @@ class PickInterface: public CGFinterface {
 private:
 	GLUI_Panel *generalPanel;
 	GLUI_Panel *gameTypePanel;
+    GLUI_Panel *ambientPanel;
 	GLUI_RadioGroup* radio;
+    GLUI_Listbox *ambientList;
 public:
 	virtual void initGUI();
 	virtual void processGUI(GLUI_Control *ctrl);

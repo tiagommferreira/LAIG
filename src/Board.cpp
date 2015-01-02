@@ -5,19 +5,21 @@
 using namespace std;
 
 Board::Board():Primitive((char*)"board") {
-
 	float amb[4] = {0.4,0.4,0.4,1};
 	float dif[4] = {0.5,0.5,0.5,1};
 	float spec[4] = {1,1,1,1};
 	app1 = new CGFappearance(amb,dif,spec,20);
 	app2 = new CGFappearance(amb,dif,spec,20);
 	app3 = new CGFappearance(amb,dif,spec,20);
-	CGFtexture * currentTexture = new CGFtexture("azul.jpg");
-	CGFtexture * currentTexture2 = new CGFtexture("azul_claro.jpg");
-	CGFtexture * currentTexture3 = new CGFtexture("selected.png");
+    app4 = new CGFappearance(amb,dif,spec,20);
+	CGFtexture * currentTexture = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul.jpg");
+	CGFtexture * currentTexture2 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul_claro.jpg");
+	CGFtexture * currentTexture3 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul_claro-confirmed.jpg");
+    CGFtexture * currentTexture4 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul-confirmed.jpg");
 	app1->setTexture(currentTexture);
 	app2->setTexture(currentTexture2);
-	app3->setTexture(currentTexture3);
+    app3->setTexture(currentTexture3);
+    app4->setTexture(currentTexture4);
 
 	this->section = new Section();
 
@@ -56,8 +58,8 @@ Board::Board():Primitive((char*)"board") {
 	temp1 = new CGFappearance(amb,dif,spec,20);
 	temp2 = new CGFappearance(amb,dif,spec,20);
 
-	CGFtexture * txt1 = new CGFtexture("images-600x331.jpg");
-	CGFtexture * txt2 = new CGFtexture("images.jpg");
+	CGFtexture * txt1 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images-600x331.jpg");
+	CGFtexture * txt2 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images.jpg");
 
 	temp1->setTexture(txt1);
 	temp2->setTexture(txt2);
@@ -72,12 +74,15 @@ void Board::draw(){
 
 	for(unsigned int i=0;i<5;i++){
 		for(unsigned int j=0;j<7;j++){
-			if(currentState[i][j]->getSelected() && currentState[i][j]->getNumberOfPieces()==0){
-				app3->apply();
-			}
-			else if(j==0 || i==0 || i==4 || j==6){
-				app1->apply();
+			if(j==0 || i==0 || i==4 || j==6){
+                if(currentState[i][j]->getSelected())
+                    app4->apply();
+                else
+                app1->apply();
 			}else{
+                if(currentState[i][j]->getSelected())
+                    app3->apply();
+                else
 				app2->apply();
 			}
 			glLoadName(row);
@@ -323,4 +328,23 @@ void Board::resetBoardColours() {
 			currentState[i][j]->setSelected(false);
 		}
 	}
+}
+
+bool Board::isOver(int playerNumber) {
+    int value=0;
+    for(int i=0;i<5;i++) {
+        for(int j=0;j<7;j++) {
+            if(!(j==0 || i==0 || i==4 || j==6)) {
+                if(currentState[i][j]->getPlayerNumber()==playerNumber) {
+                    value+=currentState[i][j]->getNumberOfPieces();
+                }
+            }
+        }
+    }
+    cout << "player number " << playerNumber << " has #" << value << endl;
+    if(value == 1) {
+        return true;
+    } else {
+        return false;
+    }
 }

@@ -1,6 +1,6 @@
 #include "Evaluator.h"
 #include <string.h>
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 #include <iostream>
 
 using namespace std;

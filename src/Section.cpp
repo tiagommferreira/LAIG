@@ -1,7 +1,5 @@
 
 #include "Section.h"
-using namespace std;
-
 Section::Section(){
 }
 

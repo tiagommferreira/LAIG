@@ -58,8 +58,8 @@ Board::Board():Primitive((char*)"board") {
 	temp1 = new CGFappearance(amb,dif,spec,20);
 	temp2 = new CGFappearance(amb,dif,spec,20);
 
-	CGFtexture * txt1 = new CGFtexture("images-600x331.jpg");
-	CGFtexture * txt2 = new CGFtexture("images.jpg");
+	CGFtexture * txt1 = new CGFtexture("texRed.jpg");
+	CGFtexture * txt2 = new CGFtexture("texBlue.jpg");
 
 	temp1->setTexture(txt1);
 	temp2->setTexture(txt2);

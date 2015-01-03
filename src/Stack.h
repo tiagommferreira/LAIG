@@ -40,12 +40,13 @@ public:
 		text = new CGFappearance(amb,dif,spec,20);
 
 		if(this->player==1) {
-			temp = new CGFtexture("images-600x331.jpg");
+			temp = new CGFtexture("texBlack.jpg");
 		} else {
-			temp = new CGFtexture("images.jpg");
+			temp = new CGFtexture("texBlue.jpg");
 		}
 		text->setTexture(temp);
 	}
+
 	bool getSelected(){
 		return selected;
 	}
@@ -102,11 +103,10 @@ public:
 			//GLUquadric *quadratic = gluNewQuadric();
 			//gluQuadricTexture(quadratic, true);
 			//gluCylinder(quadratic, 0.1,0.1, 0.2, 10, 10);
-			drawCylinder(0.2,0.3,0.15,10,10);
+			drawCylinder(0.1,0.2,0.15,10,10);
 			glTranslated(0,0,0.15);
-			drawCylinder(0.3,0.2,0.15,10,10);
-
-			//glTranslated(0, 0, 0.3);
+			drawCylinder(0.2,0.1,0.15,10,10);
+			glTranslated(0, 0, 0.15);
 
 		}
 		glPopMatrix();

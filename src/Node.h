@@ -502,10 +502,10 @@ public:
 	}
 
 	void draw(){
-		appearance->apply();
         if(this->active == false) {
             return;
         }
+        appearance->apply();
 		glPushMatrix();
 		if(this->isAnimated() && !this->isDisplayList()){//se for animado e nao for uma display lista
 			if(this->animations[currentAnimation]->getType()==0){

@@ -15,6 +15,7 @@
 #include <vector>
 #include <string.h>
 #include "Board.h"
+#include <GL/glut.h>
 
 class XMLScene : public CGFscene
 {

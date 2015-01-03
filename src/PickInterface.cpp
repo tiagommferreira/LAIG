@@ -119,7 +119,7 @@ void PickInterface::initGUI() {
     ambientList = addListboxToPanel(generalPanel,(char*)"Ambiente de Jogo",0,4);
     ambientList->add_item(1, (char*)"Madeira");
     ambientList->add_item(2, (char*)"Vidro");
-    ambientList->add_item(3, (char*)"Rustico");
+    ambientList->add_item(3, (char*)"Metal");
 }
 
 void PickInterface::processGUI(GLUI_Control *ctrl) {

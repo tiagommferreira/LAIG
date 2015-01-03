@@ -19,17 +19,33 @@
     </lights>
 
     <textures>
-        <texture id="madeira" file="/Users/ricardo/Desktop/CGFlib/CGFexample/data/madeira.png" texlength_s="1" texlength_t="1" />
+        <texture id="madeira" file="madeira.png" texlength_s="1" texlength_t="1" />
+        <texture id="vidro" file="glass.jpg" texlength_s="1" texlength_t="1" />
     </textures>
 
     <animations>
 	</animations>		
 	
     <appearances>
+    	<appearance id="chaoAp" shininess="0" textureref="madeira" >
+               <component type="ambient" value="0.4 0.4 0.4 1" />
+               <component type="diffuse" value="0.5 0.5 0.5 1" />
+               <component type="specular" value=".5 .5 0.5 1" />
+        </appearance>
         <appearance id="madeiraAp" shininess="0" textureref="madeira" >
                <component type="ambient" value="0.4 0.4 0.4 1" />
                <component type="diffuse" value="0.5 0.5 0.5 1" />
                <component type="specular" value=".5 .5 0.5 1" />
+        </appearance>
+        <appearance id="metalAp" shininess="0" textureref="vidro" >
+               <component type="ambient" value="1 1 1 1" />
+               <component type="diffuse" value="1 1 1 1" />
+               <component type="specular" value="1 1 1 1" />
+        </appearance>
+        <appearance id="vidroAp" shininess="0" textureref="vidro">
+               <component type="ambient" value="1 1 1 1" />
+               <component type="diffuse" value="1 1 1 1" />
+               <component type="specular" value="1 1 1 1" />
         </appearance>
     </appearances>
 		
@@ -40,11 +56,48 @@
             </transforms>         
             <descendants>
                 <noderef id="tabuleiro"/>
+                <noderef id="chao"/>
+                <noderef id="metal"/>
                 <noderef id="madeira"/>
                 <noderef id="vidro"/>
-                <noderef id="rustico"/>
             </descendants>
 		</node>
+
+		<node id="cadeira1" >
+            <transforms>
+                <transform type="translate" to="-5 0 10.5"/>
+                <transform type="rotate" axis="x" angle="-90"/>
+                <transform type="scale" factor="15 15 15"/>
+            </transforms>     
+            <appearanceref id="madeiraAp" />      
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+        <node id="cadeira2" >
+            <transforms>
+                <transform type="translate" to="-5 0 10.5"/>
+                <transform type="rotate" axis="x" angle="-90"/>
+                <transform type="scale" factor="15 15 15"/>
+            </transforms>     
+            <appearanceref id="madeiraAp" />      
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
+
+		<node id="chao" >
+            <transforms>
+                <transform type="translate" to="-5 0 10.5"/>
+                <transform type="rotate" axis="x" angle="-90"/>
+                <transform type="scale" factor="15 15 15"/>
+            </transforms>     
+            <appearanceref id="chaoAp" />      
+            <descendants>
+                <noderef id="quadrado"/>
+            </descendants>
+        </node>
 
         <node id="cubo" >
             <transforms>
@@ -119,10 +172,10 @@
             </descendants>
         </node>
 
-
         <node id="quadrado" >
             <transforms>
-            </transforms>      
+            </transforms>    
+            <appearanceref id="chaoAp" />    
             <primitives>
                 <plane parts="20"/>
             </primitives>   
@@ -132,42 +185,53 @@
 
         <node id="madeira">
             <transforms>
-
-            </transforms>  
-            <appearanceref id="madeiraAp" />             
+            </transforms>     
+            <appearanceref id="madeiraAp" />       
             <descendants>
                 <noderef id="perna1"/>
                 <noderef id="perna2"/>
                 <noderef id="perna3"/>
                 <noderef id="perna4"/>
                 <noderef id="tampo"/>
+                <noderef id="cadeira1"/>
+               	<noderef id="2cadeira"/>
             </descendants>
         </node>
-        <node id="rustico" active="false">
+        <node id="metal" active="false">
             <transforms>
-
-            </transforms>  
-            <appearanceref id="madeiraAp" />             
+            </transforms>             
+            <appearanceref id="metalAp" />  
             <descendants>
                 <noderef id="perna1"/>
                 <noderef id="perna2"/>
                 <noderef id="perna3"/>
                 <noderef id="perna4"/>
+                <noderef id="tampo"/>
+                <noderef id="cadeira1"/>
+               	<noderef id="2cadeira"/>
+               	<noderef id="tampocadeira1"/>
+               	<noderef id="2tampocadeira"/>
             </descendants>
         </node>
 
         <node id="vidro" active="false">
             <transforms>
-
-            </transforms>  
-            <appearanceref id="madeiraAp" />             
+            </transforms>         
+            <appearanceref id="vidroAp" />  
             <descendants>
                 <noderef id="perna1"/>
                 <noderef id="perna2"/>
+                <noderef id="perna3"/>
+                <noderef id="perna4"/>
                 <noderef id="tampo"/>
+                <noderef id="cadeira1"/>
+               	<noderef id="2cadeira"/>
+               	<noderef id="tampocadeira1"/>
+               	<noderef id="2tampocadeira"/>
             </descendants>
         </node>
 
+       
           <node id="perna1" >
             <transforms>
                 <transform type="scale" factor="1 2 1"/>
@@ -227,6 +291,66 @@
             </descendants>
             <primitives>
                 <board/>
+            </primitives>
+        </node>
+
+        <node id="cadeira1" >
+            <transforms>
+            	<transform type="translate" to="-2 0 1.5"/>
+                <transform type="scale" factor="0.45 0.45 0.45"/>
+            </transforms>  
+                   
+            <descendants>
+            	<noderef id="perna1"/>
+                <noderef id="perna2"/>
+                <noderef id="perna3"/>
+                <noderef id="perna4"/>
+                <noderef id="tampo"/>
+            </descendants>
+            <primitives>
+            </primitives>
+        </node>
+
+        <node id="2cadeira" >
+            <transforms>
+            	<transform type="translate" to="5 0 1.5"/>
+                <transform type="scale" factor="0.45 0.45 0.45"/>
+            </transforms>  
+                   
+            <descendants>
+            	<noderef id="perna1"/>
+                <noderef id="perna2"/>
+                <noderef id="perna3"/>
+                <noderef id="perna4"/>
+                <noderef id="tampo"/>
+            </descendants>
+            <primitives>
+            </primitives>
+        </node>
+
+        <node id="tampocadeira1" >
+            <transforms>
+            	<transform type="translate" to="-3 5.2 1.5"/>
+            	<transform type="rotate" axis="z" angle="-90"/>
+                <transform type="scale" factor="0.7 0.45 0.45"/>
+            </transforms>      
+            <descendants>
+                <noderef id="tampo"/>
+            </descendants>
+            <primitives>
+            </primitives>
+        </node>
+
+        <node id="2tampocadeira" >
+            <transforms>
+            	<transform type="translate" to="6.5 5.2 1.5"/>
+            	<transform type="rotate" axis="z" angle="-90"/>
+                <transform type="scale" factor="0.7 0.45 0.45"/>
+            </transforms>      
+            <descendants>
+                <noderef id="tampo"/>
+            </descendants>
+            <primitives>
             </primitives>
         </node>
 

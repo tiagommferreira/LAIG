@@ -2,7 +2,7 @@
 #define __CGFExample__Evaluator__
 
 #include "CGFtexture.h"
-#include <GLUT/glut.h>
+#include <GL/glut.h>
 
 class Evaluator{
 public:

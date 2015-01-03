@@ -7,7 +7,7 @@
 #include <iostream>
 
 XMLParser::XMLParser() {
-	const char *p = "/Users/ricardo/Desktop/CGFlib/CGFexample/data/cenoide.anf";
+	const char *p = "cenoide.anf";
 	// Read XML from file
 
 	doc=new TiXmlDocument(p );
@@ -441,7 +441,7 @@ XMLParser::XMLParser() {
 			Node* currentNode = new Node();
 			currentNode->setId(id);
             char * activity = (char*)node->Attribute("active");
-            if(activity!=NULL) {
+            if(activity != NULL) {
                 currentNode->setActivate(false);
                 cout << "current node is disabled #" << id << endl;
             }

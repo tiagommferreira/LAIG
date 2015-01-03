@@ -12,10 +12,10 @@ Board::Board():Primitive((char*)"board") {
 	app2 = new CGFappearance(amb,dif,spec,20);
 	app3 = new CGFappearance(amb,dif,spec,20);
     app4 = new CGFappearance(amb,dif,spec,20);
-	CGFtexture * currentTexture = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul.jpg");
-	CGFtexture * currentTexture2 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul_claro.jpg");
-	CGFtexture * currentTexture3 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul_claro-confirmed.jpg");
-    CGFtexture * currentTexture4 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/azul-confirmed.jpg");
+	CGFtexture * currentTexture = new CGFtexture("azul.jpg");
+	CGFtexture * currentTexture2 = new CGFtexture("azul_claro.jpg");
+	CGFtexture * currentTexture3 = new CGFtexture("azul_claro-confirmed.jpg");
+    CGFtexture * currentTexture4 = new CGFtexture("azul-confirmed.jpg");
 	app1->setTexture(currentTexture);
 	app2->setTexture(currentTexture2);
     app3->setTexture(currentTexture3);
@@ -58,8 +58,8 @@ Board::Board():Primitive((char*)"board") {
 	temp1 = new CGFappearance(amb,dif,spec,20);
 	temp2 = new CGFappearance(amb,dif,spec,20);
 
-	CGFtexture * txt1 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images-600x331.jpg");
-	CGFtexture * txt2 = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images.jpg");
+	CGFtexture * txt1 = new CGFtexture("images-600x331.jpg");
+	CGFtexture * txt2 = new CGFtexture("images.jpg");
 
 	temp1->setTexture(txt1);
 	temp2->setTexture(txt2);

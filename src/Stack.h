@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cmath>
+#include <string.h>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ class Stack {
 private:
 	int numberOfPieces;
 	int player;
-    bool selected;
+	bool selected;
 	CGFappearance * text;
 	bool animated, zAscending;
 	vector<int> animStartPoint;
@@ -23,7 +24,7 @@ private:
 public:
 	Stack(int numberOfPieces, int player){
 		this->numberOfPieces=numberOfPieces;
-        this->selected=false;
+		this->selected=false;
 		this->player=player;
 		CGFtexture * temp;
 		this->animated = false;
@@ -39,20 +40,20 @@ public:
 		text = new CGFappearance(amb,dif,spec,20);
 
 		if(this->player==1) {
-			temp = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images-600x331.jpg");
+			temp = new CGFtexture("images-600x331.jpg");
 		} else {
-			temp = new CGFtexture("/Users/ricardo/Desktop/CGFlib/CGFexample/data/images.jpg");
+			temp = new CGFtexture("images.jpg");
 		}
 		text->setTexture(temp);
 	}
-    bool getSelected(){
-        return selected;
-    }
-    
-    void setSelected(bool value){
-        this->selected=value;
-    }
-    
+	bool getSelected(){
+		return selected;
+	}
+
+	void setSelected(bool value){
+		this->selected=value;
+	}
+
 	int getNumberOfPieces() {
 		return numberOfPieces;
 	}
@@ -98,11 +99,14 @@ public:
 
 			}
 
-			GLUquadric *quadratic = gluNewQuadric();
-			gluQuadricTexture(quadratic, true);
-			gluCylinder(quadratic, 0.1,0.1, 0.2, 10, 10);
+			//GLUquadric *quadratic = gluNewQuadric();
+			//gluQuadricTexture(quadratic, true);
+			//gluCylinder(quadratic, 0.1,0.1, 0.2, 10, 10);
+			drawCylinder(0.2,0.3,0.15,10,10);
+			glTranslated(0,0,0.15);
+			drawCylinder(0.3,0.2,0.15,10,10);
 
-			glTranslated(0, 0, 0.3);
+			//glTranslated(0, 0, 0.3);
 
 		}
 		glPopMatrix();
@@ -360,6 +364,52 @@ public:
 
 	void setNumPiecesToFuse(int numPiecesToFuse) {
 		this->numPiecesToFuse = numPiecesToFuse;
+	}
+
+	void drawCylinder(float base,float top, float height, int slices, int stacks){
+		GLUquadric *quadratic = gluNewQuadric();
+		gluQuadricTexture(quadratic, true);
+		gluCylinder(quadratic, base, top, height, slices, stacks);
+		double pos = 0.0;
+		double incAngle = 360.0/12.0;
+		double delta = 2*(3.1415)/slices;
+		double angle = 0;
+		double posTextX = 0.0;
+		double posTextY = 0.0;
+
+		glPushMatrix();
+		glRotated(180,0,1,0);
+		glScaled(base,base,0);
+		for(int i=0; i < slices; i++) {
+			glBegin(GL_TRIANGLES);
+			glTexCoord2d((cos(angle + delta) * 0.5)+0.5 ,(sin(angle + delta) * 0.5)+0.5);
+			glVertex3d(cos(angle+delta),sin(angle+delta),1);
+			glTexCoord2d(0.5, 0.5);
+			glVertex3d(0,0,1);
+			glTexCoord2d((cos(angle)* 0.5)+0.5,(sin(angle)*0.5)+0.5);
+			glVertex3d(cos(angle),sin(angle),1);
+			glEnd();
+			angle += delta;
+			posTextX += incAngle;
+		}
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(0,0,height);
+		glScaled(top,top,0);
+		for(int i=0; i < slices; i++) {
+			glBegin(GL_TRIANGLES);
+			glTexCoord2d((cos(angle + delta) * 0.5)+0.5 ,(sin(angle + delta) * 0.5)+0.5);
+			glVertex3d(cos(angle+delta),sin(angle+delta),1);
+			glTexCoord2d(0.5, 0.5);
+			glVertex3d(0,0,1);
+			glTexCoord2d((cos(angle)* 0.5)+0.5,(sin(angle)*0.5)+0.5);
+			glVertex3d(cos(angle),sin(angle),1);
+			glEnd();
+			angle += delta;
+			posTextX += incAngle;
+		}
+		glPopMatrix();
 	}
 };
 

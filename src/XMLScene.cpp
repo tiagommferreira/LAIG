@@ -285,10 +285,8 @@ void XMLScene::setNodesAppearances() {
 void XMLScene::setNodeChildApp(Node* parent) {
 	for(unsigned int i = 0; i < parent->getDescendents().size(); i++) {
 		if(strcmp(parent->getDescendents()[i]->getAppearenceRef(), "inherit") == 0 || strcmp(parent->getDescendents()[i]->getAppearenceRef(),"")==0) {
-			if(parent->getActivity()) {
 				parent->getDescendents()[i]->setAppearance(parent->getAppearance());
 				setNodeChildApp(parent->getDescendents()[i]);
-			}
 		}
 	}
 }
@@ -574,7 +572,7 @@ void XMLScene::setCurrentAmbient(int currentAmbient) {
 		if(strcmp(it->first,deactiveMatch2)==0) {
 			it->second->setActivate(false);
 		}
-		setNodeChildApp(it->second);
+		//setNodeChildApp(it->second);
 	}
 }
 
